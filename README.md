@@ -6,6 +6,10 @@ The plugin will create posts preceding the agenda item with configured hashtag f
 
 The meeting settings for the channel can be configured in the Channel Header Dropwdown (supported in [this WebApp branch](https://github.com/mattermost/mattermost-webapp/tree/MM-19902))
 
+![channel_header_menu](./assets/channelHeaderDropdown.png)
+
+![settings_dialog](./assets/settingsDialog.png)
+
 Meeting settings include:
 
 - Schedule Day: Day of the week when the meeting is scheduled.
@@ -22,6 +26,8 @@ Slash Commands to manage the meeting agenda:
 ```
 Creates a post with the given `message` for the next meeting with the configured hashtag format preceding it.
 If `next-week` is indicated (optional), it will use the date of the meeting in the next calendar week. 
+
+![post_example](./assets/postExample.png)
 
 ```
 /agenda list [next-week]
