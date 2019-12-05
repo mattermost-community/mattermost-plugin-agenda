@@ -1,13 +1,12 @@
 
-import {updateSearchTerms, updateSearchResultsTerms, updateRhsState, performSearch, openChannelSettingsModal} from './actions';
+import {updateSearchTerms, updateSearchResultsTerms, updateRhsState, performSearch, openMeetingSettingsModal} from './actions';
 
 import reducer from './reducer';
 
-import ChannelSettingsModal from './components/channel_settings';
+import ChannelSettingsModal from './components/meeting_settings';
 
 import {id as pluginId} from './manifest';
 export default class Plugin {
-    // eslint-disable-next-line no-unused-vars
     initialize(registry, store) {
         registry.registerWebSocketEventHandler(
             'custom_' + pluginId + '_list',
@@ -17,7 +16,7 @@ export default class Plugin {
         registry.registerRootComponent(ChannelSettingsModal);
         registry.registerChannelHeaderMenuAction('Agenda Plugin Settings',
             (channelId) => {
-                store.dispatch(openChannelSettingsModal(channelId));
+                store.dispatch(openMeetingSettingsModal(channelId));
             });
 
         registry.registerReducer(reducer);

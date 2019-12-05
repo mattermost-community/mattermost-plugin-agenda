@@ -36,10 +36,6 @@ func (p *Plugin) registerCommands() error {
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	split := strings.Fields(args.Command)
 	command := split[0]
-	action := ""
-	if len(split) > 1 {
-		action = split[1]
-	}
 
 	if command != "/agenda" {
 		return &model.CommandResponse{
@@ -47,6 +43,15 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 			Text:         fmt.Sprintf("Unknown command: " + args.Command),
 		}, nil
 	}
+
+	if len(split) < 2 {
+		return &model.CommandResponse{
+			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
+			Text:         fmt.Sprintf("Missing command. You can try queue, list, setting"),
+		}, nil
+	}
+
+	action := split[1]
 
 	switch action {
 	case "list":
@@ -69,11 +74,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandResponse {
 
 	split := strings.Fields(args.Command)
-
-	nextWeek := false
-	if len(split) > 2 && split[2] == "next-week" {
-		nextWeek = true
-	}
+	nextWeek := len(split) > 2 && split[2] == "next-week"
 
 	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek)
 	if error != nil {
@@ -110,7 +111,6 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 	value := split[3]
 
 	meeting, err := p.GetMeeting(args.ChannelId)
-
 	if err != nil {
 		return &model.CommandResponse{
 			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
@@ -120,7 +120,14 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 
 	if field == "schedule" {
 		//set schedule
-		weekdayInt, _ := strconv.Atoi(value)
+		weekdayInt, err := strconv.Atoi(value)
+		if err != nil {
+			return &model.CommandResponse{
+				ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
+				Text:         fmt.Sprintf("Invalid weekday. Must be between 1-5"),
+			}
+		}
+
 		meeting.Schedule = time.Weekday(weekdayInt)
 
 	} else if field == "hashtag" {
@@ -133,7 +140,7 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 		}
 	}
 
-	if err := p.SaveMeeting(args.ChannelId, meeting); err != nil {
+	if err := p.SaveMeeting(meeting); err != nil {
 		return &model.CommandResponse{
 			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
 			Text:         fmt.Sprintf("Error saving setting "),
@@ -172,7 +179,7 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		}
 	}
 
-	user, appError := p.API.GetUser(args.UserId)
+	itemsQueued, appError := p.API.SearchPostsInTeam(args.TeamId, []*model.SearchParams{{Terms: hashtag, IsHashtag: true}})
 
 	if appError != nil {
 		return &model.CommandResponse{
@@ -182,11 +189,10 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 	}
 
 	_, err := p.API.CreatePost(&model.Post{
-		UserId:    p.botID,
+		UserId:    args.UserId,
 		ChannelId: args.ChannelId,
-		Message:   fmt.Sprintf("#### %v %v \n _%v @%v_", hashtag, message, "Queued by:", user.Username),
+		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, len(itemsQueued)+1, message),
 	})
-
 	if err != nil {
 		return &model.CommandResponse{
 			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,

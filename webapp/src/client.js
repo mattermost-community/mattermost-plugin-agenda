@@ -2,35 +2,50 @@ import request from 'superagent';
 
 import {id as pluginId} from './manifest';
 
-export async function getChannelSettings (channelId) {
-    const url = `/plugins/${pluginId}/api/v1`;
-    
-    return doGet(`${url}/settings?channelId=${channelId}`);
-}
+export default class Client {
+    constructor() {
+        this.url = `/plugins/${pluginId}/api/v1`;
+    }
 
+    getMeetingSettings = async (channelId) => {
+        return this.doGet(`${this.url}/settings?channelId=${channelId}`);
+    }
 
-async function doGet (url, body, headers = {}) {
-    headers['X-Requested-With'] = 'XMLHttpRequest';
-    headers['X-Timezone-Offset'] = new Date().getTimezoneOffset();
+    saveMeetingSettings = async (meeting) => {
+        return this.doPost(`${this.url}/settings`, meeting);
+    }
 
-    const response = await request.
-        get(url).
-        set(headers).
-        accept('application/json');
+    doGet = async (url, body, headers = {}) => {
+        headers['X-Requested-With'] = 'XMLHttpRequest';
+        headers['X-Timezone-Offset'] = new Date().getTimezoneOffset();
 
-    return response.body;
-}
+        try {
+            const response = await request.
+                get(url).
+                set(headers).
+                accept('application/json');
 
-async function doPost (url, body, headers = {}) {
-    headers['X-Requested-With'] = 'XMLHttpRequest';
-    headers['X-Timezone-Offset'] = new Date().getTimezoneOffset();
+            return response.body;
+        } catch (err) {
+            throw err;
+        }
+    }
 
-    const response = await request.
-        post(url).
-        send(body).
-        set(headers).
-        type('application/json').
-    accept('application/json');
+    doPost = async (url, body, headers = {}) => {
+        headers['X-Requested-With'] = 'XMLHttpRequest';
+        headers['X-Timezone-Offset'] = new Date().getTimezoneOffset();
 
-    return response.body;
+        try {
+            const response = await request.
+                post(url).
+                send(body).
+                set(headers).
+                type('application/json').
+                accept('application/json');
+
+            return response.body;
+        } catch (err) {
+            throw err;
+        }
+    }
 }

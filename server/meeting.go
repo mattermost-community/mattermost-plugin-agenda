@@ -7,6 +7,7 @@ import (
 )
 
 type Meeting struct {
+	ChannelId     string       `json:"channelId"`
 	Schedule      time.Weekday `json:"schedule"`
 	HashtagFormat string       `json:"hashtagFormat"` //Default: Jan02
 }
@@ -20,30 +21,29 @@ func (p *Plugin) GetMeeting(channelId string) (*Meeting, error) {
 
 	var meeting *Meeting
 	if meettingBytes != nil {
-
 		if err := json.Unmarshal(meettingBytes, &meeting); err != nil {
 			return nil, err
 		}
-
 	} else {
-		//Default values
+		//Return a default value
 		meeting = &Meeting{
 			Schedule:      time.Thursday,
 			HashtagFormat: "Jan02",
+			ChannelId:     channelId,
 		}
 	}
 
 	return meeting, nil
 }
 
-func (p *Plugin) SaveMeeting(channelId string, meeting *Meeting) error {
+func (p *Plugin) SaveMeeting(meeting *Meeting) error {
 
 	jsonMeeting, err := json.Marshal(meeting)
 	if err != nil {
 		return err
 	}
 
-	if err := p.API.KVSet(channelId, jsonMeeting); err != nil {
+	if err := p.API.KVSet(meeting.ChannelId, jsonMeeting); err != nil {
 		return err
 	}
 

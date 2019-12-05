@@ -1,16 +1,16 @@
 import {combineReducers} from 'redux';
 
-import {OPEN_CHANNEL_SETTINGS_MODAL, CLOSE_CHANNEL_SETTINGS_MODAL} from './actions/actions_types';
+import ActionTypes from './action_types';
 
-const channelSettingsModal = (state = false, action) => {
+const meetingSettingsModal = (state = false, action) => {
     switch (action.type) {
-    case OPEN_CHANNEL_SETTINGS_MODAL:
+    case ActionTypes.OPEN_MEETING_SETTINGS_MODAL:
         return {
             ...state,
             visible: true,
             channelId: action.channelId,
         };
-    case CLOSE_CHANNEL_SETTINGS_MODAL:
+    case ActionTypes.CLOSE_MEETING_SETTINGS_MODAL:
         return {
             ...state,
             visible: false,
@@ -21,7 +21,21 @@ const channelSettingsModal = (state = false, action) => {
     }
 };
 
+function meetingSettings(state = {}, action) {
+    switch (action.type) {
+    case ActionTypes.RECEIVED_MEETING_SETTINGS: {
+        return {
+            ...state,
+            meeting: action.data,
+        };
+    }
+    default:
+        return state;
+    }
+}
+
 export default combineReducers({
-    channelSettingsModal,
+    meetingSettingsModal,
+    meetingSettings,
 });
 

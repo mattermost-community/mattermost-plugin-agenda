@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"io/ioutil"
 	"net/http"
 	"sync"
 
@@ -29,13 +29,12 @@ type Plugin struct {
 
 // ServeHTTP demonstrates a plugin that handles HTTP requests by greeting the world.
 func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Hello, world")
 
 	w.Header().Set("Content-Type", "application/json")
 
 	switch path := r.URL.Path; path {
 	case "/api/v1/settings":
-		p.httpChannelSettings(w, r)
+		p.httpMeetingSettings(w, r)
 	default:
 		http.NotFound(w, r)
 	}
@@ -57,11 +56,10 @@ func (p *Plugin) OnActivate() error {
 	}
 	p.botID = botID
 
-	//TO-DO set a profile image
 	return nil
 }
 
-func (p *Plugin) httpChannelSettings(w http.ResponseWriter, r *http.Request) {
+func (p *Plugin) httpMeetingSettings(w http.ResponseWriter, r *http.Request) {
 
 	mattermostUserId := r.Header.Get("Mattermost-User-Id")
 	if mattermostUserId == "" {
@@ -70,20 +68,43 @@ func (p *Plugin) httpChannelSettings(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case http.MethodPost:
-		p.httpChannelSaveSetting(w, r, mattermostUserId)
+		p.httpMeetingSaveSettings(w, r, mattermostUserId)
 	case http.MethodGet:
-		p.httpChannelGetSetting(w, r, mattermostUserId)
+		p.httpMeetingGetSettings(w, r, mattermostUserId)
 	default:
 		http.Error(w, "Request: "+r.Method+" is not allowed.", http.StatusMethodNotAllowed)
 	}
 }
 
-func (p *Plugin) httpChannelSaveSetting(w http.ResponseWriter, r *http.Request, mmUserId string) {
+func (p *Plugin) httpMeetingSaveSettings(w http.ResponseWriter, r *http.Request, mmUserId string) {
 
-	//To-Do
+	userID := r.Header.Get("Mattermost-User-ID")
+	if userID == "" {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	var meeting *Meeting
+	if err = json.Unmarshal(body, &meeting); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if err = p.SaveMeeting(meeting); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Write([]byte("{\"status\": \"OK\"}"))
 }
 
-func (p *Plugin) httpChannelGetSetting(w http.ResponseWriter, r *http.Request, mmUserId string) {
+func (p *Plugin) httpMeetingGetSettings(w http.ResponseWriter, r *http.Request, mmUserId string) {
 	userID := r.Header.Get("Mattermost-User-ID")
 	if userID == "" {
 		http.Error(w, "Not authorized", http.StatusUnauthorized)
@@ -103,6 +124,11 @@ func (p *Plugin) httpChannelGetSetting(w http.ResponseWriter, r *http.Request, m
 		return
 	}
 
-	resp, _ := json.Marshal(meeting)
+	resp, err := json.Marshal(meeting)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	w.Write(resp)
 }
