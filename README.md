@@ -1,76 +1,55 @@
-# Plugin Starter Template [![CircleCI branch](https://img.shields.io/circleci/project/github/mattermost/mattermost-plugin-starter-template/master.svg)](https://circleci.com/gh/mattermost/mattermost-plugin-starter-template)
+# Agenda Plugin
 
-This plugin serves as a starting point for writing a Mattermost plugin. Feel free to base your own plugin off this repository.
+The Agenda Plugin helps users queue and list items in a channel's meeting agenda. The agenda is identified by a hashtag based on the meeting date.
 
-To learn more about plugins, see [our plugin documentation](https://developers.mattermost.com/extend/plugins/).
+The plugin will create posts for the user preceding the agenda item with configured hashtag format and can open a search with that hashtag to view the agenda list. 
 
-## Getting Started
-Use GitHub's template feature to make a copy of this repository by clicking the "Use this template" button then clone outside of `$GOPATH`.
+Initial development as part of [Mattermost Hackathon 2019](https://github.com/mattermost/mattermost-hackathon-nov2019)
 
-Alternatively shallow clone the repository to a directory outside of `$GOPATH` matching your plugin name:
-```
-git clone --depth 1 https://github.com/mattermost/mattermost-plugin-starter-template com.example.my-plugin
-```
+## Usage
 
-Note that this project uses [Go modules](https://github.com/golang/go/wiki/Modules). Be sure to locate the project outside of `$GOPATH`, or allow the use of Go modules within your `$GOPATH` with an `export GO111MODULE=on`.
+#### Meeting Settings Configuration
 
-Edit `plugin.json` with your `id`, `name`, and `description`:
-```
-{
-    "id": "com.example.my-plugin",
-    "name": "My Plugin",
-    "description": "A plugin to enhance Mattermost."
-}
-```
+The meeting settings for each channel can be configured in the Channel Header Dropwdown (supported in [this WebApp branch](https://github.com/mattermost/mattermost-webapp/tree/MM-19902))
 
-Build your plugin:
-```
-make
-```
+![channel_header_menu](./assets/channelHeaderDropdown.png)
 
-This will produce a single plugin file (with support for multiple architectures) for upload to your Mattermost server:
+![settings_dialog](./assets/settingsDialog.png)
+
+Meeting settings include:
+
+- Schedule Day: Day of the week when the meeting is scheduled.
+- Hashtag Format: The format of the hashtag for the meeting date. The date format is based on [Go date and time formatting](https://yourbasic.org/golang/format-parse-string-time-date-example/#standard-time-and-date-formats)
+
+#### Slash Commands to manage the meeting agenda:
 
 ```
-dist/com.example.my-plugin.tar.gz
+/agenda queue [next-week] message
 ```
+Creates a post for the user with the given `message` for the next meeting date with the configured hashtag format preceding it.
+If `next-week` is indicated (optional), it will use the date of the meeting in the next calendar week. 
 
-There is a build target to automate deploying and enabling the plugin to your server, but it requires configuration and [http](https://httpie.org/) to be installed:
+![post_example](./assets/postExample.png)
+
 ```
-export MM_SERVICESETTINGS_SITEURL=http://localhost:8065
-export MM_ADMIN_USERNAME=admin
-export MM_ADMIN_PASSWORD=password
-make deploy
+/agenda list [next-week]
 ```
+Executes a search of the hashtag of the next meeting, opening the RHS with all the posts with that hashtag. 
+If `next-week` is indicated (optional), it will use the date of the meeting in the next calendar week. 
 
-Alternatively, if you are running your `mattermost-server` out of a sibling directory by the same name, use the `deploy` target alone to  unpack the files into the right directory. You will need to restart your server and manually enable your plugin.
-
-In production, deploy and upload your plugin via the [System Console](https://about.mattermost.com/default-plugin-uploads).
-
-## Q&A
-
-### How do I make a server-only or web app-only plugin?
-
-Simply delete the `server` or `webapp` folders and remove the corresponding sections from `plugin.json`. The build scripts will skip the missing portions automatically.
-
-### How do I include assets in the plugin bundle?
-
-Place them into the `assets` directory. To use an asset at runtime, build the path to your asset and open as a regular file:
-
-```go
-bundlePath, err := p.API.GetBundlePath()
-if err != nil {
-    return errors.Wrap(err, "failed to get bundle path")
-}
-
-profileImage, err := ioutil.ReadFile(filepath.Join(bundlePath, "assets", "profile_image.png"))
-if err != nil {
-    return errors.Wrap(err, "failed to read profile image")
-}
-
-if appErr := p.API.SetProfileImage(userID, profileImage); appErr != nil {
-    return errors.Wrap(err, "failed to set profile image")
-}
 ```
+/agenda setting field value
+```
+Updates the given setting with the provided value for the meeting settings of that channel. 
 
-### How do I build the plugin with unminified JavaScript?
-Use `make debug-dist` and `make debug-deploy` in place of `make dist` and `make deploy` to configure webpack to generate unminified Javascript.
+`Field` can be one of:
+
+- `schedule`: Day of the week of the meeting. It is an int based on [`time.Weekday`](https://golang.org/pkg/time/#Weekday)
+- `hashtag`: Format of the hashtag for the meeting date. It is based on the format used in [`time.Format`](https://golang.org/pkg/time/#Time.Format)
+
+## Future Improvements
+
+- Mark items as resolved or queue for next week. 
+- Queue a post using a menu option in the post dot menu. 
+- Handle multiple meeting days in a week.
+- Handle time in meeting schedule. 
