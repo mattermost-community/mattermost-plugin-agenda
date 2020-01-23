@@ -28,6 +28,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
         }
 
         if (this.props.meeting && this.props.meeting !== prevProps.meeting) {
+            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({
                 hashtag: this.props.meeting.hashtagFormat,
                 weekday: this.props.meeting.schedule,
@@ -66,11 +67,10 @@ export default class MeetingSettingsModal extends React.PureComponent {
 
         const checkboxes = weekDays.map((weekday, i) => {
             return (
-                <label 
+                <label
                     className='checkbox-inline'
                     key={weekday}
-
-                        >
+                >
                     <input
                         key={weekday}
                         type='checkbox'
