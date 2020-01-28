@@ -136,7 +136,7 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 	} else {
 		return &model.CommandResponse{
 			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Unknow setting " + field),
+			Text:         fmt.Sprintf("Unknown setting " + field),
 		}
 	}
 
