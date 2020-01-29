@@ -10,7 +10,7 @@ Initial development as part of [Mattermost Hackathon 2019](https://github.com/ma
 
 #### Meeting Settings Configuration
 
-The meeting settings for each channel can be configured in the Channel Header Dropdown (supported in [this WebApp branch](https://github.com/mattermost/mattermost-webapp/tree/MM-19902))
+The meeting settings for each channel can be configured in the Channel Header Dropdown.
 
 ![channel_header_menu](./assets/channelHeaderDropdown.png)
 
