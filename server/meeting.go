@@ -46,8 +46,8 @@ func (p *Plugin) SaveMeeting(meeting *Meeting) error {
 		return err
 	}
 
-	if err := p.API.KVSet(meeting.ChannelID, jsonMeeting); err != nil {
-		return err
+	if appErr := p.API.KVSet(meeting.ChannelID, jsonMeeting); appErr != nil {
+		return appErr
 	}
 
 	return nil
@@ -63,7 +63,7 @@ func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool) (string, error
 
 	meetingDate := nextWeekdayDate(meeting.Schedule, nextWeek)
 
-	hastag := fmt.Sprintf("#%v", meetingDate.Format(meeting.HashtagFormat))
+	hashtag := fmt.Sprintf("#%v", meetingDate.Format(meeting.HashtagFormat))
 
-	return hastag, nil
+	return hashtag, nil
 }
