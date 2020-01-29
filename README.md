@@ -26,7 +26,7 @@ Meeting settings include:
 ```
 /agenda queue [next-week] message
 ```
-Creates a post for the user with the given `message` for the next meeting date with the configured hashtag format preceding it.
+Creates a post for the user with the given `message` for the next meeting date. The configured hashtag will precede the `message`.
 If `next-week` is indicated (optional), it will use the date of the meeting in the next calendar week. 
 
 ![post_example](./assets/postExample.png)
