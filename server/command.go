@@ -15,12 +15,11 @@ import (
 const (
 	commandTriggerAgenda = "agenda"
 
-	WS_EVENT_LIST = "list"
+	wsEventList = "list"
 )
 
 func (p *Plugin) registerCommands() error {
 	if err := p.API.RegisterCommand(&model.Command{
-
 		Trigger:          commandTriggerAgenda,
 		AutoComplete:     true,
 		AutoCompleteHint: "[command]",
@@ -32,7 +31,7 @@ func (p *Plugin) registerCommands() error {
 	return nil
 }
 
-// ExecuteCommand
+// ExecuteCommand executes a command that has been previously registered via the RegisterCommand
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	split := strings.Fields(args.Command)
 	command := split[0]
@@ -85,7 +84,7 @@ func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandRespo
 	}
 
 	p.API.PublishWebSocketEvent(
-		WS_EVENT_LIST,
+		wsEventList,
 		map[string]interface{}{
 			"hashtag": hashtag,
 		},

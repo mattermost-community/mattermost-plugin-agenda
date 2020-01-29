@@ -2,14 +2,15 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/mattermost/mattermost-server/plugin/plugintest"
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/mattermost/mattermost-server/plugin/plugintest"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestServeHTTP(t *testing.T) {
@@ -22,7 +23,7 @@ func TestServeHTTP(t *testing.T) {
 	t.Run("get default meeting settings", func(t *testing.T) {
 		// Mock get default meeting
 		defaultMeeting := &Meeting{
-			ChannelId:     "myChannelId",
+			ChannelID:     "myChannelId",
 			Schedule:      time.Thursday,
 			HashtagFormat: "Jan02",
 		}
@@ -49,7 +50,7 @@ func TestServeHTTP(t *testing.T) {
 	t.Run("post meeting settings", func(t *testing.T) {
 		// Mock set meeting
 		meeting := &Meeting{
-			ChannelId:     "myChannelId",
+			ChannelID:     "myChannelId",
 			Schedule:      time.Tuesday,
 			HashtagFormat: "MyMeeting-Jan-02",
 		}
