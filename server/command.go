@@ -15,12 +15,11 @@ import (
 const (
 	commandTriggerAgenda = "agenda"
 
-	WS_EVENT_LIST = "list"
+	wsEventList = "list"
 )
 
 func (p *Plugin) registerCommands() error {
 	if err := p.API.RegisterCommand(&model.Command{
-
 		Trigger:          commandTriggerAgenda,
 		AutoComplete:     true,
 		AutoCompleteHint: "[command]",
@@ -32,7 +31,7 @@ func (p *Plugin) registerCommands() error {
 	return nil
 }
 
-// ExecuteCommand
+// ExecuteCommand executes a command that has been previously registered via the RegisterCommand
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	split := strings.Fields(args.Command)
 	command := split[0]
@@ -76,16 +75,17 @@ func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandRespo
 	split := strings.Fields(args.Command)
 	nextWeek := len(split) > 2 && split[2] == "next-week"
 
-	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek)
-	if error != nil {
+	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek)
+	if err != nil {
 		return &model.CommandResponse{
 			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
 			Text:         fmt.Sprintf("Error calculating hashtags"),
 		}
 	}
 
+	//TODO need to understand this
 	p.API.PublishWebSocketEvent(
-		WS_EVENT_LIST,
+		wsEventList,
 		map[string]interface{}{
 			"hashtag": hashtag,
 		},
@@ -136,7 +136,7 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 	} else {
 		return &model.CommandResponse{
 			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Unknow setting " + field),
+			Text:         fmt.Sprintf("Unknown setting " + field),
 		}
 	}
 
@@ -171,32 +171,31 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		message = strings.Join(split[3:], " ")
 	}
 
-	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek)
-	if error != nil {
+	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek)
+	if err != nil {
 		return &model.CommandResponse{
 			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
 			Text:         fmt.Sprintf("Error calculating hashtags"),
 		}
 	}
 
-	itemsQueued, appError := p.API.SearchPostsInTeam(args.TeamId, []*model.SearchParams{{Terms: hashtag, IsHashtag: true}})
-
-	if appError != nil {
+	itemsQueued, appErr := p.API.SearchPostsInTeam(args.TeamId, []*model.SearchParams{{Terms: hashtag, IsHashtag: true}})
+	if appErr != nil {
 		return &model.CommandResponse{
 			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
 			Text:         fmt.Sprintf("Error getting user"),
 		}
 	}
 
-	_, err := p.API.CreatePost(&model.Post{
+	_, appErr = p.API.CreatePost(&model.Post{
 		UserId:    args.UserId,
 		ChannelId: args.ChannelId,
 		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, len(itemsQueued)+1, message),
 	})
-	if err != nil {
+	if appErr != nil {
 		return &model.CommandResponse{
 			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Error creating post: " + err.Message),
+			Text:         fmt.Sprintf("Error creating post: " + appErr.Message),
 		}
 	}
 

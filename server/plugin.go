@@ -40,7 +40,7 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	}
 }
 
-// OnActivate
+// OnActivate is invoked when the plugin is activated
 func (p *Plugin) OnActivate() error {
 	if err := p.registerCommands(); err != nil {
 		return errors.Wrap(err, "failed to register commands")
@@ -61,22 +61,22 @@ func (p *Plugin) OnActivate() error {
 
 func (p *Plugin) httpMeetingSettings(w http.ResponseWriter, r *http.Request) {
 
-	mattermostUserId := r.Header.Get("Mattermost-User-Id")
-	if mattermostUserId == "" {
+	mattermostUserID := r.Header.Get("Mattermost-User-Id")
+	if mattermostUserID == "" {
 		http.Error(w, "Not Authorized", http.StatusUnauthorized)
 	}
 
 	switch r.Method {
 	case http.MethodPost:
-		p.httpMeetingSaveSettings(w, r, mattermostUserId)
+		p.httpMeetingSaveSettings(w, r, mattermostUserID)
 	case http.MethodGet:
-		p.httpMeetingGetSettings(w, r, mattermostUserId)
+		p.httpMeetingGetSettings(w, r, mattermostUserID)
 	default:
 		http.Error(w, "Request: "+r.Method+" is not allowed.", http.StatusMethodNotAllowed)
 	}
 }
 
-func (p *Plugin) httpMeetingSaveSettings(w http.ResponseWriter, r *http.Request, mmUserId string) {
+func (p *Plugin) httpMeetingSaveSettings(w http.ResponseWriter, r *http.Request, mmUserID string) {
 
 	userID := r.Header.Get("Mattermost-User-ID")
 	if userID == "" {
@@ -104,21 +104,21 @@ func (p *Plugin) httpMeetingSaveSettings(w http.ResponseWriter, r *http.Request,
 	w.Write([]byte("{\"status\": \"OK\"}"))
 }
 
-func (p *Plugin) httpMeetingGetSettings(w http.ResponseWriter, r *http.Request, mmUserId string) {
+func (p *Plugin) httpMeetingGetSettings(w http.ResponseWriter, r *http.Request, mmUserID string) {
 	userID := r.Header.Get("Mattermost-User-ID")
 	if userID == "" {
 		http.Error(w, "Not authorized", http.StatusUnauthorized)
 		return
 	}
 
-	channelId, ok := r.URL.Query()["channelId"]
+	channelID, ok := r.URL.Query()["channelId"]
 
-	if !ok || len(channelId[0]) < 1 {
+	if !ok || len(channelID[0]) < 1 {
 		http.Error(w, "Missing channelId parameter", http.StatusBadRequest)
 		return
 	}
 
-	meeting, err := p.GetMeeting(channelId[0])
+	meeting, err := p.GetMeeting(channelID[0])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

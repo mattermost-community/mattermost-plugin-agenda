@@ -10,7 +10,7 @@ Initial development as part of [Mattermost Hackathon 2019](https://github.com/ma
 
 #### Meeting Settings Configuration
 
-The meeting settings for each channel can be configured in the Channel Header Dropwdown (supported in [this WebApp branch](https://github.com/mattermost/mattermost-webapp/tree/MM-19902))
+The meeting settings for each channel can be configured in the Channel Header Dropdown.
 
 ![channel_header_menu](./assets/channelHeaderDropdown.png)
 
@@ -26,7 +26,7 @@ Meeting settings include:
 ```
 /agenda queue [next-week] message
 ```
-Creates a post for the user with the given `message` for the next meeting date with the configured hashtag format preceding it.
+Creates a post for the user with the given `message` for the next meeting date. The configured hashtag will precede the `message`.
 If `next-week` is indicated (optional), it will use the date of the meeting in the next calendar week. 
 
 ![post_example](./assets/postExample.png)

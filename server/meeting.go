@@ -6,22 +6,24 @@ import (
 	"time"
 )
 
+// Meeting represents a meeting agenda
 type Meeting struct {
-	ChannelId     string       `json:"channelId"`
+	ChannelID     string       `json:"channelId"`
 	Schedule      time.Weekday `json:"schedule"`
 	HashtagFormat string       `json:"hashtagFormat"` //Default: Jan02
 }
 
-func (p *Plugin) GetMeeting(channelId string) (*Meeting, error) {
+// GetMeeting returns a meeting
+func (p *Plugin) GetMeeting(channelID string) (*Meeting, error) {
 
-	meettingBytes, appErr := p.API.KVGet(channelId)
+	meetingBytes, appErr := p.API.KVGet(channelID)
 	if appErr != nil {
 		return nil, appErr
 	}
 
 	var meeting *Meeting
-	if meettingBytes != nil {
-		if err := json.Unmarshal(meettingBytes, &meeting); err != nil {
+	if meetingBytes != nil {
+		if err := json.Unmarshal(meetingBytes, &meeting); err != nil {
 			return nil, err
 		}
 	} else {
@@ -29,13 +31,14 @@ func (p *Plugin) GetMeeting(channelId string) (*Meeting, error) {
 		meeting = &Meeting{
 			Schedule:      time.Thursday,
 			HashtagFormat: "Jan02",
-			ChannelId:     channelId,
+			ChannelID:     channelID,
 		}
 	}
 
 	return meeting, nil
 }
 
+// SaveMeeting saves a meeting
 func (p *Plugin) SaveMeeting(meeting *Meeting) error {
 
 	jsonMeeting, err := json.Marshal(meeting)
@@ -43,23 +46,24 @@ func (p *Plugin) SaveMeeting(meeting *Meeting) error {
 		return err
 	}
 
-	if err := p.API.KVSet(meeting.ChannelId, jsonMeeting); err != nil {
-		return err
+	if appErr := p.API.KVSet(meeting.ChannelID, jsonMeeting); appErr != nil {
+		return appErr
 	}
 
 	return nil
 }
 
-func (p *Plugin) GenerateHashtag(channelId string, nextWeek bool) (string, error) {
+// GenerateHashtag returns a meeting hashtag
+func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool) (string, error) {
 
-	meeting, err := p.GetMeeting(channelId)
+	meeting, err := p.GetMeeting(channelID)
 	if err != nil {
 		return "", err
 	}
 
 	meetingDate := nextWeekdayDate(meeting.Schedule, nextWeek)
 
-	hastag := fmt.Sprintf("#%v", meetingDate.Format(meeting.HashtagFormat))
+	hashtag := fmt.Sprintf("#%v", meetingDate.Format(meeting.HashtagFormat))
 
-	return hastag, nil
+	return hashtag, nil
 }
