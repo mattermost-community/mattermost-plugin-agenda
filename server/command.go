@@ -38,17 +38,11 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 	command := split[0]
 
 	if command != "/agenda" {
-		return &model.CommandResponse{
-			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Unknown command: " + args.Command),
-		}, nil
+		return responsef("Unknown command: " + args.Command), nil
 	}
 
 	if len(split) < 2 {
-		return &model.CommandResponse{
-			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Missing command. You can try queue, list, setting"),
-		}, nil
+		return responsef("Missing command. You can try queue, list, setting"), nil
 	}
 
 	action := split[1]
@@ -65,10 +59,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 
 	}
 
-	return &model.CommandResponse{
-		ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-		Text:         fmt.Sprintf("Unknown action: " + action),
-	}, nil
+	return responsef("Unknown action: " + action), nil
 }
 
 func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandResponse {
@@ -78,10 +69,7 @@ func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandRespo
 
 	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek)
 	if error != nil {
-		return &model.CommandResponse{
-			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Error calculating hashtags"),
-		}
+		return responsef("Error calculating hashtags")
 	}
 
 	p.API.PublishWebSocketEvent(
@@ -101,10 +89,7 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 	split := strings.Fields(args.Command)
 
 	if len(split) < 4 {
-		return &model.CommandResponse{
-			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Setting parameters missing"),
-		}
+		return responsef("Setting parameters missing")
 	}
 
 	field := split[2]
@@ -112,20 +97,14 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 
 	meeting, err := p.GetMeeting(args.ChannelId)
 	if err != nil {
-		return &model.CommandResponse{
-			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Error getting meeting information for this channel "),
-		}
+		return responsef("Error getting meeting information for this channel")
 	}
 
 	if field == "schedule" {
 		//set schedule
 		weekdayInt, err := strconv.Atoi(value)
 		if err != nil {
-			return &model.CommandResponse{
-				ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-				Text:         fmt.Sprintf("Invalid weekday. Must be between 1-5"),
-			}
+			return responsef("Invalid weekday. Must be between 1-5")
 		}
 
 		meeting.Schedule = time.Weekday(weekdayInt)
@@ -134,33 +113,21 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 		//set hashtag
 		meeting.HashtagFormat = value
 	} else {
-		return &model.CommandResponse{
-			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Unknow setting " + field),
-		}
+		return responsef("Unknow setting " + field)
 	}
 
 	if err := p.SaveMeeting(meeting); err != nil {
-		return &model.CommandResponse{
-			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Error saving setting "),
-		}
+		return responsef("Error saving setting")
 	}
 
-	return &model.CommandResponse{
-		ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-		Text:         fmt.Sprintf("Updated setting %v to %v", field, value),
-	}
+	return responsef("Updated setting %v to %v", field, value)
 }
 
 func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResponse {
 	split := strings.Fields(args.Command)
 
 	if len(split) <= 2 {
-		return &model.CommandResponse{
-			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Missing parameters for queue command"),
-		}
+		return responsef("Missing parameters for queue command")
 	}
 
 	nextWeek := false
@@ -173,19 +140,13 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 
 	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek)
 	if error != nil {
-		return &model.CommandResponse{
-			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Error calculating hashtags"),
-		}
+		return responsef("Error calculating hashtags")
 	}
 
 	itemsQueued, appError := p.API.SearchPostsInTeam(args.TeamId, []*model.SearchParams{{Terms: hashtag, IsHashtag: true}})
 
 	if appError != nil {
-		return &model.CommandResponse{
-			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Error getting user"),
-		}
+		return responsef("Error getting user")
 	}
 
 	_, err := p.API.CreatePost(&model.Post{
@@ -194,11 +155,16 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, len(itemsQueued)+1, message),
 	})
 	if err != nil {
-		return &model.CommandResponse{
-			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-			Text:         fmt.Sprintf("Error creating post: " + err.Message),
-		}
+		return responsef("Error creating post: " + err.Message)
 	}
 
 	return &model.CommandResponse{}
+}
+
+func responsef(format string, args ...interface{}) *model.CommandResponse {
+	return &model.CommandResponse{
+		ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
+		Text:         fmt.Sprintf(format, args...),
+		Type:         model.POST_DEFAULT,
+	}
 }
