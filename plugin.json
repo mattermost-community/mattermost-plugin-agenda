@@ -1,6 +1,6 @@
 {
-    "id": "com.mattermost.agenda-plugin",
-    "name": "Agenda Plugin",
+    "id": "com.mattermost.agenda",
+    "name": "Agenda",
     "description": "Plugin to handle meeting agendas for Mattermost channels.",
     "version": "0.1.0",
     "min_server_version": "5.20.0",

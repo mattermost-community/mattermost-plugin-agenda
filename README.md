@@ -4,7 +4,7 @@ The Agenda Plugin helps users queue and list items in a channel's meeting agenda
 
 The plugin will create posts for the user preceding the agenda item with configured hashtag format and can open a search with that hashtag to view the agenda list. 
 
-Initial development as part of [Mattermost Hackathon 2019](https://github.com/mattermost/mattermost-hackathon-nov2019)
+Initial development as part of [Mattermost Hackathon 2019](https://github.com/mattermost/mattermost-hackathon-nov2019) which was demoed [here](https://drive.google.com/file/d/1t-ho4ZwGDxLVVWUi0sX7KpQZqKNxujlJ/view) starting at 13:50.
 
 ## Usage
 
