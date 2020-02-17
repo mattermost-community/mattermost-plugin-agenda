@@ -121,7 +121,8 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 	if field == "schedule" {
 		//set schedule
 		weekdayInt, err := strconv.Atoi(value)
-		if err != nil {
+		validWeekday := weekdayInt >= 0 && weekdayInt <= 6
+		if err != nil || !validWeekday {
 			return &model.CommandResponse{
 				ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
 				Text:         fmt.Sprintf("Invalid weekday. Must be between 0-6"),

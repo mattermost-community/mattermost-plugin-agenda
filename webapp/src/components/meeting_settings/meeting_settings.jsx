@@ -74,8 +74,8 @@ export default class MeetingSettingsModal extends React.PureComponent {
                     <input
                         key={weekday}
                         type='checkbox'
-                        value={i + 1}
-                        checked={i + 1 === meetingDay}
+                        value={i}
+                        checked={i === meetingDay}
                         onChange={this.handleCheckboxChanged}
                     /> {weekday}
                 </label>);
