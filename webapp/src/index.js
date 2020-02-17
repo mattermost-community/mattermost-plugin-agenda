@@ -14,7 +14,7 @@ export default class Plugin {
         );
 
         registry.registerRootComponent(ChannelSettingsModal);
-        registry.registerChannelHeaderMenuAction('Agenda Plugin Settings',
+        registry.registerChannelHeaderMenuAction('Agenda Settings',
             (channelId) => {
                 store.dispatch(openMeetingSettingsModal(channelId));
             });

@@ -28,6 +28,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
         }
 
         if (this.props.meeting && this.props.meeting !== prevProps.meeting) {
+            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({
                 hashtag: this.props.meeting.hashtagFormat,
                 weekday: this.props.meeting.schedule,
@@ -62,12 +63,12 @@ export default class MeetingSettingsModal extends React.PureComponent {
         // where the week array starts on Sunday = 0
         const meetingDay = this.state.weekday ? this.state.weekday : 0;
 
-        const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
         const checkboxes = weekDays.map((weekday, i) => {
             return (
                 <label
-                    className='checkbox-inline'
+                    className='checkbox-inline pl-3 pr-2'
                     key={weekday}
                 >
                     <input
@@ -86,7 +87,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
     render() {
         return (
             <Modal
-                dialogClassName='a11y__modal'
+                dialogClassName='a11y__modal modal-xl'
                 onHide={this.props.close}
                 show={this.props.visible}
                 role='dialog'
@@ -97,7 +98,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
                         componentClass='h1'
                         id='agendaPluginMeetingSettingsModalLabel'
                     >
-                        {'Agenda Plugin Channel Settings'}
+                        {'Channel Agenda Settings'}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -105,7 +106,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
                         <label className='control-label'>
                             {'Meeting Day'}
                         </label>
-                        <div className='form-control'>
+                        <div className='p-2'>
                             {this.getDaysCheckboxes()}
                         </div>
                     </div>

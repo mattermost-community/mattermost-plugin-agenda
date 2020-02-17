@@ -124,7 +124,7 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 		if err != nil {
 			return &model.CommandResponse{
 				ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
-				Text:         fmt.Sprintf("Invalid weekday. Must be between 1-5"),
+				Text:         fmt.Sprintf("Invalid weekday. Must be between 0-6"),
 			}
 		}
 
