@@ -105,7 +105,7 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 		//set schedule
 		weekdayInt, err := strconv.Atoi(value)
 		validWeekday := weekdayInt >= 0 && weekdayInt <= 6
-		if err != nil {
+		if err != nil || !validWeekday {
 			return responsef("Invalid weekday. Must be between 1-5")
 		}
 		meeting.Schedule = time.Weekday(weekdayInt)
@@ -156,7 +156,7 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, len(itemsQueued)+1, message),
 	})
 	if appErr != nil {
-		return responsef("Error creating post: " + err.Message)
+		return responsef("Error creating post: " + appErr.Message)
 	}
 
 	return &model.CommandResponse{}
