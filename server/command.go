@@ -118,7 +118,8 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 		}
 	}
 
-	if field == "schedule" {
+	switch field {
+	case "schedule":
 		//set schedule
 		weekdayInt, err := strconv.Atoi(value)
 		validWeekday := weekdayInt >= 0 && weekdayInt <= 6
@@ -128,13 +129,13 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 				Text:         fmt.Sprintf("Invalid weekday. Must be between 0-6"),
 			}
 		}
-
 		meeting.Schedule = time.Weekday(weekdayInt)
 
-	} else if field == "hashtag" {
+	case "hashtag":
 		//set hashtag
 		meeting.HashtagFormat = value
-	} else {
+
+	default:
 		return &model.CommandResponse{
 			ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
 			Text:         fmt.Sprintf("Unknown setting " + field),
