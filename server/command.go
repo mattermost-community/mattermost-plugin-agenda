@@ -18,12 +18,17 @@ const (
 	wsEventList = "list"
 )
 
+const helpCommandText = "###### Mattermost Agenda Plugin - Slash Command Help\n" +
+	"\n* `/agenda queue [next-week (optional)] message` - Queue `message` as a topic on the next meeting. If `next-week` is provided, it will queue for the meeting in the next calendar week. \n" +
+	"* `/agenda list [next-week (optional)]` - Show a list of items queued for the next meeting.  If `next-week` is provided, it will list the agenda for the next calendar week. \n" +
+	"* `/agenda setting <field> <value>` - Update the setting with the given value. Field can be one of `schedule` or `hashtag` \n"
+
 func (p *Plugin) registerCommands() error {
 	if err := p.API.RegisterCommand(&model.Command{
 		Trigger:          commandTriggerAgenda,
 		AutoComplete:     true,
 		AutoCompleteHint: "[command]",
-		AutoCompleteDesc: "Available commands: list, queue, setting",
+		AutoCompleteDesc: "Available commands: list, queue, setting, help",
 	}); err != nil {
 		return errors.Wrapf(err, "failed to register %s command", commandTriggerAgenda)
 	}
@@ -56,6 +61,9 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 	case "setting":
 		return p.executeCommandSetting(args), nil
 
+	case "help":
+		return p.executeCommandHelp(args), nil
+
 	}
 
 	return responsef("Unknown action: " + action), nil
@@ -71,7 +79,7 @@ func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandRespo
 		return responsef("Error calculating hashtags")
 	}
 
-	//TODO need to understand this
+	// Send a websocket event to the web app that will open the RHS
 	p.API.PublishWebSocketEvent(
 		wsEventList,
 		map[string]interface{}{
@@ -160,6 +168,10 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 	}
 
 	return &model.CommandResponse{}
+}
+
+func (p *Plugin) executeCommandHelp(args *model.CommandArgs) *model.CommandResponse {
+	return responsef(helpCommandText)
 }
 
 func responsef(format string, args ...interface{}) *model.CommandResponse {
