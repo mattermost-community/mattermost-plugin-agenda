@@ -117,6 +117,13 @@ export default class MeetingSettingsModal extends React.PureComponent {
                             className='form-control'
                             value={this.state.hashtag ? this.state.hashtag : ''}
                         />
+                        <p className='text-muted pt-1'> {'Date format should follow the one of  '}
+                            <a
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                href='https://yourbasic.org/golang/format-parse-string-time-date-example/#standard-time-and-date-formats'
+                            >{'the predefined layouts'}</a>
+                        </p>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
