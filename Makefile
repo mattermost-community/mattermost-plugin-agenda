@@ -34,7 +34,6 @@ apply:
 .PHONY: check-style
 check-style: webapp/.npminstall gofmt govet golint
 	@echo Checking for style guide compliance
-	
 ifneq ($(HAS_WEBAPP),)	
 	cd webapp && npm run lint	
 endif	
