@@ -10,7 +10,7 @@ export default class Plugin {
     initialize(registry, store) {
         registry.registerWebSocketEventHandler(
             'custom_' + pluginId + '_list',
-            handleSearchHashtag(store)
+            handleSearchHashtag(store),
         );
 
         registry.registerRootComponent(ChannelSettingsModal);
