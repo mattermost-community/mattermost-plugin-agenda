@@ -53,3 +53,7 @@ Updates the given setting with the provided value for the meeting settings of th
 - Queue a post using a menu option in the post dot menu. 
 - Handle multiple meeting days in a week.
 - Handle time in meeting schedule. 
+
+## Contributing
+
+If you would like to make contributions to this plugin, please checkout the open issues labeled [`Help Wanted` and `Up For Grabs`](https://github.com/mattermost/mattermost-plugin-agenda/issues?q=is%3Aopen+label%3A%22Up+For+Grabs%22+label%3A%22Help+Wanted%22)
