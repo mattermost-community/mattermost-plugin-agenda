@@ -28,7 +28,6 @@ export default class MeetingSettingsModal extends React.PureComponent {
         }
 
         if (this.props.meeting && this.props.meeting !== prevProps.meeting) {
-            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({
                 hashtag: this.props.meeting.hashtagFormat,
                 weekday: this.props.meeting.schedule,
@@ -63,19 +62,20 @@ export default class MeetingSettingsModal extends React.PureComponent {
         // where the week array starts on Sunday = 0
         const meetingDay = this.state.weekday ? this.state.weekday : 0;
 
-        const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
         const checkboxes = weekDays.map((weekday, i) => {
             return (
-                <label
-                    className='checkbox-inline pl-3 pr-2'
+                <label 
+                    className='checkbox-inline'
                     key={weekday}
-                >
+
+                        >
                     <input
                         key={weekday}
                         type='checkbox'
-                        value={i}
-                        checked={i === meetingDay}
+                        value={i + 1}
+                        checked={i + 1 === meetingDay}
                         onChange={this.handleCheckboxChanged}
                     /> {weekday}
                 </label>);
@@ -87,7 +87,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
     render() {
         return (
             <Modal
-                dialogClassName='a11y__modal modal-xl'
+                dialogClassName='a11y__modal'
                 onHide={this.props.close}
                 show={this.props.visible}
                 role='dialog'
@@ -98,7 +98,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
                         componentClass='h1'
                         id='agendaPluginMeetingSettingsModalLabel'
                     >
-                        {'Channel Agenda Settings'}
+                        {'Agenda Plugin Channel Settings'}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -106,7 +106,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
                         <label className='control-label'>
                             {'Meeting Day'}
                         </label>
-                        <div className='p-2'>
+                        <div className='form-control'>
                             {this.getDaysCheckboxes()}
                         </div>
                     </div>
@@ -117,14 +117,6 @@ export default class MeetingSettingsModal extends React.PureComponent {
                             className='form-control'
                             value={this.state.hashtag ? this.state.hashtag : ''}
                         />
-                        <p className='text-muted pt-1'> {'Hashtag is formatted using the '}
-                            <a
-                                target='_blank'
-                                rel='noopener noreferrer'
-                                href='https://godoc.org/time#pkg-constants'
-                            >{'Go time package.'}</a>
-                            {' Embed a date by writing down what January 2, 2006 would look like.'}
-                        </p>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
