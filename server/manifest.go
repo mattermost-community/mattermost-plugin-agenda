@@ -6,6 +6,6 @@ var manifest = struct {
 	ID      string
 	Version string
 }{
-	ID:      "com.mattermost.agenda-plugin",
+	ID:      "com.mattermost.agenda",
 	Version: "0.1.0",
 }

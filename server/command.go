@@ -15,16 +15,20 @@ import (
 const (
 	commandTriggerAgenda = "agenda"
 
-	WS_EVENT_LIST = "list"
+	wsEventList = "list"
 )
+
+const helpCommandText = "###### Mattermost Agenda Plugin - Slash Command Help\n" +
+	"\n* `/agenda queue [next-week (optional)] message` - Queue `message` as a topic on the next meeting. If `next-week` is provided, it will queue for the meeting in the next calendar week. \n" +
+	"* `/agenda list [next-week (optional)]` - Show a list of items queued for the next meeting.  If `next-week` is provided, it will list the agenda for the next calendar week. \n" +
+	"* `/agenda setting <field> <value>` - Update the setting with the given value. Field can be one of `schedule` or `hashtag` \n"
 
 func (p *Plugin) registerCommands() error {
 	if err := p.API.RegisterCommand(&model.Command{
-
 		Trigger:          commandTriggerAgenda,
 		AutoComplete:     true,
 		AutoCompleteHint: "[command]",
-		AutoCompleteDesc: "Available commands: list, queue, setting",
+		AutoCompleteDesc: "Available commands: list, queue, setting, help",
 	}); err != nil {
 		return errors.Wrapf(err, "failed to register %s command", commandTriggerAgenda)
 	}
@@ -32,7 +36,7 @@ func (p *Plugin) registerCommands() error {
 	return nil
 }
 
-// ExecuteCommand
+// ExecuteCommand executes a command that has been previously registered via the RegisterCommand
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	split := strings.Fields(args.Command)
 	command := split[0]
@@ -57,6 +61,9 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 	case "setting":
 		return p.executeCommandSetting(args), nil
 
+	case "help":
+		return p.executeCommandHelp(args), nil
+
 	}
 
 	return responsef("Unknown action: " + action), nil
@@ -67,13 +74,14 @@ func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandRespo
 	split := strings.Fields(args.Command)
 	nextWeek := len(split) > 2 && split[2] == "next-week"
 
-	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek)
-	if error != nil {
+	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek)
+	if err != nil {
 		return responsef("Error calculating hashtags")
 	}
 
+	// Send a websocket event to the web app that will open the RHS
 	p.API.PublishWebSocketEvent(
-		WS_EVENT_LIST,
+		wsEventList,
 		map[string]interface{}{
 			"hashtag": hashtag,
 		},
@@ -100,19 +108,20 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 		return responsef("Error getting meeting information for this channel")
 	}
 
-	if field == "schedule" {
+	switch field {
+	case "schedule":
 		//set schedule
 		weekdayInt, err := strconv.Atoi(value)
-		if err != nil {
+		validWeekday := weekdayInt >= 0 && weekdayInt <= 6
+		if err != nil || !validWeekday {
 			return responsef("Invalid weekday. Must be between 1-5")
 		}
-
 		meeting.Schedule = time.Weekday(weekdayInt)
 
-	} else if field == "hashtag" {
+	case "hashtag":
 		//set hashtag
 		meeting.HashtagFormat = value
-	} else {
+	default:
 		return responsef("Unknow setting " + field)
 	}
 
@@ -143,22 +152,26 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		return responsef("Error calculating hashtags")
 	}
 
-	itemsQueued, appError := p.API.SearchPostsInTeam(args.TeamId, []*model.SearchParams{{Terms: hashtag, IsHashtag: true}})
+	itemsQueued, appErr := p.API.SearchPostsInTeam(args.TeamId, []*model.SearchParams{{Terms: hashtag, IsHashtag: true}})
 
-	if appError != nil {
+	if appErr != nil {
 		return responsef("Error getting user")
 	}
 
-	_, err := p.API.CreatePost(&model.Post{
+	_, appErr = p.API.CreatePost(&model.Post{
 		UserId:    args.UserId,
 		ChannelId: args.ChannelId,
 		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, len(itemsQueued)+1, message),
 	})
-	if err != nil {
-		return responsef("Error creating post: " + err.Message)
+	if appErr != nil {
+		return responsef("Error creating post: " + appErr.Message)
 	}
 
 	return &model.CommandResponse{}
+}
+
+func (p *Plugin) executeCommandHelp(args *model.CommandArgs) *model.CommandResponse {
+	return responsef(helpCommandText)
 }
 
 func responsef(format string, args ...interface{}) *model.CommandResponse {
