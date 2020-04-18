@@ -122,7 +122,7 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 		//set hashtag
 		meeting.HashtagFormat = value
 	default:
-		return responsef("Unknow setting " + field)
+		return responsef("Unknown setting %s", field)
 	}
 
 	if err := p.SaveMeeting(meeting); err != nil {
