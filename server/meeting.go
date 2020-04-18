@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -10,7 +11,7 @@ import (
 type Meeting struct {
 	ChannelID     string       `json:"channelId"`
 	Schedule      time.Weekday `json:"schedule"`
-	HashtagFormat string       `json:"hashtagFormat"` //Default: Jan02
+	HashtagFormat string       `json:"hashtagFormat"` //Default: {ChannelName}-Jan02
 }
 
 // GetMeeting returns a meeting
@@ -28,9 +29,13 @@ func (p *Plugin) GetMeeting(channelID string) (*Meeting, error) {
 		}
 	} else {
 		//Return a default value
+		channel, err := p.API.GetChannel(channelID)
+		if err != nil {
+			return nil, err
+		}
 		meeting = &Meeting{
 			Schedule:      time.Thursday,
-			HashtagFormat: "Jan02",
+			HashtagFormat: strings.Join([]string{channel.Name[:15], "Jan02"}, "-"),
 			ChannelID:     channelID,
 		}
 	}
