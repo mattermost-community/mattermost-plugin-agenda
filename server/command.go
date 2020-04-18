@@ -66,7 +66,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 
 	}
 
-	return responsef("Unknown action: " + action), nil
+	return responsef("Unknown action: %s", action), nil
 }
 
 func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandResponse {
