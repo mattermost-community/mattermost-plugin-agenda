@@ -35,7 +35,7 @@ func (p *Plugin) GetMeeting(channelID string) (*Meeting, error) {
 		}
 		meeting = &Meeting{
 			Schedule:      time.Thursday,
-			HashtagFormat: strings.Join([]string{channel.Name[:15], "Jan02"}, "-"),
+			HashtagFormat: strings.Join([]string{fmt.Sprintf("%.15s", channel.Name), "Jan02"}, "-"),
 			ChannelID:     channelID,
 		}
 	}
