@@ -1,4 +1,5 @@
 import request from 'superagent';
+import {Client4} from 'mattermost-redux/client';
 
 import {id as pluginId} from './manifest';
 
@@ -16,28 +17,30 @@ export default class Client {
     }
 
     doGet = async (url, body, headers = {}) => {
-        headers['X-Requested-With'] = 'XMLHttpRequest';
-        headers['X-Timezone-Offset'] = new Date().getTimezoneOffset();
-
         const response = await request.
             get(url).
-            set(headers).
+            set({...this.getCommonHeaders(), ...headers}).
             accept('application/json');
 
         return response.body;
     }
 
     doPost = async (url, body, headers = {}) => {
-        headers['X-Requested-With'] = 'XMLHttpRequest';
-        headers['X-Timezone-Offset'] = new Date().getTimezoneOffset();
-
         const response = await request.
             post(url).
             send(body).
-            set(headers).
+            set({...this.getCommonHeaders(), ...headers}).
             type('application/json').
             accept('application/json');
 
         return response.body;
+    }
+
+    getCommonHeaders = () => {
+        const { headers } = Client4.getOptions([]);
+
+        headers['X-Timezone-Offset'] = new Date().getTimezoneOffset();
+
+        return headers;
     }
 }
