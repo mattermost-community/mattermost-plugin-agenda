@@ -3,8 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"regexp"
 	"strings"
 	"time"
+)
+
+var (
+	meetingDateFormatRegex = regexp.MustCompile(`(?m)^(?P<prefix>.*)?(?:{{\s*(?P<dateformat>.*)\s*}})(?P<postfix>.*)?$`)
 )
 
 // Meeting represents a meeting agenda
@@ -35,7 +40,7 @@ func (p *Plugin) GetMeeting(channelID string) (*Meeting, error) {
 		}
 		meeting = &Meeting{
 			Schedule:      time.Thursday,
-			HashtagFormat: strings.Join([]string{fmt.Sprintf("%.15s", channel.Name), "Jan02"}, "-"),
+			HashtagFormat: strings.Join([]string{fmt.Sprintf("%.15s", channel.Name), "{{ Jan02 }}"}, "-"),
 			ChannelID:     channelID,
 		}
 	}
@@ -68,7 +73,22 @@ func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool) (string, error
 
 	meetingDate := nextWeekdayDate(meeting.Schedule, nextWeek)
 
-	hashtag := fmt.Sprintf("#%v", meetingDate.Format(meeting.HashtagFormat))
+	var hashtag string
+
+	if matchGroups := meetingDateFormatRegex.FindStringSubmatch(meeting.HashtagFormat); len(matchGroups) == 4 {
+		var (
+			prefix        string
+			hashtagFormat string
+			postfix       string
+		)
+		prefix = matchGroups[1]
+		hashtagFormat = strings.TrimSpace(matchGroups[2])
+		postfix = matchGroups[3]
+
+		hashtag = fmt.Sprintf("#%s%v%s", prefix, meetingDate.Format(hashtagFormat), postfix)
+	} else {
+		hashtag = fmt.Sprintf("#%s", meeting.HashtagFormat)
+	}
 
 	return hashtag, nil
 }

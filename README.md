@@ -27,7 +27,8 @@ Meeting settings include:
 
 - Schedule Day: Day of the week when the meeting is scheduled.
 - Hashtag Format: The format of the hashtag for the meeting date. The date format is based on [Go date and time formatting](https://yourbasic.org/golang/format-parse-string-time-date-example/#standard-time-and-date-formats).
-  A default a generated from the first 15 characters of the channel's name (i.e. Dev-Jan02).
+  The date format must be wrapped in double Braces ( {{ }} ).
+  A default is generated from the first 15 characters of the channel's name with the short name of the month and day (i.e. Dev-{{ Jan02 }}).
 
 #### Slash Commands to manage the meeting agenda:
 
