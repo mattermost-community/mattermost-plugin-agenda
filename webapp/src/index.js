@@ -8,6 +8,7 @@ import ChannelSettingsModal from './components/meeting_settings';
 import {id as pluginId} from './manifest';
 export default class Plugin {
     initialize(registry, store) {
+        registry.registerReducer(reducer);
         registry.registerWebSocketEventHandler(
             'custom_' + pluginId + '_list',
             handleSearchHashtag(store),
@@ -18,8 +19,6 @@ export default class Plugin {
             (channelId) => {
                 store.dispatch(openMeetingSettingsModal(channelId));
             });
-
-        registry.registerReducer(reducer);
     }
 }
 
