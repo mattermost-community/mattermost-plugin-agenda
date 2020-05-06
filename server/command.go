@@ -19,9 +19,12 @@ const (
 )
 
 const helpCommandText = "###### Mattermost Agenda Plugin - Slash Command Help\n" +
+	"The Agenda plugin lets you queue up meeting topics for channel discussion at a later point.  When your meeting happens, you can click on the Hashtag to see all agenda items in the RHS. \n" +
+	"To configure the agenda for this channel, click on the Channel Name in Mattermost to access the channel options menu and select `Agenda Settings`"
 	"\n* `/agenda queue [next-week (optional)] message` - Queue `message` as a topic on the next meeting. If `next-week` is provided, it will queue for the meeting in the next calendar week. \n" +
 	"* `/agenda list [next-week (optional)]` - Show a list of items queued for the next meeting.  If `next-week` is provided, it will list the agenda for the next calendar week. \n" +
-	"* `/agenda setting <field> <value>` - Update the setting with the given value. Field can be one of `schedule` or `hashtag` \n"
+	"* `/agenda setting <field> <value>` - Update the setting with the given value. Field can be one of `schedule` or `hashtag` \n" +
+	"How can we make this better?  Submit an issue to the [Agenda Plugin repo here](https://github.com/mattermost/mattermost-plugin-agenda/issues) \n"
 
 func (p *Plugin) registerCommands() error {
 	if err := p.API.RegisterCommand(&model.Command{
