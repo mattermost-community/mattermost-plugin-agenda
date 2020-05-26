@@ -8,8 +8,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/mattermost/mattermost-server/model"
-	"github.com/mattermost/mattermost-server/plugin"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/plugin"
 )
 
 const (
@@ -24,12 +24,7 @@ const helpCommandText = "###### Mattermost Agenda Plugin - Slash Command Help\n"
 	"* `/agenda setting <field> <value>` - Update the setting with the given value. Field can be one of `schedule` or `hashtag` \n"
 
 func (p *Plugin) registerCommands() error {
-	if err := p.API.RegisterCommand(&model.Command{
-		Trigger:          commandTriggerAgenda,
-		AutoComplete:     true,
-		AutoCompleteHint: "[command]",
-		AutoCompleteDesc: "Available commands: list, queue, setting, help",
-	}); err != nil {
+	if err := p.API.RegisterCommand(createAgendaCommand()); err != nil {
 		return errors.Wrapf(err, "failed to register %s command", commandTriggerAgenda)
 	}
 
@@ -179,5 +174,40 @@ func responsef(format string, args ...interface{}) *model.CommandResponse {
 		ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
 		Text:         fmt.Sprintf(format, args...),
 		Type:         model.POST_DEFAULT,
+	}
+}
+
+func createAgendaCommand() *model.Command {
+	agenda := model.NewAutocompleteData(commandTriggerAgenda, "[command]", "Available commands: list, queue, setting, help")
+
+	list := model.NewAutocompleteData("list", "", "Show a list of items queued for the next meeting")
+	optionalListNextWeek := model.NewAutocompleteData("next-week", "(optional)", "If `next-week` is provided, it will list the agenda for the next calendar week.")
+	list.AddCommand(optionalListNextWeek)
+	agenda.AddCommand(list)
+
+	queue := model.NewAutocompleteData("queue", "", "Queue `message` as a topic on the next meeting.")
+	queue.AddStaticListArgument("If `next-week` is provided, it will queue for the meeting in the next calendar week.", false, []model.AutocompleteListItem{{
+		HelpText: "If `next-week` is provided, it will queue for the meeting in the next calendar week.",
+		Hint:     "(optional)",
+		Item:     "next-week",
+	}})
+	queue.AddTextArgument("Creates a post for user with the given message for the next meeting date.", "message", "")
+	agenda.AddCommand(queue)
+
+	setting := model.NewAutocompleteData("setting", "", "Update the setting.")
+	schedule := model.NewAutocompleteData("schedule", "", "Update schedule.")
+	schedule.AddTextArgument("Must be between 1-5", "weekday", "")
+	setting.AddCommand(schedule)
+	hashtag := model.NewAutocompleteData("hashtag", "", "Update hastag.")
+	hashtag.AddTextArgument("input hashtag", "Default: Jan02", "")
+	setting.AddCommand(hashtag)
+	agenda.AddCommand(setting)
+
+	help := model.NewAutocompleteData("help", "", "Mattermost Agenda plugin slash command help")
+	agenda.AddCommand(help)
+	return &model.Command{
+		Trigger:          commandTriggerAgenda,
+		AutoComplete:     true,
+		AutocompleteData: agenda,
 	}
 }
