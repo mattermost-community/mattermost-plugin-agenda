@@ -191,7 +191,7 @@ func createAgendaCommand() *model.Command {
 		Hint:     "(optional)",
 		Item:     "next-week",
 	}})
-	queue.AddTextArgument("Creates a post for user with the given message for the next meeting date.", "message", "")
+	queue.AddTextArgument("Message for the next meeting date.", "[message]", "")
 	agenda.AddCommand(queue)
 
 	setting := model.NewAutocompleteData("setting", "", "Update the setting.")
@@ -208,6 +208,8 @@ func createAgendaCommand() *model.Command {
 	return &model.Command{
 		Trigger:          commandTriggerAgenda,
 		AutoComplete:     true,
+		AutoCompleteDesc: "Available commands: list, queue, setting, help",
+		AutoCompleteHint: "[command]",
 		AutocompleteData: agenda,
 	}
 }
