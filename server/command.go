@@ -116,7 +116,7 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 		if err != nil || !validWeekday {
 			return responsef("Invalid weekday. Must be between 1-5")
 		}
-		meeting.Schedule = time.Weekday(weekdayInt)
+		meeting.Schedule = []time.Weekday{time.Weekday(weekdayInt)}
 
 	case "hashtag":
 		//set hashtag

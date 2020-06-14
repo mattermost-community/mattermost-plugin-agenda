@@ -24,7 +24,7 @@ func TestServeHTTP(t *testing.T) {
 		// Mock get default meeting
 		defaultMeeting := &Meeting{
 			ChannelID:     "myChannelId",
-			Schedule:      time.Thursday,
+			Schedule:      []time.Weekday{time.Thursday},
 			HashtagFormat: "Jan02",
 		}
 
@@ -51,7 +51,7 @@ func TestServeHTTP(t *testing.T) {
 		// Mock set meeting
 		meeting := &Meeting{
 			ChannelID:     "myChannelId",
-			Schedule:      time.Tuesday,
+			Schedule:      []time.Weekday{time.Tuesday},
 			HashtagFormat: "MyMeeting-Jan-02",
 		}
 

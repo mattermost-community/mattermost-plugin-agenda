@@ -7,9 +7,19 @@ import (
 // nextWeekdayDate calculates the date of the next given weekday
 // based on today's date.
 // If nextWeek is true, it will be based on the next calendar week.
-func nextWeekdayDate(day time.Weekday, nextWeek bool) time.Time {
+func nextWeekdayDate(meetingDays []time.Weekday, nextWeek bool) time.Time {
+	todayWeekday := time.Now().Weekday()
 
-	daysTill := daysTillNextWeekday(time.Now().Weekday(), day, nextWeek)
+	// Find which meeting weekday to calculate the date for
+	meetingDay := meetingDays[0]
+	for _, day := range meetingDays {
+		if todayWeekday <= day {
+			meetingDay = day
+			break
+		}
+	}
+
+	daysTill := daysTillNextWeekday(todayWeekday, meetingDay, nextWeek)
 
 	return time.Now().AddDate(0, 0, daysTill)
 }

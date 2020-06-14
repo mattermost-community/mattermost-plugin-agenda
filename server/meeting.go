@@ -8,9 +8,9 @@ import (
 
 // Meeting represents a meeting agenda
 type Meeting struct {
-	ChannelID     string       `json:"channelId"`
-	Schedule      time.Weekday `json:"schedule"`
-	HashtagFormat string       `json:"hashtagFormat"` //Default: Jan02
+	ChannelID     string         `json:"channelId"`
+	Schedule      []time.Weekday `json:"schedule"`
+	HashtagFormat string         `json:"hashtagFormat"` //Default: Jan02
 }
 
 // GetMeeting returns a meeting
@@ -29,7 +29,7 @@ func (p *Plugin) GetMeeting(channelID string) (*Meeting, error) {
 	} else {
 		//Return a default value
 		meeting = &Meeting{
-			Schedule:      time.Thursday,
+			Schedule:      []time.Weekday{time.Thursday},
 			HashtagFormat: "Jan02",
 			ChannelID:     channelID,
 		}

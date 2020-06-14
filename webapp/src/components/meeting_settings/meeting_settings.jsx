@@ -18,7 +18,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
 
         this.state = {
             hashtag: null,
-            weekday: 0,
+            weekdays: [],
         };
     }
 
@@ -31,7 +31,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({
                 hashtag: this.props.meeting.hashtagFormat,
-                weekday: this.props.meeting.schedule,
+                weekdays: this.props.meeting.schedule,
             });
         }
     }
@@ -43,8 +43,19 @@ export default class MeetingSettingsModal extends React.PureComponent {
     }
 
     handleCheckboxChanged = (e) => {
+        const changeday = Number(e.target.value);
+        let changedWeekdays = Object.assign([], this.state.weekdays);
+
+        if (e.target.checked && !this.state.weekdays.includes(changeday)) {
+            // Add the checked day
+            changedWeekdays = [...changedWeekdays, changeday];
+        } else if (!e.target.checked && this.state.weekdays.includes(changeday)) {
+            // Remove the unchecked day
+            changedWeekdays.splice(changedWeekdays.indexOf(changeday), 1);
+        }
+
         this.setState({
-            weekday: Number(e.target.value),
+            weekdays: changedWeekdays,
         });
     }
 
@@ -52,17 +63,13 @@ export default class MeetingSettingsModal extends React.PureComponent {
         this.props.saveMeetingSettings({
             channelId: this.props.channelId,
             hashtagFormat: this.state.hashtag,
-            schedule: this.state.weekday,
+            schedule: this.state.weekdays.sort(),
         });
 
         this.props.close();
     }
 
     getDaysCheckboxes() {
-        // weekday is based on the server time.Weekday
-        // where the week array starts on Sunday = 0
-        const meetingDay = this.state.weekday ? this.state.weekday : 0;
-
         const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
         const checkboxes = weekDays.map((weekday, i) => {
@@ -75,7 +82,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
                         key={weekday}
                         type='checkbox'
                         value={i}
-                        checked={i === meetingDay}
+                        checked={this.state.weekdays.includes(i)}
                         onChange={this.handleCheckboxChanged}
                     /> {weekday}
                 </label>);
