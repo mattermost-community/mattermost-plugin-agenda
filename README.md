@@ -27,7 +27,7 @@ The meeting settings for each channel can be configured in the Channel Header Dr
 
 Meeting settings include:
 
-- Schedule Day: Day of the week when the meeting is scheduled.
+- Schedule Day: Days of the week when the meeting is scheduled.
 - Hashtag Format: The format of the hashtag for the meeting date. The date format is based on [Go date and time formatting](https://yourbasic.org/golang/format-parse-string-time-date-example/#standard-time-and-date-formats)
 
 #### Slash Commands to manage the meeting agenda:
@@ -60,7 +60,6 @@ Updates the given setting with the provided value for the meeting settings of th
 
 - Mark items as resolved or queue for next week. 
 - Queue a post using a menu option in the post dot menu. 
-- Handle multiple meeting days in a week.
 - Handle time in meeting schedule. 
 
 ## Contributing
