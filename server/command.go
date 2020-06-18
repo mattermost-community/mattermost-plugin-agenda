@@ -152,7 +152,7 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		return responsef("Error calculating hashtags")
 	}
 
-	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, &model.SearchParameter{Terms: &hashtag})
+	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, model.SearchParameter{Terms: &hashtag})
 
 	if appErr != nil {
 		return responsef("Error calculating list number")
