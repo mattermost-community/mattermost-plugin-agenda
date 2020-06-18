@@ -149,7 +149,7 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 
 	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek)
 	if error != nil {
-		return responsef("Error calculating hashtags")
+		return responsef("Error calculating hashtags. Check the meeting settings for this channel.")
 	}
 
 	itemsQueued, appErr := p.API.SearchPostsInTeam(args.TeamId, []*model.SearchParams{{Terms: hashtag, IsHashtag: true}})

@@ -17,8 +17,8 @@ export default class MeetingSettingsModal extends React.PureComponent {
         super(props);
 
         this.state = {
-            hashtag: null,
-            weekdays: [],
+            hashtag: 'Jan02',
+            weekdays: [1],
         };
     }
 

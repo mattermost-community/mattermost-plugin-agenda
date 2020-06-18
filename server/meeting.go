@@ -61,7 +61,10 @@ func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool) (string, error
 		return "", err
 	}
 
-	meetingDate := nextWeekdayDate(meeting.Schedule, nextWeek)
+	meetingDate, err := nextWeekdayDate(meeting.Schedule, nextWeek)
+	if err != nil {
+		return "", err
+	}
 
 	hashtag := fmt.Sprintf("#%v", meetingDate.Format(meeting.HashtagFormat))
 
