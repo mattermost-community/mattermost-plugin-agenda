@@ -2,10 +2,11 @@ package main
 
 import (
 	"errors"
-	"github.com/pkg/errors"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 const (
@@ -57,7 +58,7 @@ func nextWeekdayDate(meetingDays []time.Weekday, nextWeek bool) (*time.Time, err
 	todayWeekday := time.Now().Weekday()
 
 	if len(meetingDays) == 0 {
-		return nil, errors.New("Missing weekdays to calculate date.")
+		return nil, errors.New("missing weekdays to calculate date")
 	}
 
 	// Find which meeting weekday to calculate the date for
