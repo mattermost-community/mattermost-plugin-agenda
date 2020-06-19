@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/mattermost/mattermost-server/model"
 	"github.com/mattermost/mattermost-server/plugin"
@@ -71,7 +72,12 @@ func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandRespo
 	split := strings.Fields(args.Command)
 	nextWeek := len(split) > 2 && split[2] == "next-week"
 
-	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek)
+	var weekday time.Weekday
+	if !nextWeek && len(split) > 2 {
+		weekday, _ = parseSchedule(split[2])
+	}
+
+	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek, weekday)
 	if err != nil {
 		return responsef("Error calculating hashtags")
 	}
@@ -108,7 +114,7 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 	switch field {
 	case "schedule":
 		//set schedule
-		weekDayInt, err := parseSchedule(value)
+		weekdayInt, err := parseSchedule(value)
 		if err != nil {
 			return responsef(err.Error())
 		}
@@ -136,14 +142,20 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 	}
 
 	nextWeek := false
+	var weekday time.Weekday
 	message := strings.Join(split[2:], " ")
 
 	if split[2] == "next-week" {
 		nextWeek = true
+	} else {
+		weekday, _ = parseSchedule(split[2])
+	}
+
+	if nextWeek || weekday > -1 {
 		message = strings.Join(split[3:], " ")
 	}
 
-	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek)
+	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek, weekday)
 	if error != nil {
 		return responsef("Error calculating hashtags. Check the meeting settings for this channel.")
 	}
