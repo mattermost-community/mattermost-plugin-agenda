@@ -33,18 +33,18 @@ Meeting settings include:
 #### Slash Commands to manage the meeting agenda:
 
 ```
-/agenda queue [next-week] message
+/agenda queue [meetingDay] message
 ```
-Creates a post for the user with the given `message` for the next meeting date. The configured hashtag will precede the `message`.
-If `next-week` is indicated (optional), it will use the date of the meeting in the next calendar week. 
+Creates a post for the user with the given `message` for the next meeting date or the specified `meetingDay` (optional). The configured hashtag will precede the `message`.
+The meeting day supports long (Monday, Tuesday), short name (Mon Tue), number (0-6) or `next-week`. If `next-week` is indicated, it will use the date of the first meeting in the next calendar week. 
 
 ![post_example](./assets/postExample.png)
 
 ```
-/agenda list [next-week]
+/agenda list [meetingDay]
 ```
-Executes a search of the hashtag of the next meeting, opening the RHS with all the posts with that hashtag. 
-If `next-week` is indicated (optional), it will use the date of the meeting in the next calendar week. 
+Executes a search of the hashtag of the next meeting or the specified `meetingDay` (optional), opening the RHS with all the posts with that hashtag. 
+The meeting day supports long (Monday, Tuesday), short name (Mon Tue), number (0-6) or `next-week`. If `next-week` is indicated, it will use the date of the first meeting in the next calendar week. 
 
 ```
 /agenda setting field value
