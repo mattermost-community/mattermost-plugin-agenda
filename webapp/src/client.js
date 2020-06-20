@@ -1,4 +1,3 @@
-import request from 'superagent';
 import {Client4} from 'mattermost-redux/client';
 
 import {id as pluginId} from './manifest';
@@ -16,30 +15,35 @@ export default class Client {
         return this.doPost(`${this.url}/settings`, meeting);
     }
 
-    doGet = async (url, body, headers = {}) => {
-        const response = await request.
-            get(url).
-            set({...this.getCommonHeaders(), ...headers}).
-            accept('application/json');
-
-        return response.body;
+    doGet = async (url, headers = {}) => {
+        return this.doFetch(url, { headers });
     }
 
     doPost = async (url, body, headers = {}) => {
-        const response = await request.
-            post(url).
-            send(body).
-            set({...this.getCommonHeaders(), ...headers}).
-            type('application/json').
-            accept('application/json');
+        return this.doFetch(url, {
+            method : 'POST',
+            body: JSON.stringify(body),
+            headers: {...headers, ...{
+                'Content-Type' : 'application/json'
+            }}
+        });
+    }
 
-        return response.body;
+    doFetch = async (url, { method = 'GET', body = null, headers = {} }) => {
+        const response = await fetch(url, {
+            method,
+            body,
+            headers: {...this.getCommonHeaders(), ...headers}
+        });
+
+        return response.json();
     }
 
     getCommonHeaders = () => {
         const { headers } = Client4.getOptions([]);
 
         headers['X-Timezone-Offset'] = new Date().getTimezoneOffset();
+        headers['Accept'] = 'application/json';
 
         return headers;
     }
