@@ -2,14 +2,11 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
-	"time"
-
-	"github.com/pkg/errors"
 
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/mattermost/mattermost-server/v5/plugin"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -106,12 +103,11 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 	switch field {
 	case "schedule":
 		//set schedule
-		weekdayInt, err := strconv.Atoi(value)
-		validWeekday := weekdayInt >= 0 && weekdayInt <= 6
-		if err != nil || !validWeekday {
-			return responsef("Invalid weekday. Must be between 1-5")
+		weekDayInt, err := parseSchedule(value)
+		if err != nil {
+			return responsef(err.Error())
 		}
-		meeting.Schedule = time.Weekday(weekdayInt)
+		meeting.Schedule = weekDayInt
 
 	case "hashtag":
 		//set hashtag
