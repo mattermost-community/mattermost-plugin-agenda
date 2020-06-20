@@ -192,7 +192,15 @@ func createAgendaCommand() *model.Command {
 
 	setting := model.NewAutocompleteData("setting", "", "Update the setting.")
 	schedule := model.NewAutocompleteData("schedule", "", "Update schedule.")
-	schedule.AddTextArgument("Must be between 1-5", "weekday", "")
+	schedule.AddStaticListArgument("weekday", true, []model.AutocompleteListItem{
+		{Item: "Monday"},
+		{Item: "Tuesday"},
+		{Item: "Wednesday"},
+		{Item: "Thursday"},
+		{Item: "Friday"},
+		{Item: "Saturday"},
+		{Item: "Sunday"},
+	})
 	setting.AddCommand(schedule)
 	hashtag := model.NewAutocompleteData("hashtag", "", "Update hastag.")
 	hashtag.AddTextArgument("input hashtag", "Default: Jan02", "")
