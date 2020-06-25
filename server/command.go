@@ -31,11 +31,6 @@ func (p *Plugin) registerCommands() error {
 // ExecuteCommand executes a command that has been previously registered via the RegisterCommand
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	split := strings.Fields(args.Command)
-	command := split[0]
-
-	if command != "/agenda" {
-		return responsef("Unknown command: " + args.Command), nil
-	}
 
 	if len(split) < 2 {
 		return responsef("Missing command. You can try queue, list, setting"), nil
