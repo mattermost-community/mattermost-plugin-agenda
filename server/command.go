@@ -53,7 +53,7 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 
 	}
 
-	return responsef("Unknown action: " + action), nil
+	return responsef("Unknown action: %s", action), nil
 }
 
 func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandResponse {
@@ -108,7 +108,7 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 		//set hashtag
 		meeting.HashtagFormat = value
 	default:
-		return responsef("Unknow setting " + field)
+		return responsef("Unknown setting %s", field)
 	}
 
 	if err := p.SaveMeeting(meeting); err != nil {
@@ -150,7 +150,7 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, len(itemsQueued)+1, message),
 	})
 	if appErr != nil {
-		return responsef("Error creating post: " + appErr.Message)
+		return responsef("Error creating post: %s", appErr.Message)
 	}
 
 	return &model.CommandResponse{}
