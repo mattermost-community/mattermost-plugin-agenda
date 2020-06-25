@@ -138,16 +138,19 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		return responsef("Error calculating hashtags")
 	}
 
-	itemsQueued, appErr := p.API.SearchPostsInTeam(args.TeamId, []*model.SearchParams{{Terms: hashtag, IsHashtag: true}})
+	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, model.SearchParameter{Terms: &hashtag})
 
 	if appErr != nil {
-		return responsef("Error getting user")
+		return responsef("Error calculating list number")
 	}
+
+	postList := *searchResults.PostList
+	numQueueItems := len(postList.Posts)
 
 	_, appErr = p.API.CreatePost(&model.Post{
 		UserId:    args.UserId,
 		ChannelId: args.ChannelId,
-		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, len(itemsQueued)+1, message),
+		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, numQueueItems+1, message),
 	})
 	if appErr != nil {
 		return responsef("Error creating post: %s", appErr.Message)
