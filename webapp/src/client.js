@@ -1,4 +1,5 @@
 import {Client4} from 'mattermost-redux/client';
+import {ClientError} from 'mattermost-redux/client/client4';
 
 import {id as pluginId} from './manifest';
 
@@ -43,7 +44,17 @@ export default class Client {
 
         const response = await fetch(url, options);
 
-        return response.json();
+        if (response.ok) {
+            return response.json();
+        }
+
+        const data = await response.text();
+
+        throw new ClientError(Client4.url, {
+            message: data || '',
+            status_code: response.status,
+            url,
+        });
     }
 
 }
