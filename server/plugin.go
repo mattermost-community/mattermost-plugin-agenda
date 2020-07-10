@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"sync"
@@ -35,6 +36,10 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	switch path := r.URL.Path; path {
 	case "/api/v1/settings":
 		p.httpMeetingSettings(w, r)
+	case "/api/v1/meeting-days-autocomplete":
+		p.httpMeetingDaysAutocomplete(w, r, false)
+	case "/api/v1/list-meeting-days-autocomplete":
+		p.httpMeetingDaysAutocomplete(w, r, true)
 	default:
 		http.NotFound(w, r)
 	}
@@ -118,4 +123,44 @@ func (p *Plugin) httpMeetingGetSettings(w http.ResponseWriter, r *http.Request, 
 	}
 
 	w.Write(resp)
+}
+
+func (p *Plugin) httpMeetingDaysAutocomplete(w http.ResponseWriter, r *http.Request, listCommand bool) {
+	query := r.URL.Query()
+	meeting, err := p.GetMeeting(query.Get("channel_id"))
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error getting meeting days: %s", err.Error()), http.StatusInternalServerError)
+	}
+
+	ret := make([]model.AutocompleteListItem, 0)
+
+	helpText := "Queue this item "
+	if listCommand {
+		helpText = "List items "
+	}
+
+	for _, meetingDay := range meeting.Schedule {
+		ret = append(ret, model.AutocompleteListItem{
+			Item:     meetingDay.String(),
+			HelpText: fmt.Sprintf(helpText+"for %s's meeting", meetingDay.String()),
+			Hint:     "(optional)",
+		})
+	}
+	ret = append(ret, model.AutocompleteListItem{
+		Item:     "next-week",
+		HelpText: fmt.Sprintf(helpText + "for the first meeting next week"),
+		Hint:     "(optional)",
+	})
+
+	jsonBytes, err := json.Marshal(ret)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error getting meeting days: %s", err.Error()), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if _, err = w.Write(jsonBytes); err != nil {
+		http.Error(w, fmt.Sprintf("Error getting meeting days: %s", err.Error()), http.StatusInternalServerError)
+		return
+	}
 }

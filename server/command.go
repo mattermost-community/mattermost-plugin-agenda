@@ -17,8 +17,8 @@ const (
 )
 
 const helpCommandText = "###### Mattermost Agenda Plugin - Slash Command Help\n" +
-	"\n* `/agenda queue [next-week (optional)] message` - Queue `message` as a topic on the next meeting. If `next-week` is provided, it will queue for the meeting in the next calendar week. \n" +
-	"* `/agenda list [next-week (optional)]` - Show a list of items queued for the next meeting.  If `next-week` is provided, it will list the agenda for the next calendar week. \n" +
+	"\n* `/agenda queue [weekday (optional)] message` - Queue `message` as a topic on the next meeting. If `weekday` is provided, it will queue for the meeting for. \n" +
+	"* `/agenda list [weekday(optional)]` - Show a list of items queued for the next meeting.  If `next-week` is provided, it will list the agenda for the next calendar week. \n" +
 	"* `/agenda setting <field> <value>` - Update the setting with the given value. Field can be one of `schedule` or `hashtag` \n"
 
 func (p *Plugin) registerCommands() error {
@@ -184,16 +184,11 @@ func createAgendaCommand() *model.Command {
 	agenda := model.NewAutocompleteData(commandTriggerAgenda, "[command]", "Available commands: list, queue, setting, help")
 
 	list := model.NewAutocompleteData("list", "", "Show a list of items queued for the next meeting")
-	optionalListNextWeek := model.NewAutocompleteData("next-week", "(optional)", "If `next-week` is provided, it will list the agenda for the next calendar week.")
-	list.AddCommand(optionalListNextWeek)
+	list.AddDynamicListArgument("Day of the week for when to queue the meeting", "/api/v1/list-meeting-days-autocomplete", false)
 	agenda.AddCommand(list)
 
 	queue := model.NewAutocompleteData("queue", "", "Queue `message` as a topic on the next meeting.")
-	queue.AddStaticListArgument("If `next-week` is provided, it will queue for the meeting in the next calendar week.", false, []model.AutocompleteListItem{{
-		HelpText: "If `next-week` is provided, it will queue for the meeting in the next calendar week.",
-		Hint:     "(optional)",
-		Item:     "next-week",
-	}})
+	queue.AddDynamicListArgument("Day of the week for when to queue the meeting", "/api/v1/meeting-days-autocomplete", false)
 	queue.AddTextArgument("Message for the next meeting date.", "[message]", "")
 	agenda.AddCommand(queue)
 

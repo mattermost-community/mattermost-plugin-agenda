@@ -31,7 +31,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({
                 hashtag: this.props.meeting.hashtagFormat,
-                weekdays: this.props.meeting.schedule,
+                weekdays: this.props.meeting.schedule || [],
             });
         }
     }
