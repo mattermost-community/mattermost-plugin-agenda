@@ -37,7 +37,6 @@ export default class Client {
             body,
             headers: {
                 ...headers,
-                'X-Timezoone-Offset' : new Date().getTimezoneOffset(),
                 'Accept' : 'application/json'
             },
         });
