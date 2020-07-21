@@ -22,22 +22,22 @@ export default class Client {
 
     doPost = async (url, body, headers = {}) => {
         return this.doFetch(url, {
-            method : 'POST',
+            method: 'POST',
             body: JSON.stringify(body),
             headers: {
-                ...headers, 
-                'Content-Type' : 'application/json',
-            }
+                ...headers,
+                'Content-Type': 'application/json',
+            },
         });
     }
 
-    doFetch = async (url, { method = 'GET', body = null, headers = {} }) => {
+    doFetch = async (url, {method = 'GET', body = null, headers = {}}) => {
         const options = Client4.getOptions({
             method,
             body,
             headers: {
                 ...headers,
-                'Accept' : 'application/json'
+                Accept: 'application/json',
             },
         });
 
@@ -55,5 +55,4 @@ export default class Client {
             url,
         });
     }
-
 }
