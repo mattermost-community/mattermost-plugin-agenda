@@ -29,7 +29,6 @@ type Plugin struct {
 
 // ServeHTTP demonstrates a plugin that handles HTTP requests by greeting the world.
 func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
-
 	w.Header().Set("Content-Type", "application/json")
 
 	switch path := r.URL.Path; path {
@@ -60,7 +59,6 @@ func (p *Plugin) OnActivate() error {
 }
 
 func (p *Plugin) httpMeetingSettings(w http.ResponseWriter, r *http.Request) {
-
 	mattermostUserID := r.Header.Get("Mattermost-User-Id")
 	if mattermostUserID == "" {
 		http.Error(w, "Not Authorized", http.StatusUnauthorized)

@@ -14,7 +14,6 @@ import (
 )
 
 func TestServeHTTP(t *testing.T) {
-
 	assert := assert.New(t)
 	plugin := Plugin{}
 	api := &plugintest.API{}
