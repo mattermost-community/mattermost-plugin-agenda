@@ -1,4 +1,5 @@
-import request from 'superagent';
+import {Client4} from 'mattermost-redux/client';
+import {ClientError} from 'mattermost-redux/client/client4';
 
 import {id as pluginId} from './manifest';
 
@@ -15,29 +16,43 @@ export default class Client {
         return this.doPost(`${this.url}/settings`, meeting);
     }
 
-    doGet = async (url, body, headers = {}) => {
-        headers['X-Requested-With'] = 'XMLHttpRequest';
-        headers['X-Timezone-Offset'] = new Date().getTimezoneOffset();
-
-        const response = await request.
-            get(url).
-            set(headers).
-            accept('application/json');
-
-        return response.body;
+    doGet = async (url, headers = {}) => {
+        return this.doFetch(url, {headers});
     }
 
     doPost = async (url, body, headers = {}) => {
-        headers['X-Requested-With'] = 'XMLHttpRequest';
-        headers['X-Timezone-Offset'] = new Date().getTimezoneOffset();
+        return this.doFetch(url, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                ...headers,
+                'Content-Type': 'application/json',
+            },
+        });
+    }
 
-        const response = await request.
-            post(url).
-            send(body).
-            set(headers).
-            type('application/json').
-            accept('application/json');
+    doFetch = async (url, {method = 'GET', body = null, headers = {}}) => {
+        const options = Client4.getOptions({
+            method,
+            body,
+            headers: {
+                ...headers,
+                Accept: 'application/json',
+            },
+        });
 
-        return response.body;
+        const response = await fetch(url, options);
+
+        if (response.ok) {
+            return response.json();
+        }
+
+        const data = await response.text();
+
+        throw new ClientError(Client4.url, {
+            message: data || '',
+            status_code: response.status,
+            url,
+        });
     }
 }
