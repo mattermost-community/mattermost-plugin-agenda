@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	scheduleErrorInvalid       = "Invalid weekday. Must be between 1-5 or Mon-Fri"
-	scheduleErrorInvalidNumber = "Invalid weekday. Must be between 1-5"
+	scheduleErrorInvalid       = "invalid weekday. Must be between 1-5 or Mon-Fri"
+	scheduleErrorInvalidNumber = "invalid weekday. Must be between 1-5"
 )
 
 var daysOfWeek = map[string]time.Weekday{}

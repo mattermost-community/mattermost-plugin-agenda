@@ -92,7 +92,11 @@ func (p *Plugin) httpMeetingSaveSettings(w http.ResponseWriter, r *http.Request,
 		return
 	}
 
-	w.Write([]byte("{\"status\": \"OK\"}"))
+	resp := struct {
+		Status string
+	}{"OK"}
+
+	p.writeJSON(w, resp)
 }
 
 func (p *Plugin) httpMeetingGetSettings(w http.ResponseWriter, r *http.Request, mmUserID string) {
@@ -109,11 +113,20 @@ func (p *Plugin) httpMeetingGetSettings(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	resp, err := json.Marshal(meeting)
+	p.writeJSON(w, meeting)
+}
+
+func (p *Plugin) writeJSON(w http.ResponseWriter, v interface{}) {
+	b, err := json.Marshal(v)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		p.API.LogWarn("Failed to marshal JSON response", "error", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
-	w.Write(resp)
+	_, err = w.Write(b)
+	if err != nil {
+		p.API.LogWarn("Failed to write JSON response", "error", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
