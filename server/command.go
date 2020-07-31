@@ -2,14 +2,11 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
-	"time"
 
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/plugin"
 	"github.com/pkg/errors"
-
-	"github.com/mattermost/mattermost-server/model"
-	"github.com/mattermost/mattermost-server/plugin"
 )
 
 const (
@@ -24,12 +21,7 @@ const helpCommandText = "###### Mattermost Agenda Plugin - Slash Command Help\n"
 	"* `/agenda setting <field> <value>` - Update the setting with the given value. Field can be one of `schedule` or `hashtag` \n"
 
 func (p *Plugin) registerCommands() error {
-	if err := p.API.RegisterCommand(&model.Command{
-		Trigger:          commandTriggerAgenda,
-		AutoComplete:     true,
-		AutoCompleteHint: "[command]",
-		AutoCompleteDesc: "Available commands: list, queue, setting, help",
-	}); err != nil {
+	if err := p.API.RegisterCommand(createAgendaCommand()); err != nil {
 		return errors.Wrapf(err, "failed to register %s command", commandTriggerAgenda)
 	}
 
@@ -39,11 +31,6 @@ func (p *Plugin) registerCommands() error {
 // ExecuteCommand executes a command that has been previously registered via the RegisterCommand
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	split := strings.Fields(args.Command)
-	command := split[0]
-
-	if command != "/agenda" {
-		return responsef("Unknown command: " + args.Command), nil
-	}
 
 	if len(split) < 2 {
 		return responsef("Missing command. You can try queue, list, setting"), nil
@@ -63,14 +50,12 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 
 	case "help":
 		return p.executeCommandHelp(args), nil
-
 	}
 
-	return responsef("Unknown action: " + action), nil
+	return responsef("Unknown action: %s", action), nil
 }
 
 func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandResponse {
-
 	split := strings.Fields(args.Command)
 	nextWeek := len(split) > 2 && split[2] == "next-week"
 
@@ -92,7 +77,6 @@ func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandRespo
 }
 
 func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandResponse {
-
 	// settings: hashtag, schedule
 	split := strings.Fields(args.Command)
 
@@ -111,18 +95,17 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 	switch field {
 	case "schedule":
 		//set schedule
-		weekdayInt, err := strconv.Atoi(value)
-		validWeekday := weekdayInt >= 0 && weekdayInt <= 6
-		if err != nil || !validWeekday {
-			return responsef("Invalid weekday. Must be between 1-5")
+		weekDayInt, err := parseSchedule(value)
+		if err != nil {
+			return responsef(err.Error())
 		}
-		meeting.Schedule = time.Weekday(weekdayInt)
+		meeting.Schedule = weekDayInt
 
 	case "hashtag":
 		//set hashtag
 		meeting.HashtagFormat = value
 	default:
-		return responsef("Unknow setting " + field)
+		return responsef("Unknown setting %s", field)
 	}
 
 	if err := p.SaveMeeting(meeting); err != nil {
@@ -152,19 +135,22 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		return responsef("Error calculating hashtags")
 	}
 
-	itemsQueued, appErr := p.API.SearchPostsInTeam(args.TeamId, []*model.SearchParams{{Terms: hashtag, IsHashtag: true}})
+	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, model.SearchParameter{Terms: &hashtag})
 
 	if appErr != nil {
-		return responsef("Error getting user")
+		return responsef("Error calculating list number")
 	}
+
+	postList := *searchResults.PostList
+	numQueueItems := len(postList.Posts)
 
 	_, appErr = p.API.CreatePost(&model.Post{
 		UserId:    args.UserId,
 		ChannelId: args.ChannelId,
-		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, len(itemsQueued)+1, message),
+		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, numQueueItems+1, message),
 	})
 	if appErr != nil {
-		return responsef("Error creating post: " + appErr.Message)
+		return responsef("Error creating post: %s", appErr.Message)
 	}
 
 	return &model.CommandResponse{}
@@ -179,5 +165,50 @@ func responsef(format string, args ...interface{}) *model.CommandResponse {
 		ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
 		Text:         fmt.Sprintf(format, args...),
 		Type:         model.POST_DEFAULT,
+	}
+}
+
+func createAgendaCommand() *model.Command {
+	agenda := model.NewAutocompleteData(commandTriggerAgenda, "[command]", "Available commands: list, queue, setting, help")
+
+	list := model.NewAutocompleteData("list", "", "Show a list of items queued for the next meeting")
+	optionalListNextWeek := model.NewAutocompleteData("next-week", "(optional)", "If `next-week` is provided, it will list the agenda for the next calendar week.")
+	list.AddCommand(optionalListNextWeek)
+	agenda.AddCommand(list)
+
+	queue := model.NewAutocompleteData("queue", "", "Queue `message` as a topic on the next meeting.")
+	queue.AddStaticListArgument("If `next-week` is provided, it will queue for the meeting in the next calendar week.", false, []model.AutocompleteListItem{{
+		HelpText: "If `next-week` is provided, it will queue for the meeting in the next calendar week.",
+		Hint:     "(optional)",
+		Item:     "next-week",
+	}})
+	queue.AddTextArgument("Message for the next meeting date.", "[message]", "")
+	agenda.AddCommand(queue)
+
+	setting := model.NewAutocompleteData("setting", "", "Update the setting.")
+	schedule := model.NewAutocompleteData("schedule", "", "Update schedule.")
+	schedule.AddStaticListArgument("weekday", true, []model.AutocompleteListItem{
+		{Item: "Monday"},
+		{Item: "Tuesday"},
+		{Item: "Wednesday"},
+		{Item: "Thursday"},
+		{Item: "Friday"},
+		{Item: "Saturday"},
+		{Item: "Sunday"},
+	})
+	setting.AddCommand(schedule)
+	hashtag := model.NewAutocompleteData("hashtag", "", "Update hastag.")
+	hashtag.AddTextArgument("input hashtag", "Default: Jan02", "")
+	setting.AddCommand(hashtag)
+	agenda.AddCommand(setting)
+
+	help := model.NewAutocompleteData("help", "", "Mattermost Agenda plugin slash command help")
+	agenda.AddCommand(help)
+	return &model.Command{
+		Trigger:          commandTriggerAgenda,
+		AutoComplete:     true,
+		AutoCompleteDesc: "Available commands: list, queue, setting, help",
+		AutoCompleteHint: "[command]",
+		AutocompleteData: agenda,
 	}
 }

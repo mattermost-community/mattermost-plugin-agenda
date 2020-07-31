@@ -3,6 +3,8 @@
 [![CircleCI](https://img.shields.io/circleci/project/github/mattermost/mattermost-plugin-agenda/master.svg)](https://circleci.com/gh/mattermost/mattermost-plugin-agenda)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mattermost/mattermost-plugin-agenda)](https://goreportcard.com/report/github.com/mattermost/mattermost-plugin-agenda)
 [![Code Coverage](https://img.shields.io/codecov/c/github/mattermost/mattermost-plugin-agenda/master.svg)](https://codecov.io/gh/mattermost/mattermost-plugin-agenda)
+[![Release](https://img.shields.io/github/v/release/mattermost/mattermost-plugin-agenda?include_prereleases)](https://github.com/mattermost/mattermost-plugin-agenda/releases/latest)
+[![HW](https://img.shields.io/github/issues/mattermost/mattermost-plugin-agenda/Up%20For%20Grabs?color=dark%20green&label=Help%20Wanted)](https://github.com/mattermost/mattermost-plugin-agenda/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22Up+For+Grabs%22+label%3A%22Help+Wanted%22)
 
 **Maintainer:** [@jfrerich](https://github.com/jfrerich)
 **Co-Maintainer:** [@iomodo](https://github.com/iomodo)
@@ -25,7 +27,7 @@ The meeting settings for each channel can be configured in the Channel Header Dr
 
 Meeting settings include:
 
-- Schedule Day: Day of the week when the meeting is scheduled.
+- Schedule Day: Day of the week when the meeting is scheduled. Monday is `1`.
 - Hashtag Format: The format of the hashtag for the meeting date. The date format is based on [Go date and time formatting](https://yourbasic.org/golang/format-parse-string-time-date-example/#standard-time-and-date-formats).
   The date format must be wrapped in double Braces ( {{ }} ).
   A default is generated from the first 15 characters of the channel's name with the short name of the month and day (i.e. Dev-{{ Jan02 }}).

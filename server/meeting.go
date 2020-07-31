@@ -21,7 +21,6 @@ type Meeting struct {
 
 // GetMeeting returns a meeting
 func (p *Plugin) GetMeeting(channelID string) (*Meeting, error) {
-
 	meetingBytes, appErr := p.API.KVGet(channelID)
 	if appErr != nil {
 		return nil, appErr
@@ -50,7 +49,6 @@ func (p *Plugin) GetMeeting(channelID string) (*Meeting, error) {
 
 // SaveMeeting saves a meeting
 func (p *Plugin) SaveMeeting(meeting *Meeting) error {
-
 	jsonMeeting, err := json.Marshal(meeting)
 	if err != nil {
 		return err
@@ -65,7 +63,6 @@ func (p *Plugin) SaveMeeting(meeting *Meeting) error {
 
 // GenerateHashtag returns a meeting hashtag
 func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool) (string, error) {
-
 	meeting, err := p.GetMeeting(channelID)
 	if err != nil {
 		return "", err
