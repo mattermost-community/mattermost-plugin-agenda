@@ -50,14 +50,12 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 
 	case "help":
 		return p.executeCommandHelp(args), nil
-
 	}
 
 	return responsef("Unknown action: %s", action), nil
 }
 
 func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandResponse {
-
 	split := strings.Fields(args.Command)
 	nextWeek := len(split) > 2 && split[2] == "next-week"
 
@@ -79,7 +77,6 @@ func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandRespo
 }
 
 func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandResponse {
-
 	// settings: hashtag, schedule
 	split := strings.Fields(args.Command)
 

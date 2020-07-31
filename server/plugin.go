@@ -29,7 +29,6 @@ type Plugin struct {
 
 // ServeHTTP demonstrates a plugin that handles HTTP requests by greeting the world.
 func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
-
 	w.Header().Set("Content-Type", "application/json")
 
 	switch path := r.URL.Path; path {
@@ -60,7 +59,6 @@ func (p *Plugin) OnActivate() error {
 }
 
 func (p *Plugin) httpMeetingSettings(w http.ResponseWriter, r *http.Request) {
-
 	mattermostUserID := r.Header.Get("Mattermost-User-Id")
 	if mattermostUserID == "" {
 		http.Error(w, "Not Authorized", http.StatusUnauthorized)
@@ -94,7 +92,11 @@ func (p *Plugin) httpMeetingSaveSettings(w http.ResponseWriter, r *http.Request,
 		return
 	}
 
-	w.Write([]byte("{\"status\": \"OK\"}"))
+	resp := struct {
+		Status string
+	}{"OK"}
+
+	p.writeJSON(w, resp)
 }
 
 func (p *Plugin) httpMeetingGetSettings(w http.ResponseWriter, r *http.Request, mmUserID string) {
@@ -111,11 +113,20 @@ func (p *Plugin) httpMeetingGetSettings(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	resp, err := json.Marshal(meeting)
+	p.writeJSON(w, meeting)
+}
+
+func (p *Plugin) writeJSON(w http.ResponseWriter, v interface{}) {
+	b, err := json.Marshal(v)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		p.API.LogWarn("Failed to marshal JSON response", "error", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
-	w.Write(resp)
+	_, err = w.Write(b)
+	if err != nil {
+		p.API.LogWarn("Failed to write JSON response", "error", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
