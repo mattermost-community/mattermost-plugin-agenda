@@ -2,13 +2,13 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/mattermost/mattermost-server/model"
 	"reflect"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/mattermost/mattermost-server/plugin/plugintest"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/plugin/plugintest"
 	"github.com/stretchr/testify/assert"
 )
 
