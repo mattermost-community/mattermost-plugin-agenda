@@ -106,7 +106,7 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 		if err != nil {
 			return responsef(err.Error())
 		}
-		meeting.Schedule = []time.Weekday{time.Weekday(weekdayInt)}
+		meeting.Schedule = []time.Weekday{weekdayInt}
 
 	case "hashtag":
 		//set hashtag
