@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	scheduleErrorInvalid       = "Invalid weekday. Must be between 1-5 or Mon-Fri"
-	scheduleErrorInvalidNumber = "Invalid weekday. Must be between 1-5"
+	scheduleErrorInvalid       = "invalid weekday. Must be between 1-5 or Mon-Fri"
+	scheduleErrorInvalidNumber = "invalid weekday. Must be between 1-5"
 )
 
 var daysOfWeek = map[string]time.Weekday{}
@@ -85,7 +85,6 @@ func nextWeekdayDate(meetingDay time.Weekday, nextWeek bool) (*time.Time, error)
 /// daysTillNextWeekday calculates the amount of days between two weekdays.
 /// If nexWeek is true, the nextDay will be based on the next calendar week.
 func daysTillNextWeekday(today time.Weekday, nextDay time.Weekday, nextWeek bool) int {
-
 	if today > nextDay {
 		return int((7 - today) + nextDay)
 	}
