@@ -54,7 +54,7 @@ func (p *Plugin) SaveMeeting(meeting *Meeting) error {
 }
 
 // GenerateHashtag returns a meeting hashtag
-func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday time.Weekday) (string, error) {
+func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday int) (string, error) {
 
 	meeting, err := p.GetMeeting(channelID)
 	if err != nil {
@@ -64,7 +64,7 @@ func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday time.W
 	var meetingDate *time.Time
 	if weekday > -1 {
 		// Get date for given day
-		if meetingDate, err = nextWeekdayDate(weekday, nextWeek); err != nil {
+		if meetingDate, err = nextWeekdayDate(time.Weekday(weekday), nextWeek); err != nil {
 			return "", err
 		}
 	} else {

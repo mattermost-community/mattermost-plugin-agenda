@@ -62,9 +62,10 @@ func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandRespo
 	split := strings.Fields(args.Command)
 	nextWeek := len(split) > 2 && split[2] == "next-week"
 
-	var weekday time.Weekday
+	weekday := -1
 	if !nextWeek && len(split) > 2 {
-		weekday, _ = parseSchedule(split[2])
+		parsedWeekday, _ := parseSchedule(split[2])
+		weekday = int(parsedWeekday)
 	}
 
 	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek, weekday)
@@ -132,13 +133,14 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 	}
 
 	nextWeek := false
-	var weekday time.Weekday
+	weekday := -1
 	message := strings.Join(split[2:], " ")
 
 	if split[2] == "next-week" {
 		nextWeek = true
 	} else {
-		weekday, _ = parseSchedule(split[2])
+		parsedWeekday, _ := parseSchedule(split[2])
+		weekday = int(parsedWeekday)
 	}
 
 	if nextWeek || weekday > -1 {
