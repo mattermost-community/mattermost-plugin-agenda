@@ -8,9 +8,9 @@ import (
 
 // Meeting represents a meeting agenda
 type Meeting struct {
-	ChannelID     string       `json:"channelId"`
-	Schedule      time.Weekday `json:"schedule"`
-	HashtagFormat string       `json:"hashtagFormat"` //Default: Jan02
+	ChannelID     string         `json:"channelId"`
+	Schedule      []time.Weekday `json:"schedule"`
+	HashtagFormat string         `json:"hashtagFormat"` //Default: Jan02
 }
 
 // GetMeeting returns a meeting
@@ -28,7 +28,7 @@ func (p *Plugin) GetMeeting(channelID string) (*Meeting, error) {
 	} else {
 		//Return a default value
 		meeting = &Meeting{
-			Schedule:      time.Thursday,
+			Schedule:      []time.Weekday{time.Thursday},
 			HashtagFormat: "Jan02",
 			ChannelID:     channelID,
 		}
@@ -52,13 +52,24 @@ func (p *Plugin) SaveMeeting(meeting *Meeting) error {
 }
 
 // GenerateHashtag returns a meeting hashtag
-func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool) (string, error) {
+func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday int) (string, error) {
 	meeting, err := p.GetMeeting(channelID)
 	if err != nil {
 		return "", err
 	}
 
-	meetingDate := nextWeekdayDate(meeting.Schedule, nextWeek)
+	var meetingDate *time.Time
+	if weekday > -1 {
+		// Get date for given day
+		if meetingDate, err = nextWeekdayDate(time.Weekday(weekday), nextWeek); err != nil {
+			return "", err
+		}
+	} else {
+		// Get date for the list of days of the week
+		if meetingDate, err = nextWeekdayDateInWeek(meeting.Schedule, nextWeek); err != nil {
+			return "", err
+		}
+	}
 
 	hashtag := fmt.Sprintf("#%v", meetingDate.Format(meeting.HashtagFormat))
 

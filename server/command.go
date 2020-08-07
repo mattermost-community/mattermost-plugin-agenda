@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/mattermost/mattermost-server/v5/plugin"
@@ -16,8 +17,8 @@ const (
 )
 
 const helpCommandText = "###### Mattermost Agenda Plugin - Slash Command Help\n" +
-	"\n* `/agenda queue [next-week (optional)] message` - Queue `message` as a topic on the next meeting. If `next-week` is provided, it will queue for the meeting in the next calendar week. \n" +
-	"* `/agenda list [next-week (optional)]` - Show a list of items queued for the next meeting.  If `next-week` is provided, it will list the agenda for the next calendar week. \n" +
+	"\n* `/agenda queue [weekday (optional)] message` - Queue `message` as a topic on the next meeting. If `weekday` is provided, it will queue for the meeting for. \n" +
+	"* `/agenda list [weekday(optional)]` - Show a list of items queued for the next meeting.  If `next-week` is provided, it will list the agenda for the next calendar week. \n" +
 	"* `/agenda setting <field> <value>` - Update the setting with the given value. Field can be one of `schedule` or `hashtag` \n"
 
 func (p *Plugin) registerCommands() error {
@@ -59,7 +60,13 @@ func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandRespo
 	split := strings.Fields(args.Command)
 	nextWeek := len(split) > 2 && split[2] == "next-week"
 
-	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek)
+	weekday := -1
+	if !nextWeek && len(split) > 2 {
+		parsedWeekday, _ := parseSchedule(split[2])
+		weekday = int(parsedWeekday)
+	}
+
+	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek, weekday)
 	if err != nil {
 		return responsef("Error calculating hashtags")
 	}
@@ -95,11 +102,11 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 	switch field {
 	case "schedule":
 		//set schedule
-		weekDayInt, err := parseSchedule(value)
+		weekdayInt, err := parseSchedule(value)
 		if err != nil {
 			return responsef(err.Error())
 		}
-		meeting.Schedule = weekDayInt
+		meeting.Schedule = []time.Weekday{weekdayInt}
 
 	case "hashtag":
 		//set hashtag
@@ -123,16 +130,23 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 	}
 
 	nextWeek := false
+	weekday := -1
 	message := strings.Join(split[2:], " ")
 
 	if split[2] == "next-week" {
 		nextWeek = true
+	} else {
+		parsedWeekday, _ := parseSchedule(split[2])
+		weekday = int(parsedWeekday)
+	}
+
+	if nextWeek || weekday > -1 {
 		message = strings.Join(split[3:], " ")
 	}
 
-	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek)
+	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek, weekday)
 	if error != nil {
-		return responsef("Error calculating hashtags")
+		return responsef("Error calculating hashtags. Check the meeting settings for this channel.")
 	}
 
 	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, model.SearchParameter{Terms: &hashtag})
@@ -172,16 +186,11 @@ func createAgendaCommand() *model.Command {
 	agenda := model.NewAutocompleteData(commandTriggerAgenda, "[command]", "Available commands: list, queue, setting, help")
 
 	list := model.NewAutocompleteData("list", "", "Show a list of items queued for the next meeting")
-	optionalListNextWeek := model.NewAutocompleteData("next-week", "(optional)", "If `next-week` is provided, it will list the agenda for the next calendar week.")
-	list.AddCommand(optionalListNextWeek)
+	list.AddDynamicListArgument("Day of the week for when to queue the meeting", "/api/v1/list-meeting-days-autocomplete", false)
 	agenda.AddCommand(list)
 
 	queue := model.NewAutocompleteData("queue", "", "Queue `message` as a topic on the next meeting.")
-	queue.AddStaticListArgument("If `next-week` is provided, it will queue for the meeting in the next calendar week.", false, []model.AutocompleteListItem{{
-		HelpText: "If `next-week` is provided, it will queue for the meeting in the next calendar week.",
-		Hint:     "(optional)",
-		Item:     "next-week",
-	}})
+	queue.AddDynamicListArgument("Day of the week for when to queue the meeting", "/api/v1/meeting-days-autocomplete", false)
 	queue.AddTextArgument("Message for the next meeting date.", "[message]", "")
 	agenda.AddCommand(queue)
 
