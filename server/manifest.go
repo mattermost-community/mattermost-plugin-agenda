@@ -2,10 +2,40 @@
 
 package main
 
-var manifest = struct {
-	ID      string
-	Version string
-}{
-	ID:      "com.mattermost.agenda",
-	Version: "0.1.0",
+import (
+	"strings"
+
+	"github.com/mattermost/mattermost-server/v5/model"
+)
+
+var manifest *model.Manifest
+
+const manifestStr = `
+{
+  "id": "com.mattermost.agenda",
+  "name": "Agenda",
+  "description": "Plugin to handle meeting agendas for Mattermost channels.",
+  "version": "0.1.0",
+  "min_server_version": "5.26.0",
+  "server": {
+    "executables": {
+      "linux-amd64": "server/dist/plugin-linux-amd64",
+      "darwin-amd64": "server/dist/plugin-darwin-amd64",
+      "windows-amd64": "server/dist/plugin-windows-amd64.exe"
+    },
+    "executable": ""
+  },
+  "webapp": {
+    "bundle_path": "webapp/dist/main.js"
+  },
+  "settings_schema": {
+    "header": "",
+    "footer": "",
+    "settings": []
+  }
+}
+`
+
+func init() {
+	manifest = model.ManifestFromJson(strings.NewReader(manifestStr))
 }
