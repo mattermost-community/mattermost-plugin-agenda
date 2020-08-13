@@ -12,6 +12,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func assertNextWeekdayDate(meetingDay time.Weekday, nextWeek bool) *time.Time {
+	weekDay, err := nextWeekdayDate(meetingDay, nextWeek)
+	if err != nil {
+		panic(err)
+	}
+	return weekDay
+}
+
 func TestPlugin_GenerateHashtag(t *testing.T) {
 	tAssert := assert.New(t)
 	mPlugin := Plugin{}
@@ -34,7 +42,7 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 				nextWeek: true,
 				meeting: &Meeting{
 					ChannelID:     "Developers",
-					Schedule:      time.Thursday,
+					Schedule:      []time.Weekday{time.Thursday},
 					HashtagFormat: "Developers",
 				}},
 			want:    "#Developers",
@@ -46,10 +54,10 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 				nextWeek: true,
 				meeting: &Meeting{
 					ChannelID:     "QA",
-					Schedule:      time.Wednesday,
+					Schedule:      []time.Weekday{time.Wednesday},
 					HashtagFormat: "{{Jan02}}",
 				}},
-			want:    "#" + nextWeekdayDate(time.Wednesday, true).Format("Jan02"),
+			want:    "#" + assertNextWeekdayDate(time.Wednesday, true).Format("Jan02"),
 			wantErr: false,
 		},
 		{
@@ -58,10 +66,10 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 				nextWeek: true,
 				meeting: &Meeting{
 					ChannelID:     "QA Backend",
-					Schedule:      time.Monday,
+					Schedule:      []time.Weekday{time.Monday},
 					HashtagFormat: "QA-{{January 02 2006}}",
 				}},
-			want:    "#QA-" + nextWeekdayDate(time.Monday, true).Format("January 02 2006"),
+			want:    "#QA-" + assertNextWeekdayDate(time.Monday, true).Format("January 02 2006"),
 			wantErr: false,
 		},
 		{
@@ -70,10 +78,10 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 				nextWeek: false,
 				meeting: &Meeting{
 					ChannelID:     "QA FrontEnd",
-					Schedule:      time.Monday,
+					Schedule:      []time.Weekday{time.Monday},
 					HashtagFormat: "{{January 02 2006}}.vue",
 				}},
-			want:    "#" + nextWeekdayDate(time.Monday, false).Format("January 02 2006") + ".vue",
+			want:    "#" + assertNextWeekdayDate(time.Monday, false).Format("January 02 2006") + ".vue",
 			wantErr: false,
 		},
 		{
@@ -82,10 +90,10 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 				nextWeek: false,
 				meeting: &Meeting{
 					ChannelID:     "QA Middleware",
-					Schedule:      time.Monday,
+					Schedule:      []time.Weekday{time.Monday},
 					HashtagFormat: "React {{January 02 2006}} Born",
 				}},
-			want:    "#React " + nextWeekdayDate(time.Monday, false).Format("January 02 2006") + " Born",
+			want:    "#React " + assertNextWeekdayDate(time.Monday, false).Format("January 02 2006") + " Born",
 			wantErr: false,
 		},
 		{
@@ -94,10 +102,10 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 				nextWeek: false,
 				meeting: &Meeting{
 					ChannelID:     "Coffee Time",
-					Schedule:      time.Monday,
+					Schedule:      []time.Weekday{time.Monday},
 					HashtagFormat: "January 02 2006 {{January 02 2006}} January 02 2006",
 				}},
-			want:    "#January 02 2006 " + nextWeekdayDate(time.Monday, false).Format("January 02 2006") + " January 02 2006",
+			want:    "#January 02 2006 " + assertNextWeekdayDate(time.Monday, false).Format("January 02 2006") + " January 02 2006",
 			wantErr: false,
 		},
 		{
@@ -106,22 +114,22 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 				nextWeek: false,
 				meeting: &Meeting{
 					ChannelID: "Dates with Spaces",
-					Schedule:  time.Monday,
+					Schedule:  []time.Weekday{time.Monday},
 					HashtagFormat: "{{   January 02 2006			}}",
 				}},
-			want:    "#" + nextWeekdayDate(time.Monday, false).Format("January 02 2006"),
+			want:    "#" + assertNextWeekdayDate(time.Monday, false).Format("January 02 2006"),
 			wantErr: false,
 		},
 		{
-			name: "Date Formatting ANSIC",
+			name: "Date Formatting ANSI",
 			args: args{
 				nextWeek: false,
 				meeting: &Meeting{
 					ChannelID:     "Dates",
-					Schedule:      time.Monday,
+					Schedule:      []time.Weekday{time.Monday},
 					HashtagFormat: "{{ Mon Jan _2 }}",
 				}},
-			want:    "#" + nextWeekdayDate(time.Monday, false).Format("Mon Jan _2"),
+			want:    "#" + assertNextWeekdayDate(time.Monday, false).Format("Mon Jan _2"),
 			wantErr: false,
 		},
 	}
@@ -130,7 +138,7 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 			jsonMeeting, err := json.Marshal(tt.args.meeting)
 			tAssert.Nil(err)
 			api.On("KVGet", tt.args.meeting.ChannelID).Return(jsonMeeting, nil)
-			got, err := mPlugin.GenerateHashtag(tt.args.meeting.ChannelID, tt.args.nextWeek)
+			got, err := mPlugin.GenerateHashtag(tt.args.meeting.ChannelID, tt.args.nextWeek, -1)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GenerateHashtag() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -167,7 +175,7 @@ func TestPlugin_GetMeeting(t *testing.T) {
 				storeMeeting: nil,
 			},
 			want: &Meeting{
-				Schedule:      time.Thursday,
+				Schedule:      []time.Weekday{time.Thursday},
 				HashtagFormat: "Short-{{ Jan02 }}",
 				ChannelID:     "#short.name.channel",
 			},
@@ -181,7 +189,7 @@ func TestPlugin_GetMeeting(t *testing.T) {
 				storeMeeting: nil,
 			},
 			want: &Meeting{
-				Schedule:      time.Thursday,
+				Schedule:      []time.Weekday{time.Thursday},
 				HashtagFormat: "Very Long Chann-{{ Jan02 }}",
 				ChannelID:     "#long.name.channel",
 			},
