@@ -130,7 +130,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
                                 rel='noopener noreferrer'
                                 href='https://godoc.org/time#pkg-constants'
                             >{'Go time package.'}</a>
-                            {' Embed a date by writing down what January 2, 2006 would look like.'}
+                            {' Embed a date by surrounding what January 2, 2006 would look like with double curly braces, i.e. {{Jan02}}'}
                         </p>
                     </div>
                 </Modal.Body>
