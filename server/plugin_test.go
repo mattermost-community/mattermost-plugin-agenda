@@ -9,12 +9,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mattermost/mattermost-server/plugin/plugintest"
+	"github.com/mattermost/mattermost-server/v5/plugin/plugintest"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestServeHTTP(t *testing.T) {
-
 	assert := assert.New(t)
 	plugin := Plugin{}
 	api := &plugintest.API{}
@@ -24,7 +23,7 @@ func TestServeHTTP(t *testing.T) {
 		// Mock get default meeting
 		defaultMeeting := &Meeting{
 			ChannelID:     "myChannelId",
-			Schedule:      time.Thursday,
+			Schedule:      []time.Weekday{time.Thursday},
 			HashtagFormat: "Jan02",
 		}
 
@@ -51,7 +50,7 @@ func TestServeHTTP(t *testing.T) {
 		// Mock set meeting
 		meeting := &Meeting{
 			ChannelID:     "myChannelId",
-			Schedule:      time.Tuesday,
+			Schedule:      []time.Weekday{time.Tuesday},
 			HashtagFormat: "MyMeeting-Jan-02",
 		}
 

@@ -2,14 +2,12 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 	"time"
 
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/plugin"
 	"github.com/pkg/errors"
-
-	"github.com/mattermost/mattermost-server/model"
-	"github.com/mattermost/mattermost-server/plugin"
 )
 
 const (
@@ -20,19 +18,14 @@ const (
 
 const helpCommandText = "###### Mattermost Agenda Plugin - Slash Command Help\n" +
 	"The Agenda plugin lets you queue up meeting topics for channel discussion at a later point.  When your meeting happens, you can click on the Hashtag to see all agenda items in the RHS. \n" +
-	"To configure the agenda for this channel, click on the Channel Name in Mattermost to access the channel options menu and select `Agenda Settings`"
-	"\n* `/agenda queue [next-week (optional)] message` - Queue `message` as a topic on the next meeting. If `next-week` is provided, it will queue for the meeting in the next calendar week. \n" +
-	"* `/agenda list [next-week (optional)]` - Show a list of items queued for the next meeting.  If `next-week` is provided, it will list the agenda for the next calendar week. \n" +
+	"To configure the agenda for this channel, click on the Channel Name in Mattermost to access the channel options menu and select `Agenda Settings`" +
+	"\n* `/agenda queue [weekday (optional)] message` - Queue `message` as a topic on the next meeting. If `weekday` is provided, it will queue for the meeting for. \n" +
+	"* `/agenda list [weekday(optional)]` - Show a list of items queued for the next meeting.  If `next-week` is provided, it will list the agenda for the next calendar week. \n" +
 	"* `/agenda setting <field> <value>` - Update the setting with the given value. Field can be one of `schedule` or `hashtag` \n" +
 	"How can we make this better?  Submit an issue to the [Agenda Plugin repo here](https://github.com/mattermost/mattermost-plugin-agenda/issues) \n"
 
 func (p *Plugin) registerCommands() error {
-	if err := p.API.RegisterCommand(&model.Command{
-		Trigger:          commandTriggerAgenda,
-		AutoComplete:     true,
-		AutoCompleteHint: "[command]",
-		AutoCompleteDesc: "Available commands: list, queue, setting, help",
-	}); err != nil {
+	if err := p.API.RegisterCommand(createAgendaCommand()); err != nil {
 		return errors.Wrapf(err, "failed to register %s command", commandTriggerAgenda)
 	}
 
@@ -42,11 +35,6 @@ func (p *Plugin) registerCommands() error {
 // ExecuteCommand executes a command that has been previously registered via the RegisterCommand
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	split := strings.Fields(args.Command)
-	command := split[0]
-
-	if command != "/agenda" {
-		return responsef("Unknown command: " + args.Command), nil
-	}
 
 	if len(split) < 2 {
 		return responsef("Missing command. You can try queue, list, setting"), nil
@@ -66,18 +54,22 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 
 	case "help":
 		return p.executeCommandHelp(args), nil
-
 	}
 
-	return responsef("Unknown action: " + action), nil
+	return responsef("Unknown action: %s", action), nil
 }
 
 func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandResponse {
-
 	split := strings.Fields(args.Command)
 	nextWeek := len(split) > 2 && split[2] == "next-week"
 
-	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek)
+	weekday := -1
+	if !nextWeek && len(split) > 2 {
+		parsedWeekday, _ := parseSchedule(split[2])
+		weekday = int(parsedWeekday)
+	}
+
+	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek, weekday)
 	if err != nil {
 		return responsef("Error calculating hashtags")
 	}
@@ -95,7 +87,6 @@ func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandRespo
 }
 
 func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandResponse {
-
 	// settings: hashtag, schedule
 	split := strings.Fields(args.Command)
 
@@ -114,18 +105,17 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 	switch field {
 	case "schedule":
 		//set schedule
-		weekdayInt, err := strconv.Atoi(value)
-		validWeekday := weekdayInt >= 0 && weekdayInt <= 6
-		if err != nil || !validWeekday {
-			return responsef("Invalid weekday. Must be between 1-5")
+		weekdayInt, err := parseSchedule(value)
+		if err != nil {
+			return responsef(err.Error())
 		}
-		meeting.Schedule = time.Weekday(weekdayInt)
+		meeting.Schedule = []time.Weekday{weekdayInt}
 
 	case "hashtag":
 		//set hashtag
 		meeting.HashtagFormat = value
 	default:
-		return responsef("Unknow setting " + field)
+		return responsef("Unknown setting %s", field)
 	}
 
 	if err := p.SaveMeeting(meeting); err != nil {
@@ -143,31 +133,41 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 	}
 
 	nextWeek := false
+	weekday := -1
 	message := strings.Join(split[2:], " ")
 
 	if split[2] == "next-week" {
 		nextWeek = true
+	} else {
+		parsedWeekday, _ := parseSchedule(split[2])
+		weekday = int(parsedWeekday)
+	}
+
+	if nextWeek || weekday > -1 {
 		message = strings.Join(split[3:], " ")
 	}
 
-	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek)
+	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek, weekday)
 	if error != nil {
-		return responsef("Error calculating hashtags")
+		return responsef("Error calculating hashtags. Check the meeting settings for this channel.")
 	}
 
-	itemsQueued, appErr := p.API.SearchPostsInTeam(args.TeamId, []*model.SearchParams{{Terms: hashtag, IsHashtag: true}})
+	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, model.SearchParameter{Terms: &hashtag})
 
 	if appErr != nil {
-		return responsef("Error getting user")
+		return responsef("Error calculating list number")
 	}
+
+	postList := *searchResults.PostList
+	numQueueItems := len(postList.Posts)
 
 	_, appErr = p.API.CreatePost(&model.Post{
 		UserId:    args.UserId,
 		ChannelId: args.ChannelId,
-		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, len(itemsQueued)+1, message),
+		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, numQueueItems+1, message),
 	})
 	if appErr != nil {
-		return responsef("Error creating post: " + appErr.Message)
+		return responsef("Error creating post: %s", appErr.Message)
 	}
 
 	return &model.CommandResponse{}
@@ -182,5 +182,45 @@ func responsef(format string, args ...interface{}) *model.CommandResponse {
 		ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
 		Text:         fmt.Sprintf(format, args...),
 		Type:         model.POST_DEFAULT,
+	}
+}
+
+func createAgendaCommand() *model.Command {
+	agenda := model.NewAutocompleteData(commandTriggerAgenda, "[command]", "Available commands: list, queue, setting, help")
+
+	list := model.NewAutocompleteData("list", "", "Show a list of items queued for the next meeting")
+	list.AddDynamicListArgument("Day of the week for when to queue the meeting", "/api/v1/list-meeting-days-autocomplete", false)
+	agenda.AddCommand(list)
+
+	queue := model.NewAutocompleteData("queue", "", "Queue `message` as a topic on the next meeting.")
+	queue.AddDynamicListArgument("Day of the week for when to queue the meeting", "/api/v1/meeting-days-autocomplete", false)
+	queue.AddTextArgument("Message for the next meeting date.", "[message]", "")
+	agenda.AddCommand(queue)
+
+	setting := model.NewAutocompleteData("setting", "", "Update the setting.")
+	schedule := model.NewAutocompleteData("schedule", "", "Update schedule.")
+	schedule.AddStaticListArgument("weekday", true, []model.AutocompleteListItem{
+		{Item: "Monday"},
+		{Item: "Tuesday"},
+		{Item: "Wednesday"},
+		{Item: "Thursday"},
+		{Item: "Friday"},
+		{Item: "Saturday"},
+		{Item: "Sunday"},
+	})
+	setting.AddCommand(schedule)
+	hashtag := model.NewAutocompleteData("hashtag", "", "Update hastag.")
+	hashtag.AddTextArgument("input hashtag", "Default: Jan02", "")
+	setting.AddCommand(hashtag)
+	agenda.AddCommand(setting)
+
+	help := model.NewAutocompleteData("help", "", "Mattermost Agenda plugin slash command help")
+	agenda.AddCommand(help)
+	return &model.Command{
+		Trigger:          commandTriggerAgenda,
+		AutoComplete:     true,
+		AutoCompleteDesc: "Available commands: list, queue, setting, help",
+		AutoCompleteHint: "[command]",
+		AutocompleteData: agenda,
 	}
 }

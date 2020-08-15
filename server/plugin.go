@@ -2,14 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"sync"
 
 	"github.com/pkg/errors"
 
-	"github.com/mattermost/mattermost-server/model"
-	"github.com/mattermost/mattermost-server/plugin"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/mattermost/mattermost-server/v5/plugin"
 )
 
 // Plugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.
@@ -29,12 +30,15 @@ type Plugin struct {
 
 // ServeHTTP demonstrates a plugin that handles HTTP requests by greeting the world.
 func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
-
 	w.Header().Set("Content-Type", "application/json")
 
 	switch path := r.URL.Path; path {
 	case "/api/v1/settings":
 		p.httpMeetingSettings(w, r)
+	case "/api/v1/meeting-days-autocomplete":
+		p.httpMeetingDaysAutocomplete(w, r, false)
+	case "/api/v1/list-meeting-days-autocomplete":
+		p.httpMeetingDaysAutocomplete(w, r, true)
 	default:
 		http.NotFound(w, r)
 	}
@@ -60,7 +64,6 @@ func (p *Plugin) OnActivate() error {
 }
 
 func (p *Plugin) httpMeetingSettings(w http.ResponseWriter, r *http.Request) {
-
 	mattermostUserID := r.Header.Get("Mattermost-User-Id")
 	if mattermostUserID == "" {
 		http.Error(w, "Not Authorized", http.StatusUnauthorized)
@@ -94,7 +97,11 @@ func (p *Plugin) httpMeetingSaveSettings(w http.ResponseWriter, r *http.Request,
 		return
 	}
 
-	w.Write([]byte("{\"status\": \"OK\"}"))
+	resp := struct {
+		Status string
+	}{"OK"}
+
+	p.writeJSON(w, resp)
 }
 
 func (p *Plugin) httpMeetingGetSettings(w http.ResponseWriter, r *http.Request, mmUserID string) {
@@ -111,11 +118,60 @@ func (p *Plugin) httpMeetingGetSettings(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	resp, err := json.Marshal(meeting)
+	p.writeJSON(w, meeting)
+}
+
+func (p *Plugin) writeJSON(w http.ResponseWriter, v interface{}) {
+	b, err := json.Marshal(v)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		p.API.LogWarn("Failed to marshal JSON response", "error", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	_, err = w.Write(b)
+	if err != nil {
+		p.API.LogWarn("Failed to write JSON response", "error", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+}
+
+func (p *Plugin) httpMeetingDaysAutocomplete(w http.ResponseWriter, r *http.Request, listCommand bool) {
+	query := r.URL.Query()
+	meeting, err := p.GetMeeting(query.Get("channel_id"))
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error getting meeting days: %s", err.Error()), http.StatusInternalServerError)
+	}
+
+	ret := make([]model.AutocompleteListItem, 0)
+
+	helpText := "Queue this item "
+	if listCommand {
+		helpText = "List items "
+	}
+
+	for _, meetingDay := range meeting.Schedule {
+		ret = append(ret, model.AutocompleteListItem{
+			Item:     meetingDay.String(),
+			HelpText: fmt.Sprintf(helpText+"for %s's meeting", meetingDay.String()),
+			Hint:     "(optional)",
+		})
+	}
+	ret = append(ret, model.AutocompleteListItem{
+		Item:     "next-week",
+		HelpText: fmt.Sprintf(helpText + "for the first meeting next week"),
+		Hint:     "(optional)",
+	})
+
+	jsonBytes, err := json.Marshal(ret)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error getting meeting days: %s", err.Error()), http.StatusInternalServerError)
 		return
 	}
 
-	w.Write(resp)
+	w.Header().Set("Content-Type", "application/json")
+	if _, err = w.Write(jsonBytes); err != nil {
+		http.Error(w, fmt.Sprintf("Error getting meeting days: %s", err.Error()), http.StatusInternalServerError)
+		return
+	}
 }
