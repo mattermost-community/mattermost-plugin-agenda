@@ -17,7 +17,7 @@ const (
 )
 
 const helpCommandText = "###### Mattermost Agenda Plugin - Slash Command Help\n" +
-	"The Agenda plugin lets you queue up meeting topics for channel discussion at a later point.  When your meeting happens, you can click on the Hashtag to see all agenda items in the RHS. \n" +
+	"The Agenda plugin lets you queue up meeting topics for channel discussion at a later time.  When your meeting happens, you can click on the Hashtag to see all agenda items in the RHS. \n" +
 	"To configure the agenda for this channel, click on the Channel Name in Mattermost to access the channel options menu and select `Agenda Settings`" +
 	"\n* `/agenda queue [weekday (optional)] message` - Queue `message` as a topic on the next meeting. If `weekday` is provided, it will queue for the meeting for. \n" +
 	"* `/agenda list [weekday(optional)]` - Show a list of items queued for the next meeting.  If `next-week` is provided, it will list the agenda for the next calendar week. \n" +
