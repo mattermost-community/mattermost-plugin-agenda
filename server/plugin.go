@@ -141,6 +141,8 @@ func (p *Plugin) httpMeetingDaysAutocomplete(w http.ResponseWriter, r *http.Requ
 	meeting, err := p.GetMeeting(query.Get("channel_id"))
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error getting meeting days: %s", err.Error()), http.StatusInternalServerError)
+		p.API.LogDebug("Failed to find meeting for autocomplete", "error", err.Error(), "listCommand", listCommand)
+		return
 	}
 
 	ret := make([]model.AutocompleteListItem, 0)
