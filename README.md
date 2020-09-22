@@ -13,7 +13,7 @@ The Agenda Plugin helps users queue and list items in a channel's meeting agenda
 
 The plugin will create posts for the user preceding the agenda item with configured hashtag format and can open a search with that hashtag to view the agenda list. 
 
-Initial development as part of [Mattermost Hackathon 2019](https://github.com/mattermost/mattermost-hackathon-nov2019) which was demoed [here](https://drive.google.com/file/d/1t-ho4ZwGDxLVVWUi0sX7KpQZqKNxujlJ/view) starting at 13:50.
+Initial development as part of [Mattermost Hackathon 2019](https://github.com/mattermost/mattermost-hackathon-nov2019) which was demoed [here](https://www.youtube.com/watch?v=Tl08dt7TheI&feature=youtu.be&t=821).
 
 ## Usage
 
@@ -27,8 +27,10 @@ The meeting settings for each channel can be configured in the Channel Header Dr
 
 Meeting settings include:
 
-- Schedule Day: Days of the week when the meeting is scheduled.
-- Hashtag Format: The format of the hashtag for the meeting date. The date format is based on [Go date and time formatting](https://yourbasic.org/golang/format-parse-string-time-date-example/#standard-time-and-date-formats)
+- Schedule Day: Day of the week when the meeting is scheduled.
+- Hashtag Format: The format of the hashtag for the meeting date. The date format is based on [Go date and time formatting](https://yourbasic.org/golang/format-parse-string-time-date-example/#standard-time-and-date-formats).
+  The date format must be wrapped in double Braces ( {{ }} ).
+  A default is generated from the first 15 characters of the channel's name with the short name of the month and day (i.e. Dev-{{ Jan02 }}).
 
 #### Slash Commands to manage the meeting agenda:
 
