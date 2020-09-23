@@ -1,62 +1,116 @@
 {
-  "name": "webapp",
-  "version": "0.0.1",
-  "description": "This plugin serves as a starting point for writing a Mattermost plugin.",
-  "main": "src/index.js",
+  "private": true,
   "scripts": {
     "build": "webpack --mode=production",
+    "build:watch": "webpack --mode=production --watch",
     "debug": "webpack --mode=none",
-    "lint": "eslint --ignore-pattern node_modules --ignore-pattern dist --ext .js --ext .jsx --ext tsx --ext ts . --quiet",
-    "fix": "eslint --ignore-pattern node_modules --ignore-pattern dist --ext .js --ext .jsx --ext tsx --ext ts . --quiet --fix",
-    "test": "jest --forceExit --detectOpenHandles --verbose"
+    "debug:watch": "webpack --mode=development --watch",
+    "lint": "eslint --ignore-pattern node_modules --ignore-pattern dist --ext .js --ext .jsx --ext tsx --ext ts . --quiet --cache",
+    "fix": "eslint --ignore-pattern node_modules --ignore-pattern dist --ext .js --ext .jsx --ext tsx --ext ts . --quiet --fix --cache",
+    "test": "jest --forceExit --detectOpenHandles --verbose",
+    "test:watch": "jest --watch",
+    "test-ci": "jest --forceExit --detectOpenHandles --maxWorkers=2",
+    "check-types": "tsc"
   },
-  "author": "",
-  "license": "",
   "devDependencies": {
-    "@babel/cli": "7.8.4",
-    "@babel/core": "7.8.7",
-    "@babel/plugin-proposal-class-properties": "7.8.3",
-    "@babel/plugin-proposal-object-rest-spread": "7.8.3",
+    "@babel/cli": "7.11.6",
+    "@babel/core": "7.11.6",
+    "@babel/plugin-proposal-class-properties": "7.10.4",
+    "@babel/plugin-proposal-object-rest-spread": "7.11.0",
+    "@babel/plugin-proposal-optional-chaining": "7.11.0",
     "@babel/plugin-syntax-dynamic-import": "7.8.3",
-    "@babel/polyfill": "7.8.7",
-    "@babel/preset-env": "7.8.7",
-    "@babel/preset-react": "7.8.3",
-    "@babel/preset-typescript": "7.8.3",
-    "@babel/runtime": "7.8.7",
+    "@babel/polyfill": "7.11.5",
+    "@babel/preset-env": "7.11.5",
+    "@babel/preset-react": "7.10.4",
+    "@babel/preset-typescript": "7.10.4",
+    "@babel/runtime": "7.11.2",
+    "@emotion/babel-preset-css-prop": "10.0.27",
+    "@emotion/core": "10.0.35",
+    "@types/enzyme": "3.10.6",
+    "@types/jest": "26.0.14",
+    "@types/node": "14.11.2",
+    "@types/react": "16.9.49",
+    "@types/react-dom": "16.9.8",
     "@types/react-intl": "3.0.0",
-    "@typescript-eslint/eslint-plugin": "2.23.0",
+    "@types/react-redux": "7.1.9",
+    "@types/react-router-dom": "5.1.5",
+    "@types/react-transition-group": "4.4.0",
+    "@typescript-eslint/eslint-plugin": "4.2.0",
+    "@typescript-eslint/parser": "4.2.0",
     "babel-eslint": "10.1.0",
-    "babel-loader": "8.0.6",
-    "babel-plugin-typescript-to-proptypes": "1.3.0",
-    "eslint": "6.8.0",
-    "eslint-import-resolver-webpack": "0.12.1",
-    "eslint-plugin-import": "2.20.1",
-    "eslint-plugin-react": "7.19.0",
-    "file-loader": "5.1.0",
-    "jest": "25.1.0",
-    "minimist": "0.2.1",
-    "serialize-javascript": "3.1.0",
-    "webpack": "4.42.0",
-    "webpack-cli": "3.3.11"
+    "babel-jest": "26.3.0",
+    "babel-loader": "8.1.0",
+    "babel-plugin-typescript-to-proptypes": "1.4.1",
+    "css-loader": "4.3.0",
+    "enzyme": "3.11.0",
+    "enzyme-adapter-react-16": "1.15.4",
+    "enzyme-to-json": "3.5.0",
+    "eslint": "7.9.0",
+    "eslint-import-resolver-webpack": "0.12.2",
+    "eslint-plugin-import": "2.22.0",
+    "eslint-plugin-react": "7.20.6",
+    "eslint-plugin-react-hooks": "4.1.2",
+    "file-loader": "6.1.0",
+    "identity-obj-proxy": "3.0.0",
+    "jest": "26.4.2",
+    "jest-canvas-mock": "2.2.0",
+    "jest-junit": "11.1.0",
+    "mattermost-webapp": "github:mattermost/mattermost-webapp#23f5f93d9f12a7e2b5623e5cee6814366abd9a0f",
+    "minimist": "1.2.5",
+    "sass-loader": "10.0.2",
+    "serialize-javascript": "5.0.1",
+    "style-loader": "1.2.1",
+    "webpack": "4.44.2",
+    "webpack-cli": "3.3.12"
   },
   "dependencies": {
-    "@types/enzyme": "3.10.5",
-    "@types/jest": "25.1.4",
-    "@types/node": "13.9.0",
-    "@types/react": "16.9.23",
-    "@types/react-dom": "16.9.5",
-    "@types/react-router-dom": "5.1.3",
-    "@types/react-transition-group": "4.2.4",
-    "@typescript-eslint/parser": "2.23.0",
-    "actions": "1.3.0",
-    "core-js": "^3.6.4",
-    "mattermost-redux": "5.20.1",
-    "prop-types": "15.7.2",
-    "react": "16.13.0",
-    "react-bootstrap": "0.33.1",
-    "react-redux": "7.2.0",
+    "core-js": "3.6.5",
+    "mattermost-redux": "5.27.0",
+    "react": "16.13.1",
+    "react-redux": "7.2.1",
     "redux": "4.0.5",
-    "selectors": "0.0.1",
-    "typescript": "3.8.3"
+    "typescript": "4.0.3"
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "<rootDir>/node_modules/enzyme-to-json/serializer"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/non_npm_dependencies/"
+    ],
+    "clearMocks": true,
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
+    ],
+    "coverageReporters": [
+      "lcov",
+      "text-summary"
+    ],
+    "moduleNameMapper": {
+      "^.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "identity-obj-proxy",
+      "^.+\\.(css|less|scss)$": "identity-obj-proxy",
+      "^.*i18n.*\\.(json)$": "<rootDir>/tests/i18n_mock.json",
+      "^bundle-loader\\?lazy\\!(.*)$": "$1"
+    },
+    "moduleDirectories": [
+      "",
+      "node_modules",
+      "non_npm_dependencies"
+    ],
+    "reporters": [
+      "default",
+      "jest-junit"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!react-native|react-router|mattermost-webapp)"
+    ],
+    "setupFiles": [
+      "jest-canvas-mock"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setup.js"
+    ],
+    "testURL": "http://localhost:8065"
   }
 }
