@@ -164,6 +164,7 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 	_, appErr = p.API.CreatePost(&model.Post{
 		UserId:    args.UserId,
 		ChannelId: args.ChannelId,
+		RootId:    args.RootId,
 		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, numQueueItems+1, message),
 	})
 	if appErr != nil {
