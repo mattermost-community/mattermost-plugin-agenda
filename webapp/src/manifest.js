@@ -5,7 +5,7 @@ const manifest = JSON.parse(`
     "id": "com.mattermost.agenda",
     "name": "Agenda",
     "description": "Plugin to handle meeting agendas for Mattermost channels.",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "min_server_version": "5.26.0",
     "server": {
         "executables": {
