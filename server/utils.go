@@ -82,8 +82,8 @@ func nextWeekdayDate(meetingDay time.Weekday, nextWeek bool) (*time.Time, error)
 	return &nextDate, nil
 }
 
-/// daysTillNextWeekday calculates the amount of days between two weekdays.
-/// If nexWeek is true, the nextDay will be based on the next calendar week.
+// daysTillNextWeekday calculates the amount of days between two weekdays.
+// If nexWeek is true, the nextDay will be based on the next calendar week.
 func daysTillNextWeekday(today time.Weekday, nextDay time.Weekday, nextWeek bool) int {
 	if today > nextDay {
 		return int((7 - today) + nextDay)

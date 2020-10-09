@@ -16,7 +16,7 @@ var (
 type Meeting struct {
 	ChannelID     string         `json:"channelId"`
 	Schedule      []time.Weekday `json:"schedule"`
-	HashtagFormat string         `json:"hashtagFormat"` //Default: {ChannelName}-Jan02
+	HashtagFormat string         `json:"hashtagFormat"` // Default: {ChannelName}-Jan02
 }
 
 // GetMeeting returns a meeting
@@ -32,7 +32,7 @@ func (p *Plugin) GetMeeting(channelID string) (*Meeting, error) {
 			return nil, err
 		}
 	} else {
-		//Return a default value
+		// Return a default value
 		channel, err := p.API.GetChannel(channelID)
 		if err != nil {
 			return nil, err

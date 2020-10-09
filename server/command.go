@@ -104,7 +104,7 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 
 	switch field {
 	case "schedule":
-		//set schedule
+		// Set schedule
 		weekdayInt, err := parseSchedule(value)
 		if err != nil {
 			return responsef(err.Error())
@@ -112,7 +112,7 @@ func (p *Plugin) executeCommandSetting(args *model.CommandArgs) *model.CommandRe
 		meeting.Schedule = []time.Weekday{weekdayInt}
 
 	case "hashtag":
-		//set hashtag
+		// Set hashtag
 		meeting.HashtagFormat = value
 	default:
 		return responsef("Unknown setting %s", field)
