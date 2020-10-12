@@ -17,13 +17,16 @@ export default class MeetingSettingsModal extends React.PureComponent {
         super(props);
 
         this.state = {
-            hashtag: '{{Jan02}}',
+            hashtag: 'Jan02',
             weekdays: [1],
         };
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.channelId && this.props.channelId !== prevProps.channelId) {
+        if (
+            this.props.channelId &&
+            this.props.channelId !== prevProps.channelId
+        ) {
             this.props.fetchMeetingSettings(this.props.channelId);
         }
 
@@ -40,7 +43,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
         this.setState({
             hashtag: e.target.value,
         });
-    }
+    };
 
     handleCheckboxChanged = (e) => {
         const changeday = Number(e.target.value);
@@ -49,7 +52,10 @@ export default class MeetingSettingsModal extends React.PureComponent {
         if (e.target.checked && !this.state.weekdays.includes(changeday)) {
             // Add the checked day
             changedWeekdays = [...changedWeekdays, changeday];
-        } else if (!e.target.checked && this.state.weekdays.includes(changeday)) {
+        } else if (
+            !e.target.checked &&
+            this.state.weekdays.includes(changeday)
+        ) {
             // Remove the unchecked day
             changedWeekdays.splice(changedWeekdays.indexOf(changeday), 1);
         }
@@ -57,7 +63,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
         this.setState({
             weekdays: changedWeekdays,
         });
-    }
+    };
 
     onSave = () => {
         this.props.saveMeetingSettings({
@@ -67,10 +73,18 @@ export default class MeetingSettingsModal extends React.PureComponent {
         });
 
         this.props.close();
-    }
+    };
 
     getDaysCheckboxes() {
-        const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const weekDays = [
+            'Sunday',
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+        ];
 
         const checkboxes = weekDays.map((weekday, i) => {
             return (
@@ -84,8 +98,10 @@ export default class MeetingSettingsModal extends React.PureComponent {
                         value={i}
                         checked={this.state.weekdays.includes(i)}
                         onChange={this.handleCheckboxChanged}
-                    /> {weekday}
-                </label>);
+                    />{' '}
+                    {weekday}
+                </label>
+            );
         });
 
         return checkboxes;
@@ -110,28 +126,31 @@ export default class MeetingSettingsModal extends React.PureComponent {
                 </Modal.Header>
                 <Modal.Body>
                     <div className='form-group'>
-                        <label className='control-label'>
-                            {'Meeting Day'}
-                        </label>
-                        <div className='p-2'>
-                            {this.getDaysCheckboxes()}
-                        </div>
+                        <label className='control-label'>{'Meeting Day'}</label>
+                        <div className='p-2'>{this.getDaysCheckboxes()}</div>
                     </div>
                     <div className='form-group'>
-                        <label className='control-label'>{'Hashtag Format'}</label>
+                        <label className='control-label'>
+                            {'Hashtag Format'}
+                        </label>
                         <input
                             onInput={this.handleHashtagChange}
                             className='form-control'
-                            placeholder={this.state.hashtag ? this.state.hashtag : ''}
-                            defaultValue={this.state.hashtag ? this.state.hashtag : ''}
+                            value={this.state.hashtag ? this.state.hashtag : ''}
                         />
-                        <p className='text-muted pt-1'> {'Hashtag is formatted using the '}
+                        <p className='text-muted pt-1'>
+                            {' '}
+                            {'Hashtag is formatted using the '}
                             <a
                                 target='_blank'
                                 rel='noopener noreferrer'
                                 href='https://godoc.org/time#pkg-constants'
-                            >{'Go time package.'}</a>
-                            {' Embed a date by surrounding what January 2, 2006 would look like with double curly braces, i.e. {{Jan02}}'}
+                            >
+                                {'Go time package.'}
+                            </a>
+                            {
+                                ' Embed a date by surrounding what January 2, 2006 would look like with double curly braces, i.e. {{Jan02}}'
+                            }
                         </p>
                     </div>
                 </Modal.Body>
