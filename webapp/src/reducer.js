@@ -2,7 +2,7 @@ import {combineReducers} from 'redux';
 
 import ActionTypes from './action_types';
 
-const meetingSettingsModal = (state = false, action) => {
+const meetingSettingsModal = (state = {visible: false, channelId: ''}, action) => {
     switch (action.type) {
     case ActionTypes.OPEN_MEETING_SETTINGS_MODAL:
         return {
