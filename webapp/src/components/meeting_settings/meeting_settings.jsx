@@ -120,10 +120,9 @@ export default class MeetingSettingsModal extends React.PureComponent {
                     <div className='form-group'>
                         <label className='control-label'>{'Hashtag Format'}</label>
                         <input
-                            onInput={this.handleHashtagChange}
+                            onChange={this.handleHashtagChange}
                             className='form-control'
-                            placeholder={this.state.hashtag ? this.state.hashtag : ''}
-                            defaultValue={this.state.hashtag ? this.state.hashtag : ''}
+                            value={this.state.hashtag ? this.state.hashtag : ''}
                         />
                         <p className='text-muted pt-1'> {'Hashtag is formatted using the '}
                             <a
