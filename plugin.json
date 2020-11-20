@@ -4,16 +4,16 @@
     "description": "Plugin to handle meeting agendas for Mattermost channels.",
     "homepage_url": "https://github.com/mattermost/mattermost-plugin-agenda",
     "support_url": "https://github.com/mattermost/mattermost-plugin-agenda/issues",
-    "release_notes_url": "https://github.com/mattermost/mattermost-plugin-agenda/releases/tag/v0.2.1",
-    "icon_path": "",
-    "version": "0.2.1",
+    "release_notes_url": "https://github.com/mattermost/mattermost-plugin-agenda/releases/tag/v0.2.2",
+    "version": "0.2.2",
     "min_server_version": "5.26.0",
     "server": {
         "executables": {
             "linux-amd64": "server/dist/plugin-linux-amd64",
             "darwin-amd64": "server/dist/plugin-darwin-amd64",
             "windows-amd64": "server/dist/plugin-windows-amd64.exe"
-        }
+        },
+        "executable": ""
     },
     "webapp": {
         "bundle_path": "webapp/dist/main.js"
