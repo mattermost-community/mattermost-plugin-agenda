@@ -17,7 +17,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
         super(props);
 
         this.state = {
-            hashtag: 'Jan02',
+            hashtag: '{{Jan02}}',
             weekdays: [1],
         };
     }
@@ -120,7 +120,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
                     <div className='form-group'>
                         <label className='control-label'>{'Hashtag Format'}</label>
                         <input
-                            onInput={this.handleHashtagChange}
+                            onChange={this.handleHashtagChange}
                             className='form-control'
                             value={this.state.hashtag ? this.state.hashtag : ''}
                         />
