@@ -55,9 +55,9 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 				meeting: &Meeting{
 					ChannelID:     "QA",
 					Schedule:      []time.Weekday{time.Wednesday},
-					HashtagFormat: "{{Jan02}}",
+					HashtagFormat: "{{Jan-2}}",
 				}},
-			want:    "#" + assertNextWeekdayDate(time.Wednesday, true).Format("Jan02"),
+			want:    "#" + assertNextWeekdayDate(time.Wednesday, true).Format("Jan-2"),
 			wantErr: false,
 		},
 		{
@@ -176,7 +176,7 @@ func TestPlugin_GetMeeting(t *testing.T) {
 			},
 			want: &Meeting{
 				Schedule:      []time.Weekday{time.Thursday},
-				HashtagFormat: "Short-{{ Jan02 }}",
+				HashtagFormat: "Short-{{ Jan-2 }}",
 				ChannelID:     "#short.name.channel",
 			},
 			wantErr: false,
@@ -190,7 +190,7 @@ func TestPlugin_GetMeeting(t *testing.T) {
 			},
 			want: &Meeting{
 				Schedule:      []time.Weekday{time.Thursday},
-				HashtagFormat: "Very Long Chann-{{ Jan02 }}",
+				HashtagFormat: "Very Long Chann-{{ Jan-2 }}",
 				ChannelID:     "#long.name.channel",
 			},
 			wantErr: false,

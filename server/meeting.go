@@ -16,7 +16,7 @@ var (
 type Meeting struct {
 	ChannelID     string         `json:"channelId"`
 	Schedule      []time.Weekday `json:"schedule"`
-	HashtagFormat string         `json:"hashtagFormat"` // Default: {ChannelName}-Jan02
+	HashtagFormat string         `json:"hashtagFormat"` // Default: {ChannelName}-Jan-2
 }
 
 // GetMeeting returns a meeting
@@ -39,7 +39,7 @@ func (p *Plugin) GetMeeting(channelID string) (*Meeting, error) {
 		}
 		meeting = &Meeting{
 			Schedule:      []time.Weekday{time.Thursday},
-			HashtagFormat: strings.Join([]string{fmt.Sprintf("%.15s", channel.Name), "{{ Jan02 }}"}, "-"),
+			HashtagFormat: strings.Join([]string{fmt.Sprintf("%.15s", channel.Name), "{{ Jan-2 }}"}, "-"),
 			ChannelID:     channelID,
 		}
 	}

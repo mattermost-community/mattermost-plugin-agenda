@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import {Modal} from 'react-bootstrap';
+
+// import './style.css';
+
 
 export default class MeetingSettingsModal extends React.PureComponent {
     static propTypes = {
@@ -17,8 +19,9 @@ export default class MeetingSettingsModal extends React.PureComponent {
         super(props);
 
         this.state = {
-            hashtag: '{{Jan02}}',
+            hashtagPrefix: 'Prefix',
             weekdays: [1],
+            dateFormat:'1-2'
         };
     }
 
@@ -29,8 +32,12 @@ export default class MeetingSettingsModal extends React.PureComponent {
 
         if (this.props.meeting && this.props.meeting !== prevProps.meeting) {
             // eslint-disable-next-line react/no-did-update-set-state
+            let splitResult=this.props.meeting.hashtagFormat.split('{{');// we know, date Format is preceded by {{
+            let hashtagPrefix=splitResult[0]
+            let dateFormat=splitResult[1].substring(0, splitResult[1].length - 2) // remove trailing }}
             this.setState({
-                hashtag: this.props.meeting.hashtagFormat,
+                hashtagPrefix: hashtagPrefix,
+                dateFormat: dateFormat,
                 weekdays: this.props.meeting.schedule || [],
             });
         }
@@ -38,9 +45,15 @@ export default class MeetingSettingsModal extends React.PureComponent {
 
     handleHashtagChange = (e) => {
         this.setState({
-            hashtag: e.target.value,
+            hashtagPrefix: e.target.value,
         });
     }
+
+    handleDateFormat = event => {
+        this.setState({
+            dateFormat: event.target.value,
+        });
+    };
 
     handleCheckboxChanged = (e) => {
         const changeday = Number(e.target.value);
@@ -59,10 +72,12 @@ export default class MeetingSettingsModal extends React.PureComponent {
         });
     }
 
+
+
     onSave = () => {
         this.props.saveMeetingSettings({
             channelId: this.props.channelId,
-            hashtagFormat: this.state.hashtag,
+            hashtagFormat: `${this.state.hashtagPrefix}{{${this.state.dateFormat}}}`,
             schedule: this.state.weekdays.sort(),
         });
 
@@ -109,6 +124,9 @@ export default class MeetingSettingsModal extends React.PureComponent {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+
+
+
                     <div className='form-group'>
                         <label className='control-label'>
                             {'Meeting Day'}
@@ -117,21 +135,46 @@ export default class MeetingSettingsModal extends React.PureComponent {
                             {this.getDaysCheckboxes()}
                         </div>
                     </div>
+
                     <div className='form-group'>
-                        <label className='control-label'>{'Hashtag Format'}</label>
+                        <div style={{display:"flex",}}>
+                            <div className="fifty" style={{padding:"5px"}}>
+                        <label className='control-label'>{'Hashtag Prefix'}</label>
                         <input
                             onChange={this.handleHashtagChange}
                             className='form-control'
-                            value={this.state.hashtag ? this.state.hashtag : ''}
+                            value={this.state.hashtagPrefix ? this.state.hashtagPrefix : ''}
                         />
-                        <p className='text-muted pt-1'> {'Hashtag is formatted using the '}
-                            <a
-                                target='_blank'
-                                rel='noopener noreferrer'
-                                href='https://godoc.org/time#pkg-constants'
-                            >{'Go time package.'}</a>
-                            {' Embed a date by surrounding what January 2, 2006 would look like with double curly braces, i.e. {{Jan02}}'}
-                        </p>
+                            </div><div className="fifty" style={{padding:"5px"}} >
+                                <label className='control-label'>{'Date Format'}</label>
+                            <br/>
+                                <select
+                                    name="format"
+                                    value={this.state.dateFormat}
+                                    onChange={this.handleDateFormat}
+                                    className="nil"
+                                    style={{height: "34px",}}>
+                                    <option value="Jan-2">Month-day</option>
+                                    <option value="2-Jan">day-Month</option>
+                                    <option value="1-2">month-day</option>
+                                    <option value="2-1">day-month</option>
+                                    <option value="2006-1-2">year-month-day</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <p className='text-muted pt-1'> {'Date would be appended to Hashtag Prefix, according to format chosen.'}</p>
+                        {/*    <a*/}
+                        {/*        target='_blank'*/}
+                        {/*        rel='noopener noreferrer'*/}
+                        {/*        href='https://godoc.org/time#pkg-constants'*/}
+                        {/*    >{'Go time package.'}</a>*/}
+                        {/*    {' Embed a date by surrounding what January 2, 2006 would look like with double curly braces, i.e. {{Jan-2}}'}*/}
+                        {/*</p>*/}
+
+
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
