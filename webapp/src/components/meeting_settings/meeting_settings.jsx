@@ -2,9 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Modal} from 'react-bootstrap';
 
-// import './style.css';
-
-
 export default class MeetingSettingsModal extends React.PureComponent {
     static propTypes = {
         visible: PropTypes.bool.isRequired,
@@ -32,6 +29,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
 
         if (this.props.meeting && this.props.meeting !== prevProps.meeting) {
             // eslint-disable-next-line react/no-did-update-set-state
+            console.log({tag:this.props.meeting.hashtagFormat})
             let splitResult=this.props.meeting.hashtagFormat.split('{{');// we know, date Format is preceded by {{
             let hashtagPrefix=splitResult[0]
             let dateFormat=splitResult[1].substring(0, splitResult[1].length - 2) // remove trailing }}
@@ -44,6 +42,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
     }
 
     handleHashtagChange = (e) => {
+        // console.log({H:e.target.value})
         this.setState({
             hashtagPrefix: e.target.value,
         });
@@ -53,6 +52,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
         this.setState({
             dateFormat: event.target.value,
         });
+        console.log(event.target.value);
     };
 
     handleCheckboxChanged = (e) => {
@@ -120,7 +120,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
                         componentClass='h1'
                         id='agendaPluginMeetingSettingsModalLabel'
                     >
-                        {'Channel Agenda Settings'}
+                        {'Channel Agenda Settings.'}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -152,20 +152,25 @@ export default class MeetingSettingsModal extends React.PureComponent {
                                     name="format"
                                     value={this.state.dateFormat}
                                     onChange={this.handleDateFormat}
-                                    className="nil"
-                                    style={{height: "34px",}}>
-                                    <option value="Jan-2">Month-day</option>
-                                    <option value="2-Jan">day-Month</option>
-                                    <option value="1-2">month-day</option>
-                                    <option value="2-1">day-month</option>
-                                    <option value="2006-1-2">year-month-day</option>
+                                    style={{height:"35px",border:"1px solid #ced4da"}}
+                                    className="form-select">
+                                    <option value="Jan 2">Month_day</option>
+                                    <option value="2 Jan">day_Month</option>
+                                    <option value="1 2">month_day</option>
+                                    <option value="2 1">day_month</option>
+                                    <option value="2006 1 2">year_month_day</option>
 
 
                                 </select>
                             </div>
                         </div>
 
-                        <p className='text-muted pt-1'> {'Date would be appended to Hashtag Prefix, according to format chosen.'}</p>
+                        <p className='text-muted pt-1'>
+                            <div className="alert alert-warning" role="alert" style={{marginBottom:"3px"}}>
+                                {'You may use underscore'}<code>_</code>. {'Other special characters including'} <code>-</code>, {'not allowed.'}
+                            </div>
+                            {'Date would be appended to Hashtag Prefix, according to format chosen.'}
+                        </p>
                         {/*    <a*/}
                         {/*        target='_blank'*/}
                         {/*        rel='noopener noreferrer'*/}
