@@ -1,5 +1,12 @@
 
-import {updateSearchTerms, updateSearchResultsTerms, updateRhsState, performSearch, openMeetingSettingsModal} from './actions';
+import {
+    updateSearchTerms,
+    updateSearchResultsTerms,
+    updateRhsState,
+    performSearch,
+    openMeetingSettingsModal,
+    requeueItem
+} from './actions';
 
 import reducer from './reducer';
 
@@ -21,7 +28,7 @@ export default class Plugin {
             });
 
         registry.registerPostDropdownMenuAction('Re-queue', (params)=>{
-            console.log({params})
+            store.dispatch(requeueItem(params));
         })
     }
 }
