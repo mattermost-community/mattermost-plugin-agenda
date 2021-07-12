@@ -55,9 +55,9 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 				meeting: &Meeting{
 					ChannelID:     "QA",
 					Schedule:      []time.Weekday{time.Wednesday},
-					HashtagFormat: "{{Jan02}}",
+					HashtagFormat: "{{Jan 2}}",
 				}},
-			want:    "#" + assertNextWeekdayDate(time.Wednesday, true).Format("Jan02"),
+			want:    "#" + strings.ReplaceAll(assertNextWeekdayDate(time.Wednesday, true).Format("Jan 2"), " ", "_"),
 			wantErr: false,
 		},
 		{
@@ -67,9 +67,9 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 				meeting: &Meeting{
 					ChannelID:     "QA Backend",
 					Schedule:      []time.Weekday{time.Monday},
-					HashtagFormat: "QA-{{January 02 2006}}",
+					HashtagFormat: "QA_{{January 02 2006}}",
 				}},
-			want:    "#QA-" + assertNextWeekdayDate(time.Monday, true).Format("January 02 2006"),
+			want:    "#QA_" + strings.ReplaceAll(assertNextWeekdayDate(time.Monday, true).Format("January 02 2006"), " ", "_"),
 			wantErr: false,
 		},
 		{
@@ -81,7 +81,7 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 					Schedule:      []time.Weekday{time.Monday},
 					HashtagFormat: "{{January 02 2006}}.vue",
 				}},
-			want:    "#" + assertNextWeekdayDate(time.Monday, false).Format("January 02 2006") + ".vue",
+			want:    "#" + strings.ReplaceAll(assertNextWeekdayDate(time.Monday, false).Format("January 02 2006"), " ", "_") + ".vue",
 			wantErr: false,
 		},
 		{
@@ -93,7 +93,7 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 					Schedule:      []time.Weekday{time.Monday},
 					HashtagFormat: "React {{January 02 2006}} Born",
 				}},
-			want:    "#React " + assertNextWeekdayDate(time.Monday, false).Format("January 02 2006") + " Born",
+			want:    "#React " + strings.ReplaceAll(assertNextWeekdayDate(time.Monday, false).Format("January 02 2006"), " ", "_") + " Born",
 			wantErr: false,
 		},
 		{
@@ -105,7 +105,7 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 					Schedule:      []time.Weekday{time.Monday},
 					HashtagFormat: "January 02 2006 {{January 02 2006}} January 02 2006",
 				}},
-			want:    "#January 02 2006 " + assertNextWeekdayDate(time.Monday, false).Format("January 02 2006") + " January 02 2006",
+			want:    "#January 02 2006 " + strings.ReplaceAll(assertNextWeekdayDate(time.Monday, false).Format("January 02 2006"), " ", "_") + " January 02 2006",
 			wantErr: false,
 		},
 		{
@@ -117,7 +117,7 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 					Schedule:  []time.Weekday{time.Monday},
 					HashtagFormat: "{{   January 02 2006			}}",
 				}},
-			want:    "#" + assertNextWeekdayDate(time.Monday, false).Format("January 02 2006"),
+			want:    "#" + strings.ReplaceAll(assertNextWeekdayDate(time.Monday, false).Format("January 02 2006"), " ", "_"),
 			wantErr: false,
 		},
 		{
@@ -129,7 +129,7 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 					Schedule:      []time.Weekday{time.Monday},
 					HashtagFormat: "{{ Mon Jan _2 }}",
 				}},
-			want:    "#" + assertNextWeekdayDate(time.Monday, false).Format("Mon Jan _2"),
+			want:    "#" + strings.ReplaceAll(assertNextWeekdayDate(time.Monday, false).Format("Mon Jan _2"), " ", "_"),
 			wantErr: false,
 		},
 	}
@@ -138,7 +138,7 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 			jsonMeeting, err := json.Marshal(tt.args.meeting)
 			tAssert.Nil(err)
 			api.On("KVGet", tt.args.meeting.ChannelID).Return(jsonMeeting, nil)
-			got, err := mPlugin.GenerateHashtag(tt.args.meeting.ChannelID, tt.args.nextWeek, -1)
+			got, err := mPlugin.GenerateHashtag(tt.args.meeting.ChannelID, tt.args.nextWeek, -1, false)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GenerateHashtag() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -176,7 +176,7 @@ func TestPlugin_GetMeeting(t *testing.T) {
 			},
 			want: &Meeting{
 				Schedule:      []time.Weekday{time.Thursday},
-				HashtagFormat: "Short-{{ Jan02 }}",
+				HashtagFormat: "Short_{{ Jan 2 }}",
 				ChannelID:     "#short.name.channel",
 			},
 			wantErr: false,
@@ -190,7 +190,7 @@ func TestPlugin_GetMeeting(t *testing.T) {
 			},
 			want: &Meeting{
 				Schedule:      []time.Weekday{time.Thursday},
-				HashtagFormat: "Very Long Chann-{{ Jan02 }}",
+				HashtagFormat: "Very Long Chann_{{ Jan 2 }}",
 				ChannelID:     "#long.name.channel",
 			},
 			wantErr: false,

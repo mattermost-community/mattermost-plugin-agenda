@@ -1,7 +1,12 @@
+import {AnyAction, Dispatch} from 'redux';
 import {searchPostsWithParams} from 'mattermost-redux/actions/search';
-
+import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {GetStateFunc} from 'mattermost-redux/types/actions';
+import {Client4} from 'mattermost-redux/client';
+import {IntegrationTypes} from 'mattermost-redux/action_types';
+
 
 import Client from '../client';
 
@@ -80,4 +85,44 @@ export function performSearch(terms) {
 
         return dispatch(searchPostsWithParams(teamId, {terms, is_or_search: false, include_deleted_channels: viewArchivedChannels, page: 0, per_page: 20}, true));
     };
+}
+
+export function setTriggerId(triggerId) {
+    return {
+        type: IntegrationTypes.RECEIVED_DIALOG_TRIGGER_ID,
+        data: triggerId,
+    };
+}
+
+export function requeueItem(itemId) {
+    return (dispatch, getState) => {
+        const command = `/agenda requeue ${itemId}`;
+        clientExecuteCommand(dispatch, getState, command).then(r => {console.log({r})});
+
+        return {data: true};
+    };
+}
+
+
+export async function clientExecuteCommand(dispatch, getState, command) {
+    let currentChannel = getCurrentChannel(getState());
+    const currentTeamId = getCurrentTeamId(getState());
+
+    // Default to town square if there is no current channel (i.e., if Mattermost has not yet loaded)
+    if (!currentChannel) {
+        currentChannel = await Client4.getChannelByName(currentTeamId, 'town-square');
+    }
+
+    const args = {
+        channel_id: currentChannel?.id,
+        team_id: currentTeamId,
+    };
+
+    try {
+        //@ts-ignore Typing in mattermost-redux is wrong
+        const data = await Client4.executeCommand(command, args);
+        dispatch(setTriggerId(data?.trigger_id));
+    } catch (error) {
+        console.error(error); //eslint-disable-line no-console
+    }
 }

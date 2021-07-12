@@ -24,7 +24,7 @@ func TestServeHTTP(t *testing.T) {
 		defaultMeeting := &Meeting{
 			ChannelID:     "myChannelId",
 			Schedule:      []time.Weekday{time.Thursday},
-			HashtagFormat: "Jan02",
+			HashtagFormat: "Jan-2",
 		}
 
 		jsonMeeting, err := json.Marshal(defaultMeeting)
