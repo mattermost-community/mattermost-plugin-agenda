@@ -16,7 +16,7 @@ var (
 type Meeting struct {
 	ChannelID     string         `json:"channelId"`
 	Schedule      []time.Weekday `json:"schedule"`
-	HashtagFormat string         `json:"hashtagFormat"` // Default: {ChannelName}-Jan02
+	HashtagFormat string         `json:"hashtagFormat"` // Default: {ChannelName}-Jan-2
 }
 
 // GetMeeting returns a meeting
@@ -37,9 +37,10 @@ func (p *Plugin) GetMeeting(channelID string) (*Meeting, error) {
 		if err != nil {
 			return nil, err
 		}
+		paddedChannelName :=strings.ReplaceAll(channel.Name, "-", "_")
 		meeting = &Meeting{
 			Schedule:      []time.Weekday{time.Thursday},
-			HashtagFormat: strings.Join([]string{fmt.Sprintf("%.15s", channel.Name), "{{ Jan02 }}"}, "-"),
+			HashtagFormat: strings.Join([]string{fmt.Sprintf("%.15s", paddedChannelName), "{{ Jan 2 }}"}, "_"),
 			ChannelID:     channelID,
 		}
 	}
@@ -92,8 +93,10 @@ func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday int) (
 		prefix = matchGroups[1]
 		hashtagFormat = strings.TrimSpace(matchGroups[2])
 		postfix = matchGroups[3]
+		formattedDate := meetingDate.Format(hashtagFormat)
+		formattedDate = strings.ReplaceAll(formattedDate, " ", "_")
 
-		hashtag = fmt.Sprintf("#%s%v%s", prefix, meetingDate.Format(hashtagFormat), postfix)
+		hashtag = fmt.Sprintf("#%s%v%s", prefix, formattedDate, postfix)
 	} else {
 		hashtag = fmt.Sprintf("#%s", meeting.HashtagFormat)
 	}
