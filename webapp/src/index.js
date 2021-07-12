@@ -5,7 +5,7 @@ import {
     updateRhsState,
     performSearch,
     openMeetingSettingsModal,
-    requeueItem
+    requeueItem,
 } from './actions';
 
 import reducer from './reducer';
@@ -27,9 +27,9 @@ export default class Plugin {
                 store.dispatch(openMeetingSettingsModal(channelId));
             });
 
-        registry.registerPostDropdownMenuAction('Re-queue', (params)=>{
+        registry.registerPostDropdownMenuAction('Re-queue', (params) => {
             store.dispatch(requeueItem(params));
-        })
+        });
     }
 }
 
