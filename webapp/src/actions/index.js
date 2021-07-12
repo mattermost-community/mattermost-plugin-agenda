@@ -1,12 +1,9 @@
-import {AnyAction, Dispatch} from 'redux';
 import {searchPostsWithParams} from 'mattermost-redux/actions/search';
 import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
-import {GetStateFunc} from 'mattermost-redux/types/actions';
 import {Client4} from 'mattermost-redux/client';
 import {IntegrationTypes} from 'mattermost-redux/action_types';
-
 
 import Client from '../client';
 
@@ -97,12 +94,10 @@ export function setTriggerId(triggerId) {
 export function requeueItem(itemId) {
     return (dispatch, getState) => {
         const command = `/agenda requeue ${itemId}`;
-        clientExecuteCommand(dispatch, getState, command).then(r => {console.log({r})});
-
+        clientExecuteCommand(dispatch, getState, command);
         return {data: true};
     };
 }
-
 
 export async function clientExecuteCommand(dispatch, getState, command) {
     let currentChannel = getCurrentChannel(getState());
