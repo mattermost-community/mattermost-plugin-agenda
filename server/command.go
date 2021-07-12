@@ -219,7 +219,6 @@ func calculateQueItemNumberAndUpdateOldItems(meeting *Meeting, args *model.Comma
 		if findErr != nil {
 			return 0, responsef("Error updating post: %s", findErr.Message)
 		}
-
 	}
 	return counter, nil
 }
@@ -283,7 +282,6 @@ func (p *Plugin) executeCommandReQueue(args *model.CommandArgs) *model.CommandRe
 	}
 
 	return &model.CommandResponse{Text: fmt.Sprintf("Item has been Re-queued to %v", hashtag), ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL}
-
 }
 
 func parseMeetingPost(meeting *Meeting, post *model.Post) (string, ParsedMeetingMessage, *model.CommandResponse) {
@@ -312,7 +310,6 @@ func parseMeetingPost(meeting *Meeting, post *model.Post) (string, ParsedMeeting
 		return hashtagDateFormat, parsedMeetingMessage, nil
 	}
 	return hashtagDateFormat, ParsedMeetingMessage{}, responsef("Please ensure correct message format!")
-
 }
 
 func (p *Plugin) executeCommandHelp(args *model.CommandArgs) *model.CommandResponse {
