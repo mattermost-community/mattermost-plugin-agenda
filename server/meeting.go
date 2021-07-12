@@ -54,11 +54,9 @@ func (p *Plugin) SaveMeeting(meeting *Meeting) error {
 	if err != nil {
 		return err
 	}
-
 	if appErr := p.API.KVSet(meeting.ChannelID, jsonMeeting); appErr != nil {
 		return appErr
 	}
-
 	return nil
 }
 
@@ -68,14 +66,12 @@ func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday int, r
 	if err != nil {
 		return "", err
 	}
-
 	var meetingDate *time.Time
 	if weekday > -1 {
 		// Get date for given day
 		if meetingDate, err = nextWeekdayDate(time.Weekday(weekday), nextWeek); err != nil {
 			return "", err
 		}
-
 	} else {
 		// user didn't provide any specific date, Get date for the list of days of the week
 		if !requeue {
@@ -90,11 +86,8 @@ func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday int, r
 				return "", err
 			}
 		}
-		//---- requeue Logic
 	}
-
 	var hashtag string
-
 	if matchGroups := meetingDateFormatRegex.FindStringSubmatch(meeting.HashtagFormat); len(matchGroups) == 4 {
 		var (
 			prefix        string
@@ -106,7 +99,6 @@ func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday int, r
 		postfix = matchGroups[3]
 		formattedDate := meetingDate.Format(hashtagFormat)
 		formattedDate = strings.ReplaceAll(formattedDate, " ", "_")
-
 		hashtag = fmt.Sprintf("#%s%v%s", prefix, formattedDate, postfix)
 	} else {
 		hashtag = fmt.Sprintf("#%s", meeting.HashtagFormat)
