@@ -1,5 +1,12 @@
 
-import {updateSearchTerms, updateSearchResultsTerms, updateRhsState, performSearch, openMeetingSettingsModal} from './actions';
+import {
+    updateSearchTerms,
+    updateSearchResultsTerms,
+    updateRhsState,
+    performSearch,
+    openMeetingSettingsModal,
+    requeueItem
+} from './actions';
 
 import reducer from './reducer';
 
@@ -19,6 +26,10 @@ export default class Plugin {
             (channelId) => {
                 store.dispatch(openMeetingSettingsModal(channelId));
             });
+
+        registry.registerPostDropdownMenuAction('Re-queue', (params)=>{
+            store.dispatch(requeueItem(params));
+        })
     }
 }
 
