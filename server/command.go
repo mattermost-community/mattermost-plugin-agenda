@@ -18,11 +18,10 @@ const (
 	wsEventList = "list"
 )
 
+// ParsedMeetingMessage is meeting message after being parsed
 type ParsedMeetingMessage struct {
-	prefix      string
-	hashTag     string
 	date        string
-	number      string //TODO we don't need it right now
+	number      string // TODO we don't need it right now
 	textMessage string
 }
 
@@ -198,7 +197,7 @@ func calculateQueItemNumberAndUpdateOldItems(meeting *Meeting, args *model.Comma
 	counter := 1
 
 	var sortedPosts []*model.Post
-   // TODO we won't need to do this once we fix https://github.com/mattermost/mattermost-server/issues/11006
+	// TODO we won't need to do this once we fix https://github.com/mattermost/mattermost-server/issues/11006
 	for _, post := range searchResults.PostList.Posts {
 		sortedPosts = append(sortedPosts, post)
 	}
@@ -208,9 +207,7 @@ func calculateQueItemNumberAndUpdateOldItems(meeting *Meeting, args *model.Comma
 	})
 
 	for _, post := range sortedPosts {
-
 		_, parsedMessage, _ := parseMeetingPost(meeting, post)
-
 		_, findErr := p.API.UpdatePost(&model.Post{
 			Id:        post.Id,
 			UserId:    args.UserId,
@@ -224,7 +221,6 @@ func calculateQueItemNumberAndUpdateOldItems(meeting *Meeting, args *model.Comma
 		}
 
 	}
-
 	return counter, nil
 }
 
@@ -240,9 +236,9 @@ func (p *Plugin) executeCommandReQueue(args *model.CommandArgs) *model.CommandRe
 		return responsef("Can't find the meeting")
 	}
 
-	oldPostId := split[2]
-	postToBeReQueued, err := p.API.GetPost(oldPostId)
-	//if err != nil { //TODO locate why its not nil even if id is valid and working
+	oldPostID := split[2]
+	postToBeReQueued, _ := p.API.GetPost(oldPostID)
+	// if err != nil { //TODO locate why its not nil even if id is valid and working
 	//	return responsef("Couldn't locate the post to requeue.")
 	//}
 	hashtagDateFormat, parsedMeetingMessage, errors := parseMeetingPost(meeting, postToBeReQueued)
@@ -276,7 +272,7 @@ func (p *Plugin) executeCommandReQueue(args *model.CommandArgs) *model.CommandRe
 	}
 
 	_, appErr := p.API.UpdatePost(&model.Post{
-		Id:        oldPostId,
+		Id:        oldPostID,
 		UserId:    args.UserId,
 		ChannelId: args.ChannelId,
 		RootId:    args.RootId,
@@ -314,9 +310,8 @@ func parseMeetingPost(meeting *Meeting, post *model.Post) (string, ParsedMeeting
 			textMessage: matchGroups[3],
 		}
 		return hashtagDateFormat, parsedMeetingMessage, nil
-	} else {
-		return hashtagDateFormat, ParsedMeetingMessage{}, responsef("Please ensure correct message format!")
 	}
+	return hashtagDateFormat, ParsedMeetingMessage{}, responsef("Please ensure correct message format!")
 
 }
 
