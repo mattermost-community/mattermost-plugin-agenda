@@ -17,8 +17,9 @@ export default class MeetingSettingsModal extends React.PureComponent {
         super(props);
 
         this.state = {
-            hashtag: '{{Jan02}}',
+            hashtagPrefix: 'Prefix',
             weekdays: [1],
+            dateFormat: '1-2',
         };
     }
 
@@ -28,9 +29,13 @@ export default class MeetingSettingsModal extends React.PureComponent {
         }
 
         if (this.props.meeting && this.props.meeting !== prevProps.meeting) {
+            const splitResult = this.props.meeting.hashtagFormat.split('{{');// we know, date Format is preceded by {{
+            const hashtagPrefix = splitResult[0];
+            const dateFormat = splitResult[1].substring(0, splitResult[1].length - 2); // remove trailing }}
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({
-                hashtag: this.props.meeting.hashtagFormat,
+                hashtagPrefix,
+                dateFormat,
                 weekdays: this.props.meeting.schedule || [],
             });
         }
@@ -38,9 +43,15 @@ export default class MeetingSettingsModal extends React.PureComponent {
 
     handleHashtagChange = (e) => {
         this.setState({
-            hashtag: e.target.value,
+            hashtagPrefix: e.target.value,
         });
     }
+
+    handleDateFormat = (event) => {
+        this.setState({
+            dateFormat: event.target.value,
+        });
+    };
 
     handleCheckboxChanged = (e) => {
         const changeday = Number(e.target.value);
@@ -62,7 +73,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
     onSave = () => {
         this.props.saveMeetingSettings({
             channelId: this.props.channelId,
-            hashtagFormat: this.state.hashtag,
+            hashtagFormat: `${this.state.hashtagPrefix}{{${this.state.dateFormat}}}`,
             schedule: this.state.weekdays.sort(),
         });
 
@@ -118,19 +129,50 @@ export default class MeetingSettingsModal extends React.PureComponent {
                         </div>
                     </div>
                     <div className='form-group'>
-                        <label className='control-label'>{'Hashtag Format'}</label>
-                        <input
-                            onChange={this.handleHashtagChange}
-                            className='form-control'
-                            value={this.state.hashtag ? this.state.hashtag : ''}
-                        />
-                        <p className='text-muted pt-1'> {'Hashtag is formatted using the '}
-                            <a
-                                target='_blank'
-                                rel='noopener noreferrer'
-                                href='https://godoc.org/time#pkg-constants'
-                            >{'Go time package.'}</a>
-                            {' Embed a date by surrounding what January 2, 2006 would look like with double curly braces, i.e. {{Jan02}}'}
+                        <div style={{display: 'flex'}}>
+                            <div
+                                className='fifty'
+                                style={{padding: '5px'}}
+                            >
+                                <label className='control-label'>{'Hashtag Prefix'}</label>
+                                <input
+                                    onChange={this.handleHashtagChange}
+                                    className='form-control'
+                                    value={this.state.hashtagPrefix ? this.state.hashtagPrefix : ''}
+                                />
+                            </div>
+                            <div
+                                className='fifty'
+                                style={{padding: '5px'}}
+                            >
+                                <label className='control-label'>{'Date Format'}</label>
+                                <br/>
+                                <select
+                                    name='format'
+                                    value={this.state.dateFormat}
+                                    onChange={this.handleDateFormat}
+                                    style={{height: '35px', border: '1px solid #ced4da'}}
+                                    className='form-select'
+                                >
+                                    <option value='Jan 2'>{'Month_day'}</option>
+                                    <option value='2 Jan'>{'day_Month'}</option>
+                                    <option value='1 2'>{'month_day'}</option>
+                                    <option value='2 1'>{'day_month'}</option>
+                                    <option value='2006 1 2'>{'year_month_day'}</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <p className='text-muted pt-1'>
+                            <div
+                                className='alert alert-warning'
+                                role='alert'
+                                style={{marginBottom: '3px'}}
+                            >
+                                {'You may use underscore'}<code>{'_'}</code>{'.'} {'Other special characters including'} <code>{'-'}</code>{','} {'not allowed.'}
+                            </div>
+                            {'Date would be appended to Hashtag Prefix, according to format chosen.'}
                         </p>
                     </div>
                 </Modal.Body>
