@@ -1,10 +1,10 @@
 import {searchPostsWithParams} from 'mattermost-redux/actions/search';
-
+import {getCurrentChannel} from 'mattermost-redux/selectors/entities/channels';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getConfig} from 'mattermost-redux/selectors/entities/general';
+import {Client4} from 'mattermost-redux/client';
 
 import Client from '../client';
-
 import ActionTypes from '../action_types';
 
 export function fetchMeetingSettings(channelId = '') {
@@ -80,4 +80,33 @@ export function performSearch(terms) {
 
         return dispatch(searchPostsWithParams(teamId, {terms, is_or_search: false, include_deleted_channels: viewArchivedChannels, page: 0, per_page: 20}, true));
     };
+}
+
+export function requeueItem(itemId) {
+    return async (dispatch, getState) => {
+        const command = `/agenda requeue ${itemId}`;
+        await clientExecuteCommand(dispatch, getState, command);
+        return {data: true};
+    };
+}
+
+export async function clientExecuteCommand(dispatch, getState, command) {
+    let currentChannel = getCurrentChannel(getState());
+    const currentTeamId = getCurrentTeamId(getState());
+
+    // Default to town square if there is no current channel (i.e., if Mattermost has not yet loaded)
+    if (!currentChannel) {
+        currentChannel = await Client4.getChannelByName(currentTeamId, 'town-square');
+    }
+
+    const args = {
+        channel_id: currentChannel?.id,
+        team_id: currentTeamId,
+    };
+
+    try {
+        return Client4.executeCommand(command, args);
+    } catch (error) {
+        return error;
+    }
 }
