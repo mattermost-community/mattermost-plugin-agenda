@@ -16,7 +16,7 @@ var (
 type Meeting struct {
 	ChannelID     string         `json:"channelId"`
 	Schedule      []time.Weekday `json:"schedule"`
-	HashtagFormat string         `json:"hashtagFormat"` // Default: {ChannelName}-Jan02
+	HashtagFormat string         `json:"hashtagFormat"` // Default: {ChannelName}-Jan-2
 }
 
 // GetMeeting returns a meeting
@@ -37,9 +37,10 @@ func (p *Plugin) GetMeeting(channelID string) (*Meeting, error) {
 		if err != nil {
 			return nil, err
 		}
+		paddedChannelName := strings.ReplaceAll(channel.Name, "-", "_")
 		meeting = &Meeting{
 			Schedule:      []time.Weekday{time.Thursday},
-			HashtagFormat: strings.Join([]string{fmt.Sprintf("%.15s", channel.Name), "{{ Jan02 }}"}, "-"),
+			HashtagFormat: strings.Join([]string{fmt.Sprintf("%.15s", paddedChannelName), "{{ Jan 2 }}"}, "_"),
 			ChannelID:     channelID,
 		}
 	}
@@ -62,7 +63,7 @@ func (p *Plugin) SaveMeeting(meeting *Meeting) error {
 }
 
 // GenerateHashtag returns a meeting hashtag
-func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday int) (string, error) {
+func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday int, requeue bool, assignedDay time.Weekday) (string, error) {
 	meeting, err := p.GetMeeting(channelID)
 	if err != nil {
 		return "", err
@@ -75,10 +76,20 @@ func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday int) (
 			return "", err
 		}
 	} else {
-		// Get date for the list of days of the week
-		if meetingDate, err = nextWeekdayDateInWeek(meeting.Schedule, nextWeek); err != nil {
-			return "", err
+		// user didn't provide any specific date, Get date for the list of days of the week
+		if !requeue {
+			if meetingDate, err = nextWeekdayDateInWeek(meeting.Schedule, nextWeek); err != nil {
+				return "", err
+			}
+		} else {
+			if len(meeting.Schedule) == 1 && meeting.Schedule[0] == assignedDay { // if this day is the only day selected in settings
+				nextWeek = true
+			}
+			if meetingDate, err = nextWeekdayDateInWeekSkippingDay(meeting.Schedule, nextWeek, assignedDay); err != nil {
+				return "", err
+			}
 		}
+		//---- requeue Logic
 	}
 
 	var hashtag string
@@ -92,8 +103,10 @@ func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday int) (
 		prefix = matchGroups[1]
 		hashtagFormat = strings.TrimSpace(matchGroups[2])
 		postfix = matchGroups[3]
+		formattedDate := meetingDate.Format(hashtagFormat)
+		formattedDate = strings.ReplaceAll(formattedDate, " ", "_")
 
-		hashtag = fmt.Sprintf("#%s%v%s", prefix, meetingDate.Format(hashtagFormat), postfix)
+		hashtag = fmt.Sprintf("#%s%v%s", prefix, formattedDate, postfix)
 	} else {
 		hashtag = fmt.Sprintf("#%s", meeting.HashtagFormat)
 	}
