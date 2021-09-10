@@ -304,7 +304,7 @@ func parseMeetingPost(meeting *Meeting, post *model.Post) (string, ParsedMeeting
 		}
 		return hashtagDateFormat, parsedMeetingMessage, nil
 	}
-	return hashtagDateFormat, ParsedMeetingMessage{}, responsef("Please ensure correct message format!")
+	return hashtagDateFormat, ParsedMeetingMessage{}, responsef("An error occurred processing the meeting hashtag.")
 }
 
 func (p *Plugin) executeCommandHelp(args *model.CommandArgs) *model.CommandResponse {
