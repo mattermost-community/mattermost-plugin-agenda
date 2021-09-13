@@ -172,7 +172,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
                             >
                                 {'Prefixes may use underscore'}<code>{'_'}</code>{'.'} {'Other special characters including'} <code>{'-'}</code> {'are not allowed.'}
                             </div>
-                            {'Date would be appended to Hashtag Prefix, according to format chosen.'}
+                            {'Date would be appended to Hashtag Prefix, according to the chosen format.'}
                         </p>
                     </div>
                 </Modal.Body>
