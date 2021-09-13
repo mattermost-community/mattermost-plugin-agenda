@@ -170,7 +170,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
                                 role='alert'
                                 style={{marginBottom: '3px'}}
                             >
-                                {'You may use underscore'}<code>{'_'}</code>{'.'} {'Other special characters including'} <code>{'-'}</code>{','} {'not allowed.'}
+                                {'Prefixes may use underscore'}<code>{'_'}</code>{'.'} {'Other special characters including'} <code>{'-'}</code> {'are not allowed.'}
                             </div>
                             {'Date would be appended to Hashtag Prefix, according to format chosen.'}
                         </p>
