@@ -154,8 +154,8 @@ export default class MeetingSettingsModal extends React.PureComponent {
                                     style={{height: '35px', border: '1px solid #ced4da'}}
                                     className='form-select'
                                 >
-                                    <option value='Jan 2'>{'Month_day'}</option>
-                                    <option value='2 Jan'>{'day_Month'}</option>
+                                    <option value='Jan 2'>{'month_day'}</option>
+                                    <option value='2 Jan'>{'day_month'}</option>
                                     <option value='1 2'>{'month_day'}</option>
                                     <option value='2 1'>{'day_month'}</option>
                                     <option value='2006 1 2'>{'year_month_day'}</option>
