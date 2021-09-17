@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"time"
 
@@ -49,6 +50,9 @@ func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*mo
 	case "queue":
 		return p.executeCommandQueue(args), nil
 
+	case "requeue":
+		return p.executeCommandReQueue(args), nil
+
 	case "setting":
 		return p.executeCommandSetting(args), nil
 
@@ -69,7 +73,7 @@ func (p *Plugin) executeCommandList(args *model.CommandArgs) *model.CommandRespo
 		weekday = int(parsedWeekday)
 	}
 
-	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek, weekday)
+	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek, weekday, false, time.Now().Weekday())
 	if err != nil {
 		return responsef("Error calculating hashtags")
 	}
@@ -147,31 +151,105 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		message = strings.Join(split[3:], " ")
 	}
 
-	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek, weekday)
+	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek, weekday, false, time.Now().Weekday())
 	if error != nil {
 		return responsef("Error calculating hashtags. Check the meeting settings for this channel.")
 	}
 
-	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, model.SearchParameter{Terms: &hashtag})
-
-	if appErr != nil {
-		return responsef("Error calculating list number")
+	itemErr, numQueueItems := calculateQueItemNumber(args, p, hashtag)
+	if itemErr != nil {
+		return itemErr
 	}
 
-	postList := *searchResults.PostList
-	numQueueItems := len(postList.Posts)
-
-	_, appErr = p.API.CreatePost(&model.Post{
+	_, appErr := p.API.CreatePost(&model.Post{
 		UserId:    args.UserId,
 		ChannelId: args.ChannelId,
 		RootId:    args.RootId,
-		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, numQueueItems+1, message),
+		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, numQueueItems, message),
 	})
 	if appErr != nil {
 		return responsef("Error creating post: %s", appErr.Message)
 	}
 
 	return &model.CommandResponse{}
+}
+
+func calculateQueItemNumber(args *model.CommandArgs, p *Plugin, hashtag string) (*model.CommandResponse, int) {
+	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, model.SearchParameter{Terms: &hashtag})
+	if appErr != nil {
+		return responsef("Error calculating list number"), 0
+	}
+	postList := *searchResults.PostList
+	numQueueItems := len(postList.Posts)
+	return nil, numQueueItems + 1
+}
+
+func (p *Plugin) executeCommandReQueue(args *model.CommandArgs) *model.CommandResponse {
+	split := strings.Fields(args.Command)
+
+	if len(split) <= 2 {
+		return responsef("Missing parameters for requeue command")
+	}
+
+	meeting, err := p.GetMeeting(args.ChannelId)
+	if err != nil {
+		return responsef("Can't find the meeting")
+	}
+
+	oldPostID := split[2]
+	postToBeReQueued, _ := p.API.GetPost(oldPostID)
+	var (
+		prefix            string
+		hashtagDateFormat string
+	)
+	if matchGroups := meetingDateFormatRegex.FindStringSubmatch(meeting.HashtagFormat); len(matchGroups) == 4 {
+		prefix = matchGroups[1]
+		hashtagDateFormat = strings.TrimSpace(matchGroups[2])
+	}
+
+	var (
+		messageRegexFormat = regexp.MustCompile(fmt.Sprintf(`(?m)^#### #%s(?P<date>.*) [0-9]+\) (?P<message>.*)?$`, prefix))
+	)
+
+	if matchGroups := messageRegexFormat.FindStringSubmatch(postToBeReQueued.Message); len(matchGroups) == 3 {
+		originalPostDate := strings.ReplaceAll(strings.TrimSpace(matchGroups[1]), "_", " ") // reverse what we do to make it a valid hashtag
+		originalPostMessage := strings.TrimSpace(matchGroups[2])
+
+		today := time.Now()
+		local, _ := time.LoadLocation("Local")
+		formattedDate, _ := time.ParseInLocation(hashtagDateFormat, originalPostDate, local)
+		if formattedDate.Year() == 0 {
+			thisYear := today.Year()
+			formattedDate = formattedDate.AddDate(thisYear, 0, 0)
+		}
+
+		if today.Year() <= formattedDate.Year() && today.YearDay() < formattedDate.YearDay() {
+			return responsef("Re-queing future items are not supported.")
+		}
+
+		hashtag, err := p.GenerateHashtag(args.ChannelId, false, -1, true, formattedDate.Weekday())
+		if err != nil {
+			return responsef("Error calculating hashtags. Check the meeting settings for this channel.")
+		}
+
+		itemErr, numQueueItems := calculateQueItemNumber(args, p, hashtag)
+		if itemErr != nil {
+			return itemErr
+		}
+
+		_, appErr := p.API.UpdatePost(&model.Post{
+			Id:        oldPostID,
+			UserId:    args.UserId,
+			ChannelId: args.ChannelId,
+			RootId:    args.RootId,
+			Message:   fmt.Sprintf("#### %v %v) %v", hashtag, numQueueItems, originalPostMessage),
+		})
+		if appErr != nil {
+			return responsef("Error creating post: %s", appErr.Message)
+		}
+		return responsef(fmt.Sprintf("Item has been Re-queued to %v", hashtag))
+	}
+	return responsef("Make sure, message is in required format!")
 }
 
 func (p *Plugin) executeCommandHelp(args *model.CommandArgs) *model.CommandResponse {

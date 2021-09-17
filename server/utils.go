@@ -72,6 +72,25 @@ func nextWeekdayDateInWeek(meetingDays []time.Weekday, nextWeek bool) (*time.Tim
 	return nextWeekdayDate(meetingDay, nextWeek)
 }
 
+func nextWeekdayDateInWeekSkippingDay(meetingDays []time.Weekday, nextWeek bool, dayToSkip time.Weekday) (*time.Time, error) {
+	if len(meetingDays) == 0 {
+		return nil, errors.New("missing weekdays to calculate date")
+	}
+
+	todayWeekday := time.Now().Weekday()
+
+	// Find which meeting weekday to calculate the date for
+	meetingDay := meetingDays[0]
+	for _, day := range meetingDays {
+		if todayWeekday <= day && day != dayToSkip {
+			meetingDay = day
+			break
+		}
+	}
+
+	return nextWeekdayDate(meetingDay, nextWeek)
+}
+
 // nextWeekdayDate calculates the date of the next given weekday
 // from today's date.
 // If nextWeek is true, it will be based on the next calendar week.

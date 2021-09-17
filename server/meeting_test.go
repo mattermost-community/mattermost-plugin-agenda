@@ -138,7 +138,7 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 			jsonMeeting, err := json.Marshal(tt.args.meeting)
 			tAssert.Nil(err)
 			api.On("KVGet", tt.args.meeting.ChannelID).Return(jsonMeeting, nil)
-			got, err := mPlugin.GenerateHashtag(tt.args.meeting.ChannelID, tt.args.nextWeek, -1)
+			got, err := mPlugin.GenerateHashtag(tt.args.meeting.ChannelID, tt.args.nextWeek, -1, false, 1)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GenerateHashtag() error = %v, wantErr %v", err, tt.wantErr)
 				return
