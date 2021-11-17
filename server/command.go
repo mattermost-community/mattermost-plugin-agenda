@@ -151,8 +151,8 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		message = strings.Join(split[3:], " ")
 	}
 
-	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek, weekday, false, time.Now().Weekday())
-	if error != nil {
+	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek, weekday, false, time.Now().Weekday())
+	if err != nil {
 		return responsef("Error calculating hashtags. Check the meeting settings for this channel.")
 	}
 
@@ -193,26 +193,31 @@ func (p *Plugin) executeCommandReQueue(args *model.CommandArgs) *model.CommandRe
 
 	meeting, err := p.GetMeeting(args.ChannelId)
 	if err != nil {
-		return responsef("Can't find the meeting")
+		return responsef("There was no meeting found for this channel.")
 	}
 
 	oldPostID := split[2]
-	postToBeReQueued, _ := p.API.GetPost(oldPostID)
+	postToBeReQueued, er := p.API.GetPost(oldPostID)
+	if er != nil {
+		return responsef("Error fetching post.")
+	}
 	var (
 		prefix            string
 		hashtagDateFormat string
 	)
-	if matchGroups := meetingDateFormatRegex.FindStringSubmatch(meeting.HashtagFormat); len(matchGroups) == 4 {
-		prefix = matchGroups[1]
-		hashtagDateFormat = strings.TrimSpace(matchGroups[2])
+	matchGroups := meetingDateFormatRegex.FindStringSubmatch(meeting.HashtagFormat)
+	if len(matchGroups) != 3 {
+		responsef("Error parsing hashtag format.")
 	}
+	prefix = matchGroups[1]
+	hashtagDateFormat = strings.TrimSpace(matchGroups[2])
 
 	var (
 		messageRegexFormat = regexp.MustCompile(fmt.Sprintf(`(?m)^#### #%s(?P<date>.*) [0-9]+\) (?P<message>.*)?$`, prefix))
 	)
 
 	if matchGroups := messageRegexFormat.FindStringSubmatch(postToBeReQueued.Message); len(matchGroups) == 3 {
-		originalPostDate := strings.ReplaceAll(strings.TrimSpace(matchGroups[1]), "_", " ") // reverse what we do to make it a valid hashtag
+		originalPostDate := p.replaceUnderscoreWithSpace(strings.TrimSpace(matchGroups[1])) // reverse what we do to make it a valid hashtag
 		originalPostMessage := strings.TrimSpace(matchGroups[2])
 
 		today := time.Now()
@@ -224,11 +229,12 @@ func (p *Plugin) executeCommandReQueue(args *model.CommandArgs) *model.CommandRe
 		}
 
 		if today.Year() <= formattedDate.Year() && today.YearDay() < formattedDate.YearDay() {
-			return responsef("Re-queing future items are not supported.")
+			return responsef("Re-queuing future items is not supported.")
 		}
 
 		hashtag, err := p.GenerateHashtag(args.ChannelId, false, -1, true, formattedDate.Weekday())
 		if err != nil {
+			p.API.LogWarn("Error calculating hashtags. Check the meeting settings for this channel.", "error", err.Error())
 			return responsef("Error calculating hashtags. Check the meeting settings for this channel.")
 		}
 
@@ -245,11 +251,16 @@ func (p *Plugin) executeCommandReQueue(args *model.CommandArgs) *model.CommandRe
 			Message:   fmt.Sprintf("#### %v %v) %v", hashtag, numQueueItems, originalPostMessage),
 		})
 		if appErr != nil {
+			p.API.LogWarn("Error creating post: %s", "error", appErr.Message)
 			return responsef("Error creating post: %s", appErr.Message)
 		}
 		return responsef(fmt.Sprintf("Item has been Re-queued to %v", hashtag))
 	}
-	return responsef("Make sure, message is in required format!")
+	return responsef("Make sure, message is in required format.")
+}
+
+func (p *Plugin) replaceUnderscoreWithSpace(hashtag string) string {
+	return strings.ReplaceAll(hashtag, "_", " ")
 }
 
 func (p *Plugin) executeCommandHelp(args *model.CommandArgs) *model.CommandResponse {

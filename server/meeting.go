@@ -75,15 +75,12 @@ func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday int, r
 			return "", err
 		}
 	} else {
-		// user didn't provide any specific date, Get date for the list of days of the week
+		// user didn't specify any specific date/day in command, Get date for the list of days of the week
 		if !requeue {
 			if meetingDate, err = nextWeekdayDateInWeek(meeting.Schedule, nextWeek); err != nil {
 				return "", err
 			}
 		} else {
-			if len(meeting.Schedule) == 1 && meeting.Schedule[0] == assignedDay { // if this day is the only day selected in settings
-				nextWeek = true
-			}
 			if meetingDate, err = nextWeekdayDateInWeekSkippingDay(meeting.Schedule, nextWeek, assignedDay); err != nil {
 				return "", err
 			}

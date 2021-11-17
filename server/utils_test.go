@@ -1,8 +1,11 @@
 package main
 
 import (
+	"reflect"
 	"testing"
 	"time"
+
+	"github.com/undefinedlabs/go-mpatch"
 )
 
 func Test_parseSchedule(t *testing.T) {
@@ -37,6 +40,45 @@ func Test_parseSchedule(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("parseSchedule() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_nextWeekdayDateInWeekSkippingDay(t *testing.T) {
+	var patch, err = mpatch.PatchMethod(time.Now, func() time.Time {
+		return time.Date(2021, 11, 15, 00, 00, 00, 0, time.UTC)
+	})
+	if patch == nil || err != nil {
+		t.Errorf("error creating patch")
+	}
+	type args struct {
+		meetingDays []time.Weekday
+		nextWeek    bool
+		dayToSkip   time.Weekday
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    time.Time
+		wantErr bool
+	}{
+
+		{name: "test skip tuesday in week, today", args: args{[]time.Weekday{1, 2, 3, 4, 5, 6, 7}, false, time.Weekday(2)}, want: time.Now().AddDate(0, 0, 0), wantErr: false},
+		{name: "test skip tuesday in few days", args: args{[]time.Weekday{2, 3, 4, 5, 6, 7}, false, time.Weekday(2)}, want: time.Now().AddDate(0, 0, 2), wantErr: false},
+		{name: "test skip monday with nextWeek true", args: args{[]time.Weekday{1, 2, 3, 4}, true, time.Weekday(1)}, want: time.Now().AddDate(0, 0, 8), wantErr: false},
+		{name: "test only meeting day is skipped", args: args{[]time.Weekday{3}, false, time.Weekday(3)}, want: time.Now().AddDate(0, 0, 2), wantErr: false},
+		{name: "test only meeting day is skipped with nextWeek true", args: args{[]time.Weekday{3}, true, time.Weekday(3)}, want: time.Now().AddDate(0, 0, 9), wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := nextWeekdayDateInWeekSkippingDay(tt.args.meetingDays, tt.args.nextWeek, tt.args.dayToSkip)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("nextWeekdayDateInWeekSkippingDay() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, &tt.want) {
+				t.Errorf("nextWeekdayDateInWeekSkippingDay() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

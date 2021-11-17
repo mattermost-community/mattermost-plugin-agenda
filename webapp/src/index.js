@@ -20,8 +20,8 @@ export default class Plugin {
                 store.dispatch(openMeetingSettingsModal(channelId));
             });
 
-        registry.registerPostDropdownMenuAction('Re-queue', (itemId) => {
-            store.dispatch(requeueItem(itemId));
+        registry.registerPostDropdownMenuAction('Re-queue', (postId) => {
+            store.dispatch(requeueItem(postId));
         });
     }
 }

@@ -83,17 +83,18 @@ export function performSearch(terms) {
     };
 }
 
-export function requeueItem(itemId) {
+export function requeueItem(postId) {
     return async (dispatch, getState) => {
-        const command = `/agenda requeue ${itemId}`;
+        const command = `/agenda requeue ${postId}`;
         await clientExecuteCommand(dispatch, getState, command);
         return {data: true};
     };
 }
 
 export async function clientExecuteCommand(dispatch, getState, command) {
-    const currentChannel = getCurrentChannel(getState());
-    const currentTeamId = getCurrentTeamId(getState());
+    const state = getState();
+    const currentChannel = getCurrentChannel(state);
+    const currentTeamId = getCurrentTeamId(state);
     const args = {
         channel_id: currentChannel?.id,
         team_id: currentTeamId,
