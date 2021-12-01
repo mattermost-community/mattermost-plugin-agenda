@@ -3,7 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/pkg/errors"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 )
@@ -59,6 +62,45 @@ func (p *Plugin) SaveMeeting(meeting *Meeting) error {
 	}
 
 	return nil
+}
+
+func calculateQueueItemNumberAndUpdateOldItems(meeting *Meeting, args *model.CommandArgs, p *Plugin, hashtag string) (int, error) {
+	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, model.SearchParameter{Terms: &hashtag})
+	if appErr != nil {
+		return 0, errors.Wrap(appErr, "Error calculating list number")
+	}
+
+	counter := 1
+
+	var sortedPosts []*model.Post
+	// TODO we won't need to do this once we fix https://github.com/mattermost/mattermost-server/issues/11006
+	for _, post := range searchResults.PostList.Posts {
+		sortedPosts = append(sortedPosts, post)
+	}
+
+	sort.Slice(sortedPosts, func(i, j int) bool {
+		return sortedPosts[i].CreateAt < sortedPosts[j].CreateAt
+	})
+
+	for _, post := range sortedPosts {
+		_, parsedMessage, err := parseMeetingPost(meeting, post)
+		if err != nil {
+			p.API.LogDebug(err.Error())
+			return 0, errors.New(err.Error())
+		}
+		_, updateErr := p.API.UpdatePost(&model.Post{
+			Id:        post.Id,
+			UserId:    args.UserId,
+			ChannelId: args.ChannelId,
+			RootId:    args.RootId,
+			Message:   fmt.Sprintf("#### %v %v) %v", hashtag, counter, parsedMessage.textMessage),
+		})
+		counter++
+		if updateErr != nil {
+			return 0, errors.Wrap(updateErr, "Error updating post")
+		}
+	}
+	return counter, nil
 }
 
 // GenerateHashtag returns a meeting hashtag

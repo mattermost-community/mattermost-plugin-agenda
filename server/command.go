@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"regexp"
-	"sort"
 	"strings"
 	"time"
 
@@ -143,7 +142,7 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 
 	meeting, err := p.GetMeeting(args.ChannelId)
 	if err != nil {
-		return responsef("Can't find the meeting")
+		p.API.LogError("failed to get meeting for channel", "err", err.Error(), "channel_id:", args.ChannelId)
 	}
 
 	nextWeek := false
@@ -166,9 +165,9 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		return responsef("Error calculating hashtags. Check the meeting settings for this channel.")
 	}
 
-	numQueueItems, itemErr := calculateQueItemNumberAndUpdateOldItems(meeting, args, p, hashtag)
+	numQueueItems, itemErr := calculateQueueItemNumberAndUpdateOldItems(meeting, args, p, hashtag)
 	if itemErr != nil {
-		return itemErr
+		return responsef(err.Error())
 	}
 
 	_, appErr := p.API.CreatePost(&model.Post{
@@ -184,42 +183,7 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 	return &model.CommandResponse{}
 }
 
-func calculateQueItemNumberAndUpdateOldItems(meeting *Meeting, args *model.CommandArgs, p *Plugin, hashtag string) (int, *model.CommandResponse) {
-	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, model.SearchParameter{Terms: &hashtag})
-	if appErr != nil {
-		return 0, responsef("Error calculating list number")
-	}
-
-	counter := 1
-
-	var sortedPosts []*model.Post
-	// TODO we won't need to do this once we fix https://github.com/mattermost/mattermost-server/issues/11006
-	for _, post := range searchResults.PostList.Posts {
-		sortedPosts = append(sortedPosts, post)
-	}
-
-	sort.Slice(sortedPosts, func(i, j int) bool {
-		return sortedPosts[i].CreateAt < sortedPosts[j].CreateAt
-	})
-
-	for _, post := range sortedPosts {
-		_, parsedMessage, _ := parseMeetingPost(meeting, post)
-		_, findErr := p.API.UpdatePost(&model.Post{
-			Id:        post.Id,
-			UserId:    args.UserId,
-			ChannelId: args.ChannelId,
-			RootId:    args.RootId,
-			Message:   fmt.Sprintf("#### %v %v) %v", hashtag, counter, parsedMessage.textMessage),
-		})
-		counter++
-		if findErr != nil {
-			return 0, responsef("Error updating post: %s", findErr.Message)
-		}
-	}
-	return counter, nil
-}
-
-func parseMeetingPost(meeting *Meeting, post *model.Post) (string, ParsedMeetingMessage, *model.CommandResponse) {
+func parseMeetingPost(meeting *Meeting, post *model.Post) (string, ParsedMeetingMessage, error) {
 	var (
 		prefix            string
 		hashtagDateFormat string
@@ -228,7 +192,7 @@ func parseMeetingPost(meeting *Meeting, post *model.Post) (string, ParsedMeeting
 		prefix = matchGroups[1]
 		hashtagDateFormat = strings.TrimSpace(matchGroups[2])
 	} else {
-		return "", ParsedMeetingMessage{}, responsef("Error 267")
+		return "", ParsedMeetingMessage{}, errors.New("error Parsing meeting post")
 	}
 
 	var (
@@ -244,7 +208,7 @@ func parseMeetingPost(meeting *Meeting, post *model.Post) (string, ParsedMeeting
 		}
 		return hashtagDateFormat, parsedMeetingMessage, nil
 	}
-	return hashtagDateFormat, ParsedMeetingMessage{}, responsef("An error occurred processing the meeting hashtag.")
+	return hashtagDateFormat, ParsedMeetingMessage{}, errors.New("failed to parse meeting post's header")
 }
 
 func (p *Plugin) executeCommandHelp(args *model.CommandArgs) *model.CommandResponse {
