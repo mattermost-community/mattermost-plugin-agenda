@@ -3,12 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/pkg/errors"
 	"regexp"
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/pkg/errors"
 )
 
 var (
