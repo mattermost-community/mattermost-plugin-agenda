@@ -160,14 +160,14 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		message = strings.Join(split[3:], " ")
 	}
 
-	hashtag, error := p.GenerateHashtag(args.ChannelId, nextWeek, weekday)
-	if error != nil {
+	hashtag, err := p.GenerateHashtag(args.ChannelId, nextWeek, weekday)
+	if err != nil {
 		return responsef("Error calculating hashtags. Check the meeting settings for this channel.")
 	}
 
-	numQueueItems, itemErr := calculateQueueItemNumberAndUpdateOldItems(meeting, args, p, hashtag)
+	numQueueItems, itemErr := p.calculateQueueItemNumberAndUpdateOldItems(meeting, args, hashtag)
 	if itemErr != nil {
-		return responsef(err.Error())
+		return responsef(itemErr.Error())
 	}
 
 	_, appErr := p.API.CreatePost(&model.Post{
@@ -196,9 +196,12 @@ func parseMeetingPost(meeting *Meeting, post *model.Post) (string, ParsedMeeting
 	}
 
 	var (
-		messageRegexFormat = regexp.MustCompile(fmt.Sprintf(`(?m)^#### #%s(?P<date>.*) ([0-9]+)\) (?P<message>.*)?$`, prefix))
+		messageRegexFormat, err = regexp.Compile(fmt.Sprintf(`(?m)^#### #%s(?P<date>.*) ([0-9]+)\) (?P<message>.*)?$`, prefix))
 	)
 
+	if err != nil {
+		return "", ParsedMeetingMessage{}, err
+	}
 	matchGroups := messageRegexFormat.FindStringSubmatch(post.Message)
 	if len(matchGroups) == 4 {
 		parsedMeetingMessage := ParsedMeetingMessage{
@@ -206,8 +209,10 @@ func parseMeetingPost(meeting *Meeting, post *model.Post) (string, ParsedMeeting
 			number:      matchGroups[2],
 			textMessage: matchGroups[3],
 		}
+
 		return hashtagDateFormat, parsedMeetingMessage, nil
 	}
+
 	return hashtagDateFormat, ParsedMeetingMessage{}, errors.New("failed to parse meeting post's header")
 }
 

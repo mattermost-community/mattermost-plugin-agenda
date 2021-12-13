@@ -65,8 +65,13 @@ func (p *Plugin) SaveMeeting(meeting *Meeting) error {
 	return nil
 }
 
-func calculateQueueItemNumberAndUpdateOldItems(meeting *Meeting, args *model.CommandArgs, p *Plugin, hashtag string) (int, error) {
-	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, model.SearchParameter{Terms: &hashtag})
+func (p *Plugin) calculateQueueItemNumberAndUpdateOldItems(meeting *Meeting, args *model.CommandArgs, hashtag string) (int, error) {
+	c, appErr := p.API.GetChannel(args.ChannelId)
+	if appErr != nil {
+		return 0, appErr
+	}
+	terms := fmt.Sprintf("in:%s %s", c.Name, hashtag)
+	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, model.SearchParameter{Terms: &terms})
 	if appErr != nil {
 		return 0, errors.Wrap(appErr, "Error calculating list number")
 	}
@@ -89,18 +94,21 @@ func calculateQueueItemNumberAndUpdateOldItems(meeting *Meeting, args *model.Com
 			p.API.LogDebug(err.Error())
 			return 0, errors.New(err.Error())
 		}
+
 		_, updateErr := p.API.UpdatePost(&model.Post{
 			Id:        post.Id,
-			UserId:    args.UserId,
-			ChannelId: args.ChannelId,
-			RootId:    args.RootId,
+			UserId:    post.UserId,
+			ChannelId: post.ChannelId,
+			RootId:    post.RootId,
 			Message:   fmt.Sprintf("#### %v %v) %v", hashtag, counter, parsedMessage.textMessage),
 		})
-		counter++
+
 		if updateErr != nil {
 			return 0, errors.Wrap(updateErr, "Error updating post")
 		}
+		counter++
 	}
+
 	return counter, nil
 }
 
