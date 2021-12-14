@@ -20,7 +20,7 @@ const (
 // ParsedMeetingMessage is meeting message after being parsed
 type ParsedMeetingMessage struct {
 	date        string
-	number      string // TODO we don't need it right now
+	number      string
 	textMessage string
 }
 
@@ -142,7 +142,7 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 
 	meeting, err := p.GetMeeting(args.ChannelId)
 	if err != nil {
-		p.API.LogError("failed to get meeting for channel", "err", err.Error(), "channel_id:", args.ChannelId)
+		p.API.LogError("failed to get meeting for channel", "err", err.Error(), "channel_id", args.ChannelId)
 	}
 
 	nextWeek := false

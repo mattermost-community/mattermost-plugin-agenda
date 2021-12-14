@@ -73,7 +73,7 @@ func (p *Plugin) calculateQueueItemNumberAndUpdateOldItems(meeting *Meeting, arg
 	terms := fmt.Sprintf("in:%s %s", c.Name, hashtag)
 	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, model.SearchParameter{Terms: &terms})
 	if appErr != nil {
-		return 0, errors.Wrap(appErr, "Error calculating list number")
+		return 0, errors.Wrap(appErr, "Error searching posts to find hashtags")
 	}
 
 	counter := 1
@@ -102,10 +102,10 @@ func (p *Plugin) calculateQueueItemNumberAndUpdateOldItems(meeting *Meeting, arg
 			RootId:    post.RootId,
 			Message:   fmt.Sprintf("#### %v %v) %v", hashtag, counter, parsedMessage.textMessage),
 		})
-
 		if updateErr != nil {
 			return 0, errors.Wrap(updateErr, "Error updating post")
 		}
+
 		counter++
 	}
 
