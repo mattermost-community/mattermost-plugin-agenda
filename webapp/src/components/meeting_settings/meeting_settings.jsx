@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import {Modal} from 'react-bootstrap';
 
-import Select from 'react-select'
+import Select from 'react-select';
 
 export default class MeetingSettingsModal extends React.PureComponent {
     static propTypes = {
@@ -16,18 +16,20 @@ export default class MeetingSettingsModal extends React.PureComponent {
     };
 
     options = [
-        { value: 'Jan 2', label: 'month_day' },
-        { value: '2 Jan', label: 'day_month' },
-        { value: '1 2', label: 'month_day' },
-        { value: '2 1', label: 'day_month' },
-        { value: '2006 1 2', label: 'year_month_day' },
+        {value: 'Jan 2', label: 'month_day'},
+        {value: '2 Jan', label: 'day_month'},
+        {value: '1 2', label: 'month_day'},
+        {value: '2 1', label: 'day_month'},
+        {value: '2006 1 2', label: 'year_month_day'},
     ];
 
     customStyles = {
-        menuList: (provided, state) => ({
-            ...provided,
-            height: 188
-        }),
+        menuList: (provided) => {
+            return ({
+                ...provided,
+                height: 188,
+            });
+        },
         control: (provided, state) => ({
             ...provided,
             height: 34,
@@ -35,19 +37,21 @@ export default class MeetingSettingsModal extends React.PureComponent {
             border: '1px solid #ced4da',
             boxShadow: state.isFocused ? 0 : '1px solid #ced4da',
             '&:hover': {
-                border: '1px solid #ced4da'
-            }
+                border: '1px solid #ced4da',
+            },
         }),
-        indicatorsContainer: (provided, state) => ({
-            ...provided,
-            height: 34,
-        }),
+        indicatorsContainer: (provided) => {
+            return ({
+                ...provided,
+                height: 34,
+            });
+        },
         singleValue: (provided, state) => {
             const opacity = state.isDisabled ? 0.5 : 1;
             const transition = 'opacity 300ms';
 
-            return { ...provided, opacity, transition };
-        }
+            return {...provided, opacity, transition};
+        },
     }
 
     constructor(props) {
@@ -69,7 +73,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
             const splitResult = this.props.meeting.hashtagFormat.split('{{');// we know, date Format is preceded by {{
             const hashtagPrefix = splitResult[0];
             const dateFormatValue = splitResult[1].substring(0, splitResult[1].length - 2).trim(); // remove trailing }}
-            const dateFormat = this.options.filter(i => i.value === dateFormatValue)[0]; // extract value object
+            const dateFormat = this.options.filter((i) => i.value === dateFormatValue)[0]; // extract value object
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({
                 hashtagPrefix,
@@ -85,8 +89,8 @@ export default class MeetingSettingsModal extends React.PureComponent {
         });
     }
 
-    handleDateFormat = (newValue, actionMeta) => {
-        this.setState({ dateFormat: newValue });
+    handleDateFormat = (newValue) => {
+        this.setState({dateFormat: newValue});
     };
 
     handleCheckboxChanged = (e) => {
