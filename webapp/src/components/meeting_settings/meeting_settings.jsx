@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import {Modal} from 'react-bootstrap';
 
+import Select from 'react-select'
+
 export default class MeetingSettingsModal extends React.PureComponent {
     static propTypes = {
         visible: PropTypes.bool.isRequired,
@@ -13,13 +15,48 @@ export default class MeetingSettingsModal extends React.PureComponent {
         saveMeetingSettings: PropTypes.func.isRequired,
     };
 
+    options = [
+        { value: 'Jan 2', label: 'month_day' },
+        { value: '2 Jan', label: 'day_month' },
+        { value: '1 2', label: 'month_day' },
+        { value: '2 1', label: 'day_month' },
+        { value: '2006 1 2', label: 'year_month_day' },
+    ];
+
+    customStyles = {
+        menuList: (provided, state) => ({
+            ...provided,
+            height: 188
+        }),
+        control: (provided, state) => ({
+            ...provided,
+            height: 34,
+            minHeight: 34,
+            border: '1px solid #ced4da',
+            boxShadow: state.isFocused ? 0 : '1px solid #ced4da',
+            '&:hover': {
+                border: '1px solid #ced4da'
+            }
+        }),
+        indicatorsContainer: (provided, state) => ({
+            ...provided,
+            height: 34,
+        }),
+        singleValue: (provided, state) => {
+            const opacity = state.isDisabled ? 0.5 : 1;
+            const transition = 'opacity 300ms';
+
+            return { ...provided, opacity, transition };
+        }
+    }
+
     constructor(props) {
         super(props);
 
         this.state = {
             hashtagPrefix: 'Prefix',
             weekdays: [1],
-            dateFormat: '1-2',
+            dateFormat: '1-2', // dateFormat will be an object type => { value: string, label: string }
         };
     }
 
@@ -31,7 +68,8 @@ export default class MeetingSettingsModal extends React.PureComponent {
         if (this.props.meeting && this.props.meeting !== prevProps.meeting) {
             const splitResult = this.props.meeting.hashtagFormat.split('{{');// we know, date Format is preceded by {{
             const hashtagPrefix = splitResult[0];
-            const dateFormat = splitResult[1].substring(0, splitResult[1].length - 2); // remove trailing }}
+            const dateFormatValue = splitResult[1].substring(0, splitResult[1].length - 2).trim(); // remove trailing }}
+            const dateFormat = this.options.filter(i => i.value === dateFormatValue)[0]; // extract value object
             // eslint-disable-next-line react/no-did-update-set-state
             this.setState({
                 hashtagPrefix,
@@ -47,10 +85,8 @@ export default class MeetingSettingsModal extends React.PureComponent {
         });
     }
 
-    handleDateFormat = (event) => {
-        this.setState({
-            dateFormat: event.target.value,
-        });
+    handleDateFormat = (newValue, actionMeta) => {
+        this.setState({ dateFormat: newValue });
     };
 
     handleCheckboxChanged = (e) => {
@@ -73,7 +109,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
     onSave = () => {
         this.props.saveMeetingSettings({
             channelId: this.props.channelId,
-            hashtagFormat: `${this.state.hashtagPrefix}{{${this.state.dateFormat}}}`,
+            hashtagFormat: `${this.state.hashtagPrefix}{{${this.state.dateFormat.value}}}`,
             schedule: this.state.weekdays.sort(),
         });
 
@@ -119,7 +155,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
                         {'Channel Agenda Settings'}
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body style={{overflow: 'visible'}}>
                     <div className='form-group'>
                         <label className='control-label'>
                             {'Meeting Day'}
@@ -143,24 +179,19 @@ export default class MeetingSettingsModal extends React.PureComponent {
                             </div>
                             <div
                                 className='fifty'
-                                style={{padding: '5px'}}
+                                style={{padding: '5px', minWidth: '175px'}}
                             >
                                 <label className='control-label'>{'Date Format'}</label>
                                 <br/>
-                                <select
+                                <Select
                                     name='format'
-                                    value={this.state.dateFormat}
-                                    onChange={this.handleDateFormat}
-                                    style={{height: '35px', border: '1px solid #ced4da'}}
                                     className='form-select'
-                                >
-                                    <option value='Jan 2'>{'month_day'}</option>
-                                    <option value='2 Jan'>{'day_month'}</option>
-                                    <option value='1 2'>{'month_day'}</option>
-                                    <option value='2 1'>{'day_month'}</option>
-                                    <option value='2006 1 2'>{'year_month_day'}</option>
-
-                                </select>
+                                    styles={this.customStyles}
+                                    isSearchable={false}
+                                    value={this.state.dateFormat}
+                                    options={this.options}
+                                    onChange={this.handleDateFormat.bind(this)}
+                                />
                             </div>
                         </div>
 
