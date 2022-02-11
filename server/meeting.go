@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	meetingDateFormatRegex = regexp.MustCompile(`(?m)^(?P<prefix>.*)?(?:{{\s*(?P<dateformat>.*)\s*}})(?P<postfix>.*)?$`)
+	meetingDateFormatRegex, appErr = regexp.Compile(`(?m)^(?P<prefix>.*)?(?:{{\s*(?P<dateformat>.*)\s*}})(?P<postfix>.*)?$`)
 )
 
 // Meeting represents a meeting agenda
@@ -139,6 +139,10 @@ func (p *Plugin) GenerateHashtag(channelID string, nextWeek bool, weekday int, r
 	}
 
 	var hashtag string
+
+	if appErr != nil {
+		return "", appErr
+	}
 
 	if matchGroups := meetingDateFormatRegex.FindStringSubmatch(meeting.HashtagFormat); len(matchGroups) == 4 {
 		var (

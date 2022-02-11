@@ -209,8 +209,9 @@ func (p *Plugin) executeCommandReQueue(args *model.CommandArgs) *model.CommandRe
 	}
 
 	oldPostID := split[2]
-	postToBeReQueued, er := p.API.GetPost(oldPostID)
-	if er != nil {
+	postToBeReQueued, appErr := p.API.GetPost(oldPostID)
+	if appErr != nil {
+		p.API.LogWarn("Error fetching post: %s", "error", appErr.Message)
 		return responsef("Error fetching post.")
 	}
 	var (
@@ -225,8 +226,11 @@ func (p *Plugin) executeCommandReQueue(args *model.CommandArgs) *model.CommandRe
 	hashtagDateFormat = strings.TrimSpace(matchGroups[2])
 
 	var (
-		messageRegexFormat = regexp.MustCompile(fmt.Sprintf(`(?m)^#### #%s(?P<date>.*) [0-9]+\) (?P<message>.*)?$`, prefix))
+		messageRegexFormat, er = regexp.Compile(fmt.Sprintf(`(?m)^#### #%s(?P<date>.*) [0-9]+\) (?P<message>.*)?$`, prefix))
 	)
+	if er != nil {
+		return responsef(er.Error())
+	}
 
 	if matchGroups := messageRegexFormat.FindStringSubmatch(postToBeReQueued.Message); len(matchGroups) == 3 {
 		originalPostDate := p.replaceUnderscoreWithSpace(strings.TrimSpace(matchGroups[1])) // reverse what we do to make it a valid hashtag
@@ -250,9 +254,9 @@ func (p *Plugin) executeCommandReQueue(args *model.CommandArgs) *model.CommandRe
 			return responsef("Error calculating hashtags. Check the meeting settings for this channel.")
 		}
 
-		itemErr, numQueueItems := calculateQueItemNumber(args, p, hashtag)
-		if itemErr != nil {
-			return itemErr
+		commandResponse, numQueueItems := calculateQueItemNumber(args, p, hashtag)
+		if commandResponse != nil {
+			return commandResponse
 		}
 
 		_, appErr := p.API.UpdatePost(&model.Post{

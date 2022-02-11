@@ -85,7 +85,7 @@ export function performSearch(terms) {
 
 export function requeueItem(postId) {
     return async (dispatch, getState) => {
-        const command = `/agenda requeue ${postId}`;
+        const command = `/agenda requeue post ${postId}`;
         await clientExecuteCommand(dispatch, getState, command);
         return {data: true};
     };
