@@ -24,10 +24,39 @@ export default class MeetingSettingsModal extends React.PureComponent {
     ];
 
     customStyles = {
+        menu: (provided) => {
+            return {
+                ...provided,
+                background: 'var(--center-channel-bg)',
+                color: 'var(--center-channel-color)',
+            };
+        },
+        option: (provided, { isFocused, isDisabled, isSelected }) => {
+            const bgColor = isFocused
+                ? {
+                      backgroundColor: 'var(--button-bg)',
+                      color: 'var(--button-color)',
+                  }
+                : {};
+
+            return {
+                ...provided,
+                ...bgColor,
+                ':active': {
+                    ...provided[':active'],
+                    backgroundColor: !isDisabled
+                        ? isSelected
+                            ? 'var(--button-bg)'
+                            : 'var(--center-channel-bg)'
+                        : undefined,
+                },
+            };
+        },
         menuList: (provided) => {
             return ({
                 ...provided,
                 height: 188,
+                color: 'var(--center-channel-color)',
             });
         },
         control: (provided, state) => ({
@@ -39,6 +68,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
             '&:hover': {
                 border: '1px solid #ced4da',
             },
+            background: 'var(--center-channel-bg)',
         }),
         indicatorsContainer: (provided) => {
             return ({
@@ -49,8 +79,9 @@ export default class MeetingSettingsModal extends React.PureComponent {
         singleValue: (provided, state) => {
             const opacity = state.isDisabled ? 0.5 : 1;
             const transition = 'opacity 300ms';
-
-            return {...provided, opacity, transition};
+            const color = 'var(--center-channel-color)';
+            const background = 'var(--center-channel-bg)';
+            return { ...provided, opacity, transition, color, background };
         },
     }
 
