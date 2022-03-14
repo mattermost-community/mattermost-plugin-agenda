@@ -4,8 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
+
+	"github.com/mattermost/mattermost-server/v5/model"
+	"github.com/pkg/errors"
 )
 
 var (
@@ -60,6 +64,53 @@ func (p *Plugin) SaveMeeting(meeting *Meeting) error {
 	}
 
 	return nil
+}
+
+func (p *Plugin) calculateQueueItemNumberAndUpdateOldItems(meeting *Meeting, args *model.CommandArgs, hashtag string) (int, error) {
+	c, appErr := p.API.GetChannel(args.ChannelId)
+	if appErr != nil {
+		return 0, appErr
+	}
+	terms := fmt.Sprintf("in:%s %s", c.Name, hashtag)
+	searchResults, appErr := p.API.SearchPostsInTeamForUser(args.TeamId, args.UserId, model.SearchParameter{Terms: &terms})
+	if appErr != nil {
+		return 0, errors.Wrap(appErr, "Error searching posts to find hashtags")
+	}
+
+	counter := 1
+
+	var sortedPosts []*model.Post
+	// TODO we won't need to do this once we fix https://github.com/mattermost/mattermost-server/issues/11006
+	for _, post := range searchResults.PostList.Posts {
+		sortedPosts = append(sortedPosts, post)
+	}
+
+	sort.Slice(sortedPosts, func(i, j int) bool {
+		return sortedPosts[i].CreateAt < sortedPosts[j].CreateAt
+	})
+
+	for _, post := range sortedPosts {
+		_, parsedMessage, err := parseMeetingPost(meeting, post)
+		if err != nil {
+			p.API.LogDebug(err.Error())
+			return 0, errors.New(err.Error())
+		}
+
+		_, updateErr := p.API.UpdatePost(&model.Post{
+			Id:        post.Id,
+			UserId:    post.UserId,
+			ChannelId: post.ChannelId,
+			RootId:    post.RootId,
+			Message:   fmt.Sprintf("#### %v %v) %v", hashtag, counter, parsedMessage.textMessage),
+		})
+		if updateErr != nil {
+			return 0, errors.Wrap(updateErr, "Error updating post")
+		}
+
+		counter++
+	}
+
+	return counter, nil
 }
 
 // GenerateHashtag returns a meeting hashtag
