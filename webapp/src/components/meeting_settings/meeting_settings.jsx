@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import {Modal} from 'react-bootstrap';
 import Select from 'react-select';
-
-
 
 export default class MeetingSettingsModal extends React.PureComponent {
     static propTypes = {
@@ -36,7 +34,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
                 {
                     backgroundColor: 'var(--button-bg)',
                     color: 'var(--button-color)',
-                }:
+                } :
                 {};
 
             return {
@@ -44,11 +42,9 @@ export default class MeetingSettingsModal extends React.PureComponent {
                 ...bgColor,
                 ':active': {
                     ...provided[':active'],
-                    backgroundColor: isDisabled ?
-                    undefined :
-                    isSelected ?
-                    'var(--button-bg)':
-                    'var(--center-channel-bg)'
+                    backgroundColor: isSelected ?
+                    'var(--button-bg)' :
+                    'var(--center-channel-bg)',
                 },
             };
         },
