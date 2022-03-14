@@ -1,9 +1,9 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-
-import {Modal} from 'react-bootstrap';
-
+import React from 'react';
+import { Modal } from 'react-bootstrap';
 import Select from 'react-select';
+
+
 
 export default class MeetingSettingsModal extends React.PureComponent {
     static propTypes = {
@@ -31,24 +31,24 @@ export default class MeetingSettingsModal extends React.PureComponent {
                 color: 'var(--center-channel-color)',
             };
         },
-        option: (provided, { isFocused, isDisabled, isSelected }) => {
-            const bgColor = isFocused
-                ? {
-                      backgroundColor: 'var(--button-bg)',
-                      color: 'var(--button-color)',
-                  }
-                : {};
+        option: (provided, {isFocused, isDisabled, isSelected}) => {
+            const bgColor = isFocused ?
+                {
+                    backgroundColor: 'var(--button-bg)',
+                    color: 'var(--button-color)',
+                }:
+                {};
 
             return {
                 ...provided,
                 ...bgColor,
                 ':active': {
                     ...provided[':active'],
-                    backgroundColor: !isDisabled
-                        ? isSelected
-                            ? 'var(--button-bg)'
-                            : 'var(--center-channel-bg)'
-                        : undefined,
+                    backgroundColor: isDisabled ?
+                    undefined :
+                    isSelected ?
+                    'var(--button-bg)':
+                    'var(--center-channel-bg)'
                 },
             };
         },
@@ -81,7 +81,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
             const transition = 'opacity 300ms';
             const color = 'var(--center-channel-color)';
             const background = 'var(--center-channel-bg)';
-            return { ...provided, opacity, transition, color, background };
+            return {...provided, opacity, transition, color, background};
         },
     }
 
