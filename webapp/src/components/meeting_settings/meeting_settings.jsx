@@ -29,7 +29,7 @@ export default class MeetingSettingsModal extends React.PureComponent {
                 color: 'var(--center-channel-color)',
             };
         },
-        option: (provided, {isFocused, isDisabled, isSelected}) => {
+        option: (provided, {isFocused, isSelected}) => {
             const bgColor = isFocused ?
                 {
                     backgroundColor: 'var(--button-bg)',
@@ -43,8 +43,8 @@ export default class MeetingSettingsModal extends React.PureComponent {
                 ':active': {
                     ...provided[':active'],
                     backgroundColor: isSelected ?
-                    'var(--button-bg)' :
-                    'var(--center-channel-bg)',
+                        'var(--button-bg)' :
+                        'var(--center-channel-bg)',
                 },
             };
         },
