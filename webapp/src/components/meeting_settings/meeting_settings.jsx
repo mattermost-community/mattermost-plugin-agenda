@@ -213,7 +213,6 @@ export default class MeetingSettingsModal extends React.PureComponent {
                                 style={{padding: '5px', minWidth: '175px'}}
                             >
                                 <label className='control-label'>{'Date Format'}</label>
-                                <br/>
                                 <Select
                                     name='format'
                                     className='form-select'
