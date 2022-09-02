@@ -25,6 +25,27 @@ export function fetchMeetingSettings(channelId = '') {
     };
 }
 
+export function fetchQueuedItems(channelId = '') {
+    return async (dispatch) => {
+        let data;
+        try {
+            data = await (new Client()).getUpNextItems(channelId);
+        } catch (error) {
+            return {error};
+        }
+
+        dispatch({
+            type: ActionTypes.RECEIVED_QUEUED_ITEMS,
+            data,
+        });
+
+        console.log('QUEUED ITEMS:');
+        console.log(data);
+
+        return {data};
+    };
+}
+
 export function saveMeetingSettings(meeting) {
     let data;
     try {

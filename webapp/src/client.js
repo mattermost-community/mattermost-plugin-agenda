@@ -8,6 +8,10 @@ export default class Client {
         this.url = `/plugins/${pluginId}/api/v1`;
     }
 
+    getUpNextItems = async (channelId) => {
+        return this.doGet(`${this.url}/queuedItems?channelId=${channelId}`);
+    }
+
     getMeetingSettings = async (channelId) => {
         return this.doGet(`${this.url}/settings?channelId=${channelId}`);
     }

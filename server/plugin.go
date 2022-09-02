@@ -9,13 +9,25 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/plugin"
+	"github.com/mattermost/mattermost-server/v6/model"
+	"github.com/mattermost/mattermost-server/v6/plugin"
+
+	fbClient "github.com/mattermost/focalboard/server/client"
+	pluginapi "github.com/mattermost/mattermost-plugin-api"
+)
+
+const (
+	// BotTokenKey is the KV store key for the bot's access token, used for the Focalboard API
+	BotTokenKey = "bot_token"
 )
 
 // Plugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.
 type Plugin struct {
 	plugin.MattermostPlugin
+
+	pluginAPI *pluginapi.Client
+
+	fbStore FocalboardStore
 
 	// configurationLock synchronizes access to the configuration.
 	configurationLock sync.RWMutex
@@ -33,6 +45,8 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	w.Header().Set("Content-Type", "application/json")
 
 	switch path := r.URL.Path; path {
+	case "/api/v1/queuedItems":
+		p.httpQueuedItems(w, r)
 	case "/api/v1/settings":
 		p.httpMeetingSettings(w, r)
 	case "/api/v1/meeting-days-autocomplete":
@@ -46,11 +60,15 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 
 // OnActivate is invoked when the plugin is activated
 func (p *Plugin) OnActivate() error {
+
+	pluginAPIClient := pluginapi.NewClient(p.API, p.Driver)
+	p.pluginAPI = pluginAPIClient
+
 	if err := p.registerCommands(); err != nil {
 		return errors.Wrap(err, "failed to register commands")
 	}
 
-	botID, err := p.Helpers.EnsureBot(&model.Bot{
+	botID, err := pluginAPIClient.Bot.EnsureBot(&model.Bot{
 		Username:    "agenda",
 		DisplayName: "Agenda Plugin Bot",
 		Description: "Created by the Agenda plugin.",
@@ -60,7 +78,57 @@ func (p *Plugin) OnActivate() error {
 	}
 	p.botID = botID
 
+	token := ""
+	rawToken, appErr := p.API.KVGet(BotTokenKey)
+	if appErr != nil {
+		return errors.Wrap(appErr, "failed to get stored bot access token")
+	}
+	if rawToken == nil {
+
+		accessToken, appErr := p.API.CreateUserAccessToken(&model.UserAccessToken{UserId: botID, Description: "For agenda plugin access to focalboard REST API"})
+		if appErr != nil {
+			return errors.Wrap(appErr, "failed to create access token for bot")
+		}
+		token = accessToken.Token
+		appErr = p.API.KVSet(BotTokenKey, []byte(token))
+		if appErr != nil {
+			return errors.Wrap(appErr, "failed to store bot access token")
+		}
+	} else {
+		token = string(rawToken)
+	}
+
+	client := fbClient.NewClient("http://localhost:8065/plugins/focalboard", token)
+	p.fbStore = NewFocalboardStore(p.API, client)
+
 	return nil
+}
+
+func (p *Plugin) httpQueuedItems(w http.ResponseWriter, r *http.Request) {
+	mattermostUserID := r.Header.Get("Mattermost-User-Id")
+	if mattermostUserID == "" {
+		http.Error(w, "Not Authorized", http.StatusUnauthorized)
+	}
+
+	if r.Method != http.MethodGet {
+		http.Error(w, "Request: "+r.Method+" is not allowed.", http.StatusMethodNotAllowed)
+		return
+	}
+
+	channelID, ok := r.URL.Query()["channelId"]
+
+	if !ok || len(channelID[0]) < 1 {
+		http.Error(w, "Missing channelId parameter", http.StatusBadRequest)
+		return
+	}
+
+	upNextCards, err := p.fbStore.GetUpnextCards(channelID[0])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	p.writeJSON(w, upNextCards)
 }
 
 func (p *Plugin) httpMeetingSettings(w http.ResponseWriter, r *http.Request) {

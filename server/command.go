@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/plugin"
+	"github.com/mattermost/mattermost-server/v6/model"
+	"github.com/mattermost/mattermost-server/v6/plugin"
 	"github.com/pkg/errors"
 )
 
@@ -170,11 +170,16 @@ func (p *Plugin) executeCommandQueue(args *model.CommandArgs) *model.CommandResp
 		return responsef(itemErr.Error())
 	}
 
+	_, cardLink, err := p.fbStore.AddCard(args.UserId, args.ChannelId, message)
+	if err != nil {
+		return responsef("Error creating board card")
+	}
+
 	_, appErr := p.API.CreatePost(&model.Post{
 		UserId:    args.UserId,
 		ChannelId: args.ChannelId,
 		RootId:    args.RootId,
-		Message:   fmt.Sprintf("#### %v %v) %v", hashtag, numQueueItems, message),
+		Message:   fmt.Sprintf("#### %v %v) %v %v", hashtag, numQueueItems, message, cardLink),
 	})
 	if appErr != nil {
 		return responsef("Error creating post: %s", appErr.Message)
@@ -222,9 +227,8 @@ func (p *Plugin) executeCommandHelp(args *model.CommandArgs) *model.CommandRespo
 
 func responsef(format string, args ...interface{}) *model.CommandResponse {
 	return &model.CommandResponse{
-		ResponseType: model.COMMAND_RESPONSE_TYPE_EPHEMERAL,
+		ResponseType: model.CommandResponseTypeEphemeral,
 		Text:         fmt.Sprintf(format, args...),
-		Type:         model.POST_DEFAULT,
 	}
 }
 

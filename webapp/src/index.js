@@ -1,27 +1,34 @@
 
-import {updateSearchTerms, updateSearchResultsTerms, updateRhsState, performSearch, openMeetingSettingsModal} from './actions';
+import {openMeetingSettingsModal} from 'actions';
 
 import reducer from './reducer';
 
 import ChannelSettingsModal from './components/meeting_settings';
+import SidebarRight from './components/sidebar_right';
 
 import {id as pluginId} from './manifest';
 export default class Plugin {
     initialize(registry, store) {
         registry.registerReducer(reducer);
-        registry.registerWebSocketEventHandler(
-            'custom_' + pluginId + '_list',
-            handleSearchHashtag(store),
-        );
 
         registry.registerRootComponent(ChannelSettingsModal);
         registry.registerChannelHeaderMenuAction('Agenda Settings',
             (channelId) => {
                 store.dispatch(openMeetingSettingsModal(channelId));
             });
+
+        const {showRHSPlugin} = registry.registerRightHandSidebarComponent(SidebarRight, 'Agenda');
+
+        registry.registerWebSocketEventHandler(
+            'custom_' + pluginId + '_list',
+
+            //handleSearchHashtag(store),
+            () => store.dispatch(showRHSPlugin),
+        );
     }
 }
 
+/*
 function handleSearchHashtag(store) {
     return (msg) => {
         if (!msg.data) {
@@ -33,6 +40,6 @@ function handleSearchHashtag(store) {
         store.dispatch(updateRhsState('search'));
         store.dispatch(performSearch(msg.data.hashtag));
     };
-}
+}*/
 
 window.registerPlugin(pluginId, new Plugin());

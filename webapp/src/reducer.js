@@ -34,8 +34,22 @@ function meetingSettings(state = {}, action) {
     }
 }
 
+function queuedItems(state = {}, action) {
+    switch (action.type) {
+    case ActionTypes.RECEIVED_QUEUED_ITEMS: {
+        return {
+            ...state,
+            items: action.data,
+        };
+    }
+    default:
+        return state;
+    }
+}
+
 export default combineReducers({
     meetingSettingsModal,
     meetingSettings,
+    queuedItems,
 });
 
