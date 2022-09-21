@@ -72,6 +72,7 @@ func (p *Plugin) OnActivate() error {
 		Username:    "agenda",
 		DisplayName: "Agenda Plugin Bot",
 		Description: "Created by the Agenda plugin.",
+		OwnerId:     "agenda",
 	})
 	if err != nil {
 		return errors.Wrap(err, "failed to ensure agenda bot")

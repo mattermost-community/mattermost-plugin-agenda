@@ -3,7 +3,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Scrollbars from 'react-custom-scrollbars';
 
 import AgendaItem from './agenda_item';
 
@@ -53,39 +52,32 @@ getUserName() {
 render() {
     return (
         <React.Fragment>
-            <Scrollbars
-                autoHide={true}
-                autoHideTimeout={500}
-                autoHideDuration={500}
-                renderThumbHorizontal={renderThumbHorizontal}
-                renderThumbVertical={renderThumbVertical}
-                renderView={renderView}
-            >
-                <div style={style.sectionHeader}>
-                    <strong>
-                        <a
+            <div style={style.sectionHeader}>
+                <strong>
+                    <a
 
-                            //href={listUrl}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                        >{'Up Next Agenda Items'}</a>
-                    </strong>
-                </div>
-                <div>
-                    {this.props.queuedItems && this.props.queuedItems.length > 0 ? this.props.queuedItems.map((item) => {
-                        return (<AgendaItem
+                        //href={listUrl}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                    >{'Up Next Agenda Items'}</a>
+                </strong>
+            </div>
+            <div>
+                {this.props.queuedItems && this.props.queuedItems.length > 0 ? this.props.queuedItems.map((item) => {
+                    return (
+                        <AgendaItem
                             title={item.title}
                             username={this.getUserName()}
                             icon={item.fields.icon}
                             teamId={this.props.teamId}
                             boardId={item.boardId}
                             cardId={item.id}
-                        />);
-                    }) :
-                        <p> {'No items queued'}</p>
-                    }
-                </div>
-            </Scrollbars>
+                        />
+                    );
+                }) :
+                <p> {'No items queued'}</p>
+                }
+            </div>
         </React.Fragment>
     );
 }
