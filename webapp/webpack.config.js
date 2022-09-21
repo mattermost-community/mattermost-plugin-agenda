@@ -67,14 +67,6 @@ module.exports = {
                     {
                         loader: 'css-loader',
                     },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            sassOptions: {
-                                includePaths: ['node_modules/compass-mixins/lib', 'sass'],
-                            },
-                        },
-                    },
                 ],
             },
         ],
@@ -82,6 +74,7 @@ module.exports = {
     externals: {
         react: 'React',
         redux: 'Redux',
+        'react-dom': 'ReactDOM',
         'react-redux': 'ReactRedux',
         'prop-types': 'PropTypes',
         'react-bootstrap': 'ReactBootstrap',
