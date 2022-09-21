@@ -327,7 +327,7 @@ func (l *focalboardStore) AddCard(userID string, channelID string, title string)
 		DeleteAt: 0,
 	}
 
-	blocks, resp := l.client.InsertBlocks(board.ID, []fbModel.Block{card})
+	blocks, resp := l.client.InsertBlocks(board.ID, []fbModel.Block{card}, false)
 	if resp.Error != nil {
 		return nil, "", resp.Error
 	}
