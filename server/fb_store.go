@@ -378,7 +378,8 @@ func (l *focalboardStore) GetUpnextCards(channelID string) ([]fbModel.Block, err
 			continue
 		}
 
-		status := getPropertyValueForCard(&b, statusProp["id"].(string))
+		block := b
+		status := getPropertyValueForCard(&block, statusProp["id"].(string))
 		if status == nil {
 			continue
 		}

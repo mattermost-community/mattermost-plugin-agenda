@@ -60,7 +60,6 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 
 // OnActivate is invoked when the plugin is activated
 func (p *Plugin) OnActivate() error {
-
 	pluginAPIClient := pluginapi.NewClient(p.API, p.Driver)
 	p.pluginAPI = pluginAPIClient
 
@@ -85,7 +84,6 @@ func (p *Plugin) OnActivate() error {
 		return errors.Wrap(appErr, "failed to get stored bot access token")
 	}
 	if rawToken == nil {
-
 		accessToken, appErr := p.API.CreateUserAccessToken(&model.UserAccessToken{UserId: botID, Description: "For agenda plugin access to focalboard REST API"})
 		if appErr != nil {
 			return errors.Wrap(appErr, "failed to create access token for bot")
