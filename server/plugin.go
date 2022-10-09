@@ -3,14 +3,17 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"sync"
 
 	"github.com/pkg/errors"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/plugin"
+	pluginapi "github.com/mattermost/mattermost-plugin-api"
+	"github.com/mattermost/mattermost-server/v6/model"
+	"github.com/mattermost/mattermost-server/v6/plugin"
+
+	root "github.com/mattermost/mattermost-plugin-agenda"
 )
 
 // Plugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.
@@ -27,6 +30,10 @@ type Plugin struct {
 	// BotId of the created bot account.
 	botID string
 }
+
+var (
+	Manifest model.Manifest = root.Manifest
+)
 
 // ServeHTTP demonstrates a plugin that handles HTTP requests by greeting the world.
 func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
@@ -50,7 +57,8 @@ func (p *Plugin) OnActivate() error {
 		return errors.Wrap(err, "failed to register commands")
 	}
 
-	botID, err := p.Helpers.EnsureBot(&model.Bot{
+	client := pluginapi.NewClient(p.API, p.Driver)
+	botID, err := client.Bot.EnsureBot(&model.Bot{
 		Username:    "agenda",
 		DisplayName: "Agenda Plugin Bot",
 		Description: "Created by the Agenda plugin.",
@@ -80,7 +88,7 @@ func (p *Plugin) httpMeetingSettings(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *Plugin) httpMeetingSaveSettings(w http.ResponseWriter, r *http.Request, mmUserID string) {
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
