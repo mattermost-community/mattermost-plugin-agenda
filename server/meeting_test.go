@@ -113,8 +113,8 @@ func TestPlugin_GenerateHashtag(t *testing.T) {
 			args: args{
 				nextWeek: false,
 				meeting: &Meeting{
-					ChannelID: "Dates with Spaces",
-					Schedule:  []time.Weekday{time.Monday},
+					ChannelID:     "Dates with Spaces",
+					Schedule:      []time.Weekday{time.Monday},
 					HashtagFormat: "{{   January 02 2006			}}",
 				}},
 			want:    "#" + assertNextWeekdayDate(time.Monday, false).Format("January 02 2006"),
