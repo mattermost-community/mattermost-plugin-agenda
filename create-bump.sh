@@ -1,9 +1,11 @@
 ARGS="$*"
-COMMITS=$(echo "$ARGS" | cut -f 2- -d" " | awk -v RS='[\n ]' '{print}')
+COMMITS=$(echo "$ARGS" | cut -f 3- -d" " | awk -v RS='[\n ]' '{print}')
 
 PREVIOUS_RELEASE=$1
 
 NEXT_RELEASE=$2
+
+
 
 git fetch
 git checkout $PREVIOUS_RELEASE
