@@ -17,8 +17,8 @@ const manifestStr = `
   "description": "Plugin to handle meeting agendas for Mattermost channels.",
   "homepage_url": "https://github.com/mattermost/mattermost-plugin-agenda",
   "support_url": "https://github.com/mattermost/mattermost-plugin-agenda/issues",
-  "release_notes_url": "https://github.com/mattermost/mattermost-plugin-agenda/releases/tag/v0.2.2",
-  "version": "0.2.2",
+  "release_notes_url": "https://github.com/mattermost/mattermost-plugin-agenda/releases/tag/v7.0.0",
+  "version": "7.0.0",
   "min_server_version": "5.26.0",
   "server": {
     "executables": {
