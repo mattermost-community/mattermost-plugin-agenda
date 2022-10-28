@@ -1,0 +1,1812 @@
+    1  exit
+    2  https://github.com/mattermost/mattermost-webapp.git
+    3  git clone https://github.com/mattermost/mattermost-webapp.git
+    4  nvm
+    5  exit
+    6  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    7  npm
+    8  k
+    9  go
+   10  ruby
+   11  mkdir mattermost
+   12  cd mattermost
+   13  git clone https://github.com/mattermost/mattermost-server.git
+   14  git clone https://github.com/mattermost/mattermost-server.git
+   15  cd mattermost-server
+   16  go
+   17  go
+   18  exit
+   19  ls -al
+   20  git clone https://github.com/nvm-sh/nvm.git .nvm
+   21  cd .nvm
+   22  git checkout v0.39.1
+   23  ./nvm.sh
+   24  . ./nvm.sh
+   25  ls
+   26  nano ../.zshrc
+   27  zsh
+   28  nvm
+   29  brew
+   30  exit
+   31  brew
+   32  cd mattermost/mattermost-server
+   33  git remote -v
+   34  cd ../
+   35  git clone https://github.com/mattermost/mattermost-plugin-zoom.git
+   36  cd mattermost-plugin-zoom
+   37  git -C ../mattermost-server remote -v
+   38  git pull
+   39  git pull
+   40  git config --global pull.rebase false
+   41  git pull
+   42  code
+   43  exit
+   44  e
+   45  exit
+   46  npm
+   47  npm -v
+   48  node -v
+   49  nvm install v13.14.0
+   50  exit
+   51  brew install --cask alt-tab
+   52  npm run tsc > hey
+   53  npm run check-types > hey
+   54  git push
+   55  exit
+   56  exit
+   57  cd mattermost
+   58  git clone https://github.com/mattermost/mattermost-plugin-jira.git
+   59  code mattermost-plugin-jira
+   60  hub pr list
+   61  hub pr checkout 858
+   62  git pull
+   63  cd
+   64  ls
+   65  cd code
+   66  mkdir code
+   67  cd code
+   68  code .
+   69  git clone https://github.com/mickmister/dotfiles.git
+   70  cd dotfiles
+   71  git checkout initial
+   72  ./shell.sh
+   73  ./.zshrc
+   74  source ./.zshrc
+   75  ./install.sh
+   76  ./shell.sh
+   77  source ~/.zshrc
+   78  ~/code/dotfiles/shell.sh
+   79  source ~/code/dotfiles/shell.sh
+   80  export SHELL=$(which zsh)' >> ~/.bash_profile
+   81  echo 'export SHELL=$(which zsh)' >> ~/.bash_profile
+   82  echo 'exec $(which zsh) -l' >> ~/.bash_profile
+   83  exit
+   84  wxit
+   85  ./shell.sh 
+   86  source ./.zshrc
+   87  ./install.sh
+   88  git status
+   89  git branch
+   90  git checkout -b plugin-setting-hosting-env
+   91  git commit
+   92  git push -u origin HEAD
+   93  EDITOR=nano git commit
+   94  git push
+   95  npm run lint
+   96  npm run fix
+   97  git push
+   98  exit
+   99  history | grep npm
+  100  which npm
+  101  nvm
+  102  nano ~/.bash_profile
+  103  nvm
+  104  npm
+  105  which nvm
+  106  go
+  107  nvm
+  108  exit
+  109  git remote add mickmister https://github.com/mickmster/mattermost-webapp.git
+  110  git fetch mickmister
+  111  git remote add mickmister https://github.com/mickmister/mattermost-webapp.git
+  112  git remote set-url mickmister https://github.com/mickmister/mattermost-webapp.git
+  113  git fetch mickmister
+  114  git checkout plugin-settings-hosting-property
+  115  \tgit checkout plugin-settings-hosting-property
+  116  git fetch mickmister
+  117  \tgit checkout plugin-settings-hosting-property
+  118  git pull
+  119  cd ../mattermost-server
+  120  git branch
+  121  git checkout master
+  122  git checkout master
+  123  git stash
+  124  git checkout master
+  125  git pull
+  126  git stash pop
+  127  cd ../enterprise
+  128  cd -
+  129  git branch
+  130  git log
+  131  git log --oneline -n 10
+  132  git log --oneline -n 20
+  133  git log --oneline -n 20 | cat
+  134  git checkout c33641e64
+  135  git checkout -b plugin-setting-hosting-env
+  136  git commit
+  137  git push -u origin HEAD
+  138  git branch
+  139  nvm
+  140  which nvm
+  141  which nvm
+  142  which nvm | head
+  143  exit
+  144  nvm install v13.14.0
+  145  e
+  146  nano ~/mattermost/.env.vars
+  147  code ~/mattermost/.env.vars
+  148  e
+  149  make deploy
+  150  cd ../mattermost-server
+  151  cd bin
+  152  ls
+  153  ./mmctl plugin marketplace install jira 3.2.0
+  154  ./mmctl plugin marketplace install jira
+  155  ./mmctl plugin marketplace install jira --local
+  156  ./mmctl plugin marketplace install jira --help
+  157  ./mmctl plugin marketplace install jira 3.2.0
+  158  git remote -v
+  159  cd ../
+  160  git clone https://github.com/mattermost/mattermost-marketplace.git 
+  161  code mattermost-marketplace
+  162  cd mattermost-server
+  163  ./bin/mmctl plugin marketplace install zoom --local
+  164  node a.js
+  165  git remote v
+  166  git remote -v
+  167  cd ../
+  168  git clone https://github.com/mattermost/mattermost-plugin-apps.git
+  169  code mattermost-plugin-apps
+  170  ipm install spell-checker
+  171  source /Users/koch/Documents/discussion.txt
+  172  cd mattermost-marketplace
+  173  git checkout production
+  174  git pull
+  175  git checkout production\ngit pull\ngit checkout -b add_mattermost-plugin-gitlab_v1.5.0\ngo run ./cmd/generator/ add mattermost-plugin-gitlab v1.4.1 --official
+  176  git checkout plugins.json
+  177  go run ./cmd/generator/ add mattermost-plugin-gitlab v1.5.0 --official
+  178  cd ../mattermost-plugin-jira
+  179  git pudh
+  180  git push
+  181  cd -
+  182  git push -u origin HEAD
+  183  nano ~/code/dotfiles/.global_gitignore
+  184  git commit
+  185  git push -u origin HEAD
+  186  ./bin/mmctl plugin marketplace install antivirus --local
+  187  cd 
+  188  cd code
+  189  cd dotfiles
+  190  ls
+  191  code mattermost.sh
+  192  npm i
+  193  rm package-lock.json
+  194  cd ../../mattermost-plugin-jira
+  195  cd webapp
+  196  npm i
+  197  npm_config_loglevel=verbose npm i
+  198  hub pr list
+  199  hub pr checkout #336
+  200  hub pr checkout 336
+  201  make deploy
+  202  cd build
+  203  go mod init go mod tidy
+  204  cd ../
+  205  go mod tidy
+  206  cd build
+  207  go mod tidy
+  208  nano ~/.zshrc
+  209  nano ~/.zshrc
+  210  mkdir ~/scripts
+  211  code ~/scripts
+  212  nano ~/scripts
+  213  nano ~/scripts/mattermost-shell.sh
+  214  chmod a+x ~/scripts/mattermost-shell.sh
+  215  ~/.zshrc
+  216  source ~/.zshrc
+  217  nano ~/.zshrc
+  218  source ~/.zshrc
+  219  make deploy
+  220  cd ../
+  221  make deploy
+  222  go mod tidy
+  223  make deploy
+  224  cd build
+  225  go mod tidy
+  226  cd ../
+  227  make deploy
+  228  nano ~/scripts/mattermost-shell.sh
+  229  source ~/.zshrc
+  230  e
+  231  nano ~/scripts/mattermost-shell.sh
+  232  source ~/.zshrc
+  233  ~/.zshrc
+  234  chmod a+x ~/.zshrc
+  235  ~/.zshrc
+  236  e
+  237  nano ~/.zshrc
+  238  nano ~/scripts/mattermost-shell.sh
+  239  make deploy
+  240  make deploy
+  241  nvm install v13.14.0
+  242  e
+  243  make deploy
+  244  git remote -v
+  245  cd ../
+  246  cd ../
+  247  cd -
+  248  git clone https://github.com/mattermost/enterprise.git 
+  249  cd mattermost-plugin-zoom/z
+  250  cd mattermost-plugin-zoom
+  251  make deploy
+  252  git checkout -b plugin-setting-hosting-env
+  253  git commit
+  254  git push -u origin HEAD
+  255  cd build
+  256  go mod tidy
+  257  go get github.com/mattermost/mattermost-server/v6@4bac08c869fa
+  258  go get github.com/mattermost/mattermost-server/v6@4bac08c869fa
+  259  go get -v github.com/mattermost/mattermost-server/v6@4bac08c869fa
+  260  make deploy
+  261  cd ../
+  262  make deploy
+  263  make deploy
+  264  git push
+  265  make test
+  266  \tmake deploy
+  267  git status
+  268  git branch
+  269  git push
+  270  hub
+  271  hub pr show
+  272  git push
+  273  hub pr show
+  274  git push
+  275  git push
+  276  git push
+  277  git push
+  278  git push
+  279  go mod tidy
+  280  cd build
+  281  go mod tidy
+  282  go mod tidy
+  283  git push
+  284  make deploy
+  285  cd ../
+  286  make deploy
+  287  make deploy
+  288  git push
+  289  go mod tidy
+  290  make deploy
+  291  make deploy
+  292  make deploy
+  293  make deploy
+  294  git revert b862b40100b845dcb2b9b1d092d50b6a9439b311
+  295  make deploy
+  296  git stash
+  297  git rebase -i master HEAD
+  298  git log
+  299  git reset HEAD~1
+  300  git branch
+  301  git branch
+  302  git checkout -b plugin-setting-hosting-env-new
+  303  git checkout plugin-setting-hosting-env
+  304  git checkout -b plugin-setting-hosting-env-old
+  305  git checkout plugin-setting-hosting-env-new
+  306  git branch -D plugin-setting-hosting-env
+  307  git checkout -b plugin-setting-hosting-env
+  308  git push
+  309  git push -u origin HEAD
+  310  make deploy
+  311  git stash pop
+  312  make deploy
+  313  make deploy
+  314  git status
+  315  git stash
+  316  mergemaster
+  317  git checkout master
+  318  git pull
+  319  git checkout -
+  320  git merge master
+  321  it push
+  322  git push
+  323  make dist
+  324  make test
+  325  mmctl
+  326  alias mmctl ~/mattermost/mattermost-server/bin/mmctl\n
+  327  mmctl
+  328  alias mmctl='~/mattermost/mattermost-server/bin/mmctl'\n
+  329  mmctl
+  330  mmctl posts search --help
+  331  mmctl post search --help
+  332  mmctl 
+  333  mmctl post 
+  334  mmctl post list --help
+  335  cd mattermost/mattermost-server
+  336  l
+  337  ls
+  338  git remote -v
+  339  cd ../
+  340  git clone https://github.com/mattermost/mattermost-app-zendesk.git
+  341  code mattermost-app-zendesk
+  342  make 
+  343  make deploy
+  344  make 
+  345  make run
+  346  hub pr list
+  347  hub pr checkout 95
+  348  git checkout pack*
+  349  hub pr checkout 95
+  350  make 
+  351  make run
+  352  /Applications/ngrok ; exit;
+  353  ngrok
+  354  echo $PATH
+  355  cd .
+  356  cd /
+  357  ls
+  358  cd Appl
+  359  cd Applications
+  360  ls
+  361  mv ngrok /usr/local/bin
+  362  sudo mv ngrok /usr/local/bin/ngrok
+  363  ngrok
+  364  cd
+  365  cd mattermost
+  366  ls
+  367  ngrok http 8065
+  368  ngrok http 4040
+  369  ngrok http 4000
+  370  NODE_HOST=https://11b1-2600-1702-21c0-12f0-594d-267c-c7e8-18ab.ngrok.io make run
+  371  ngrok http 4000
+  372  make run
+  373  NODE_HOST=https://11b1-2600-1702-21c0-12f0-594d-267c-c7e8-18ab.ngrok.io make run
+  374  npm run build:watch
+  375  make run
+  376  NODE_HOST=https://11b1-2600-1702-21c0-12f0-594d-267c-c7e8-18ab.ngrok.io make run
+  377  ngrok http 4000
+  378  NODE_HOST=https://f956-2600-1702-21c0-12f0-594d-267c-c7e8-18ab.ngrok.io make run
+  379  ngrok http 8065
+  380  cd
+  381  ls -al
+  382  ls -al | grep ngrok
+  383  exit
+  384  ngrok http 4000
+  385  NODE_HOST=https://33573457f16c.ngrok.io make run
+  386  ngrok http 8065
+  387  NODE_HOST=https://33573457f16c.ngrok.io make run
+  388  make deploy
+  389  git bisect stop
+  390  git bisect reset
+  391  git checkout master
+  392  git pull
+  393  git stash
+  394  git pull
+  395  git stash pop
+  396  git checkout -b install-app-command-marketplace
+  397  git remote -v
+  398  cd ../
+  399  git clone https://github.com/mattermost/mattermost-api-reference.git
+  400  make
+  401  cd v4/html
+  402  python -m http.server
+  403  python -m http.server .
+  404  python3 -m http.server
+  405  cd ../../
+  406  ./node_modules/.bin/redoc-cli --help
+  407  ./node_modules/.bin/redoc-cli serve --help
+  408  ./node_modules/.bin/redoc-cli bundle --help
+  409  make
+  410  git checkout master
+  411  git pull
+  412  hub pr checkout 253
+  413  mergemaster
+  414  make test
+  415  make dist
+  416  e
+  417  make deploy
+  418  git checkout master
+  419  git checkout -b revert-pmi
+  420  git revert 65af542
+  421  cd ,,.
+  422  cd ../
+  423  ls
+  424  mv mattermost-server.code-workspace mattermost.code-workspace
+  425  git push -u origin HEAD
+  426  git status
+  427  git checkout master
+  428  git pull
+  429  git checkout -b plugin-support-new-integration-type
+  430  cd ../
+  431  git clone https://github.com/mickmister/mattermost-plugin-matterzap.git
+  432  mv mattermost.code-workspace mattermost-vscode.code-workspace
+  433  code mattermost-plugin-matterzap
+  434  make dist
+  435  MM_SERVICESETTINGS_ENABLEDEVELOPER=true make dist
+  436  cd webapp
+  437  npm i
+  438  nvm
+  439  nvm install v13.14.0
+  440  npm i
+  441  npm i @mattermost/types
+  442  npm i --save-dev @mattermost/types
+  443  cd ../
+  444  make deploy
+  445  make watch
+  446  make deploy
+  447  make watch
+  448  git branch
+  449  git checkout   fix-oauth-refresh-issue
+  450  git pull
+  451  cp -r ../mattermost-plugin-jira/build ./build2
+  452  rm -rf build2
+  453  cp -r ../mattermost-plugin-matterzap/build ./build2
+  454  rm -rf build
+  455  mv build2 build
+  456  make deploy
+  457  code ../mattermost-plugin-matterzap/Makefile
+  458  make deploy
+  459  ngrock 8065
+  460  ngrok http 8065
+  461  alias e
+  462  code ~/mattermost/.env.vars
+  463  git stash -u
+  464  hub pr checkout 147
+  465  git checkout -
+  466  git stash pop
+  467  git cherry-pick 5b1d61e5001de2731a7c1223c79508ae3f84968a
+  468  git cherry-pick --abort
+  469  git stash -u
+  470  git cherry-pick 5b1d61e5001de2731a7c1223c79508ae3f84968a
+  471  git push
+  472  gut log
+  473  git log
+  474  git push
+  475  git log
+  476  git revert 71640753f563d414987d3f78792fed2aa8720cef
+  477  git push
+  478  git checkout revert-pmi
+  479  git cherry-pick 5b1d61e5001de2731a7c1223c79508ae3f84968a
+  480  git push
+  481  git checkout -
+  482  git stash pop
+  483  make deploy
+  484  cd mattermost-webapp
+  485  git add .
+  486  git commit -m WIP
+  487  git checkout -
+  488  git branch
+  489  git checkout install-app-command-marketplace
+  490  git log
+  491  git push
+  492  git push -u origin HEAD
+  493  git status
+  494  rebase-head
+  495  git log
+  496  git push
+  497  git commit -m k
+  498  rebase-head
+  499  git rebase --abort
+  500  git push
+  501  EDITOR=nano git rebase -i master
+  502  git push -f
+  503  npm run fix
+  504  git commit -m lint
+  505  EDITOR=nano git rebase -i master
+  506  git push -f
+  507  nano ~/scripts/mattermost-shell.sh
+  508  code ~/.zshrc
+  509  git rebase -i master
+  510  exit
+  511  git rebase -i master
+  512  git push
+  513  git commit -m lint
+  514  git add .
+  515  git commit -m lint
+  516  git rebase -i master
+  517  git push -f
+  518  git commit
+  519  git push
+  520  make build
+  521  git push
+  522  git checkout master
+  523  git stash -u
+  524  git checkout master
+  525  git pull
+  526  git checkout -b platform-specific-plugin-extract
+  527  git stash pop
+  528  make attach-headless
+  529  go install github.com/go-delve/delve/cmd/dlv@latest
+  530  exit
+  531  make attach-headless
+  532  go env GOARCH
+  533  which go
+  534  sudo rm -rf /usr/local/go
+  535  sudo rm /etc/paths.d/go
+  536  brew install go
+  537  go
+  538  go env GOARCH
+  539  make attach-headless
+  540  ps aux | grep zoom
+  541  make deploy
+  542  make attach-headless
+  543  which dlv
+  544  rm /Users/koch/go/bin/dlv
+  545  go install github.com/go-delve/delve/cmd/dlv@latest
+  546  make attach-headless
+  547  make deploy
+  548  ngrok http 8065
+  549  make deploy
+  550  mmctl
+  551  ../mattermost-server/bin/mmctl plugin install-url https://github.com/mickmister/mattermost-plugin-kv-backup-restore/releases/download/v0.2.0/kv-backup-restore-0.2.0.tar.gz --local
+  552  ../mattermost-server/bin/mmctl plugin list
+  553  ../mattermost-server/bin/mmctl plugin list --local
+  554  ../mattermost-server/bin/mmctl plugin enable kv-backup-restore --local
+  555  cd ../
+  556  git clone https://github.com/mickmister/mattermost-plugin-kv-backup-restore.git
+  557  code mattermost-plugin-kv-backup-restore
+  558  make dist
+  559  go get -u golang.org/x/sys
+  560  make dist
+  561  nvm install v13.14.0
+  562  make dist
+  563  alias mmctl='~/mattermost/mattermost-server/bin/mmctl'\n
+  564  mmctl plugin add ./dist/kv-backup-restore-0.2.0.tar.gz
+  565  mmctl plugin add ./dist/kv-backup-restore-0.2.0.tar.gz --local
+  566  mmctl plugin add ./dist/kv-backup-restore-0.2.0.tar.gz --local --force
+  567  mmctl plugin add ./dist/kv-backup-restore-0.2.0.tar.gz --local --force && mmctl plugin enable kv-backup-restore --local
+  568  make dist && mmctl plugin add ./dist/kv-backup-restore-0.2.0.tar.gz --local --force && mmctl plugin enable kv-backup-restore --local
+  569  go mod tidy
+  570  make dist && mmctl plugin add ./dist/kv-backup-restore-0.2.0.tar.gz --local --force && mmctl plugin enable kv-backup-restore --local
+  571  cd build
+  572  go mod init hey
+  573  go mod tidy
+  574  cd ../
+  575  go mod tidy
+  576  make dist && mmctl plugin add ./dist/kv-backup-restore-0.2.0.tar.gz --local --force && mmctl plugin enable kv-backup-restore --local
+  577  git stash -u
+  578  go mod tidy
+  579  make dist && mmctl plugin add ./dist/kv-backup-restore-0.2.0.tar.gz --local --force && mmctl plugin enable kv-backup-restore --local
+  580  git stash pop
+  581  git checkout go*
+  582  git stash pop
+  583  git checkout -b wip
+  584  git commit
+  585  git stash -u
+  586  make dist && mmctl plugin add ./dist/kv-backup-restore-0.2.0.tar.gz --local --force && mmctl plugin enable kv-backup-restore --local
+  587  git stash pop
+  588  git commit
+  589  git stash -u
+  590  make dist && mmctl plugin add ./dist/kv-backup-restore-0.2.0.tar.gz --local --force && mmctl plugin enable kv-backup-restore --local
+  591  git git stash pop
+  592  git stash pop
+  593  git checkout server/manifest.go
+  594  git stash pop
+  595  git stash -u
+  596  go mod tidy
+  597  make dist && mmctl plugin add ./dist/kv-backup-restore-0.2.0.tar.gz --local --force && mmctl plugin enable kv-backup-restore --local
+  598  alias mmctl='~/mattermost/mattermost-server/bin/mmctl'\n
+  599  make dist && mmctl plugin add ./dist/kv-backup-restore-0.2.0.tar.gz --local --force && mmctl plugin enable kv-backup-restore --local
+  600  cd mattermost-plugin-zoom
+  601  make dist && mmctl plugin add ./dist/kv-backup-restore-0.2.0.tar.gz --local --force && mmctl plugin enable kv-backup-restore --local
+  602  make dist && mmctl plugin add ./dist/zoom-1.5.1.tar.gz --local --force && mmctl plugin enable zoom --local
+  603  alias mmctl='~/mattermost/mattermost-server/bin/mmctl'\n
+  604  make dist && mmctl plugin add ./dist/zoom-1.5.1.tar.gz --local --force && mmctl plugin enable zoom --local
+  605  git stash -u
+  606  make dist && mmctl plugin add ./dist/zoom-1.5.1.tar.gz --local --force && mmctl plugin enable zoom --local
+  607  git stash pop
+  608  git push
+  609  git stash -u
+  610  make dist && mmctl plugin add ./dist/zoom-1.5.1.tar.gz --local --force && mmctl plugin enable zoom --local
+  611  git status
+  612  git checkout Makefile
+  613  git stash pop
+  614  git push
+  615  nvm install v16.10.0
+  616  exit
+  617  nvm use v16.10.0
+  618  nvm use v16.10.0 --silent
+  619  cd mattermost
+  620  ls
+  621  cd ../
+  622  cd mattermost
+  623  ls
+  624  l
+  625  ls
+  626  git -C ../mattermost-server remote -v
+  627  git -C ./mattermost-server remote -v
+  628  git clone https://github.com/mattermost/mattermost-plugin-github.git
+  629  code mattermost-plugin-github
+  630  nvm use v13.14.0
+  631  make dist
+  632  git status
+  633  git checkout master
+  634  git pull
+  635  hub pr list
+  636  hub pr checkout 270
+  637  mergemaster
+  638  git commit
+  639  git push
+  640  make dist
+  641  git commit -m "fix merge issue"
+  642  git push
+  643  git add .
+  644  git commit -m "fix merge issue"
+  645  git push
+  646  git checkout 1c3516f
+  647  git checkout -b release-1.6.0
+  648  git checkout -b release-1.6.1
+  649  git cherry-pick 1ab9d0b
+  650  git cherry-pick a13ca5c
+  651  git cherry-pick 38cd3c1
+  652  git cherry-pick dec2ad9
+  653  make dist
+  654  python -m http.server --directory .
+  655  python -m http.server 
+  656  python3 -m http.server 
+  657  python3 -m http.server --directory .
+  658  make
+  659  make dist
+  660  git commit
+  661  git push -u origin HEAD
+  662  git checkout -
+  663  git push -u origin HEAD
+  664  makedist
+  665  make dist
+  666  git reset HEAD~1
+  667  git checkout -
+  668  git stash -u
+  669  git checkout -
+  670  git stash pop
+  671  git commit -m "bump to 1.6.1"
+  672  git push
+  673  make test
+  674  get -u golang.org/x/sys
+  675  go get -u golang.org/x/sys
+  676  make test
+  677  git commit
+  678  git push
+  679  adb
+  680  cd Library/Android/sdk
+  681  ls
+  682  cd platform-tools
+  683  ls ../
+  684  ls
+  685  ./adb devices
+  686  ./adb kill-server
+  687  ./adb devices
+  688  ./adb logcat -v threadtime 11161FDD4000ZZ > /tmp/android-debug.log
+  689  code /tmp/android-debug.log
+  690  go get --help
+  691  go help get
+  692  go help get > t
+  693  go checkout go*
+  694  git checkout go*
+  695  git checkout go.mod
+  696  ls
+  697  git reset
+  698  git checkout go*
+  699  make dist
+  700  go get golang.org/x/sys
+  701  make dist
+  702  cd ../
+  703  git clone https://github.com/mattermost/mattermost-app-test.git
+  704  mv mattermost-api-reference mattermost-docs-api-reference
+  705  code mattermost-app-test
+  706  make dist
+  707  make
+  708  git checkout -b with-license-nil-checks
+  709  make dist
+  710  git commit
+  711  git push -u origin HEAD
+  712  git checkout master
+  713  git stash -u
+  714  git checkout master
+  715  git checkout -b check-nil-license-fields
+  716  git branch -D with-license-nil-checks
+  717  hub browse
+  718  git add server/plugin.go
+  719  git commit
+  720  git push -u origin HEAD
+  721  git branch
+  722  git checkout release-1.6.1
+  723  git cherry-pick a6c01ce
+  724  git push
+  725  cd ../
+  726  git clone https://github.com/mattermost/mattermost-mobile.git && code mattermost-mobile
+  727  hub pr checkout 5398
+  728  git push
+  729  cd Documents
+  730  ls
+  731  mkdir silverbullet-workspace
+  732  cd silverbullet-workspace
+  733  npx @silverbulletmd/server <path-to-folder>
+  734  npx @silverbulletmd/server .
+  735  npx @silverbulletmd/server . --port 30001
+  736  cd ../
+  737  cd mattermost-webapp
+  738  ls
+  739  ls plugins
+  740  cd ../
+  741  ls
+  742  cd mattermost-webapp
+  743  ls
+  744  cd ../mattermost-server
+  745  cd client
+  746  ls
+  747  cd plugins
+  748  ls
+  749  cd ../
+  750  cd plugins
+  751  ls
+  752  rm -rf com*
+  753  rm -rf jira
+  754  rm -rf kv-backup-restore
+  755  rm -rf matterzap
+  756  rm -rf zoom
+  757  ls
+  758  exit
+  759  cd mattermost/mattermost-server
+  760  make restart-server ENABLED_DOCKER_SERVICES=postgres
+  761  ls
+  762  brew install asimov
+  763  sudo brew services start asimov
+  764  asimov
+  765  git checkout master
+  766  git pull
+  767  git checkout -b webhook-validation
+  768  git poull
+  769  git pull
+  770  git checkout -b increase-context-timeout
+  771  git push -u origin HEAD
+  772  mergemaster
+  773  git push
+  774  git checkou production
+  775  git checkout production
+  776  git pull
+  777  hub pr checkout 306
+  778  git branch -D add_mattermost-plugin-gitlab_v1.5.0
+  779  hub pr checkout 306
+  780  git merge production
+  781  git push
+  782  git push origin HEAD:refs/pull/306/head
+  783  git remore
+  784  git remote
+  785  git remote -v
+  786  git remote add brightscout https://github.com/Brightscout/mattermost-marketplace.git
+  787  git push -u brightscout HEAD
+  788  d
+  789  alias mmctl='~/mattermost/mattermost-server/bin/mmctl'\n
+  790  make dist && mmctl plugin add ./dist/zoom-1.5.1.tar.gz --local --force && mmctl plugin enable zoom --local
+  791  git stash
+  792  git commit
+  793  git stash pop
+  794  git reset
+  795  make dist && mmctl plugin add ./dist/zoom-1.5.1.tar.gz --local --force && mmctl plugin enable zoom --local
+  796  git fetch
+  797  git tag -d v2.1.1-rc1
+  798  git tag -d v2.1.2-rc1
+  799  git push --delete origin v2.1.1-rc1
+  800  git push --delete origin v2.1.2-rc1
+  801  git checkout master
+  802  git pull
+  803  git status
+  804  which vbump\\n
+  805  vbump 2.1.2
+  806  make dist && mmctl plugin add ./dist/zoom-1.5.1.tar.gz --local --force && mmctl plugin enable zoom --local
+  807  make test
+  808  git push -u origin HEAD
+  809  make test
+  810  make check-style
+  811  git add server
+  812  rebase-head
+  813  git rebase -i master
+  814  git push -f
+  815  git pull
+  816  make run
+  817  make deploy
+  818  make run
+  819  make restart-server ENABLED_DOCKER_SERVICES=postgres
+  820  make run
+  821  make check-style
+  822  brew install golangci-lint
+  823  git commit -m lint && git push
+  824  brew tap heroku/brew && brew install heroku
+  825  heroku
+  826  exit
+  827  heroku
+  828  make stop
+  829  cd mattermost-webapp
+  830  nvm
+  831  nvm install v16.4.0
+  832  make dist
+  833  make run
+  834  make restart
+  835  git checkout release-7.1
+  836  make restart
+  837  git checkout release-7.0
+  838  git stash
+  839  git checkout release-7.0
+  840  make restart
+  841  git checkout -
+  842  git bisect start
+  843  make stop
+  844  git bisect bad
+  845  git bisect good release-7.0
+  846  git log
+  847  ls
+  848  git bisect reset
+  849  git log
+  850  git checkout release-7.0
+  851  git log
+  852  git checkout -
+  853  git log
+  854  git bisect start
+  855  git bisect good 97625bacd44535cefb465e2117e72b4e5b055e7d
+  856  git bisect bad ea3cc3fd757c1d95fb3dbb19330defc7c85d533c
+  857  make restart
+  858  git bisect good
+  859  make restart
+  860  git bisect good
+  861  git bisect good
+  862  make restart
+  863  git bisect good
+  864  git bisect bad
+  865  git bisect good
+  866  git bisect bad
+  867  git bisect good
+  868  git bisect good
+  869  git checkout ae461d196fc60eddd5639e0841a2ed1d776b7941
+  870  git checkout master
+  871  git fetch
+  872  git checkout 6d48a64
+  873  hub
+  874  brew install hub
+  875  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  876  brew
+  877   echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/koch/.zprofile
+  878  eval "$(/opt/homebrew/bin/brew shellenv)"
+  879  brew
+  880  brew install hub
+  881  hub
+  882  hub pr checkout 10772
+  883  hub pr checkout 10772
+  884  hub
+  885  hub --help
+  886  hub
+  887  hub pr checkout 10772
+  888  hub pr checkout 10772
+  889  make restart
+  890  make restart
+  891  make restart
+  892  heroku
+  893  cd cpde
+  894  cd code
+  895  ls
+  896  git clone https://github.com/mickmister/soundspace-api.git
+  897  code soundspace-api
+  898  git branch
+  899  git fetch origin
+  900  git branch
+  901  git checkout message-wording-changes
+  902  heroku
+  903  heroku | grep remote
+  904  heroku git:remote -a soundspace-production
+  905  git remote rename heroku production
+  906  heroku git:remote -a soundspace-staging
+  907  git remote rename heroku staging
+  908  git push -f staging HEAD:master
+  909  git pus
+  910  git push
+  911  ngrock 8065
+  912  ngrok http 8065
+  913  matter
+  914  cd mattermost-server
+  915  make restart-server ENABLED_DOCKER_SERVICES=postgres
+  916  git status
+  917  git checkout 479f2a6963f521a1465a6da7ae5d11ce8237cd50
+  918  git checkout -b circle-test
+  919  git commit
+  920  git push -u origin HEAD
+  921  cd build
+  922  go mod tidy
+  923  go mod tidy --help
+  924  go help mod tidy
+  925  go help mod tidy | grep verbose
+  926  go mod tidy
+  927  go mod tidy -v
+  928  git push
+  929  go mod tidy -v
+  930  rm build/go.sum
+  931  rm go.sum
+  932  go mod tidy -v
+  933  git commit -m "try mm v6 for testing"
+  934  git push
+  935  hub pr show
+  936  git commit && git push
+  937  cd ../
+  938  cd build
+  939  go mod tidy
+  940  make restart-server ENABLED_DOCKER_SERVICES=postgres
+  941  cd ../../
+  942  git clone https://gitlab.com/mjkochell/mattermost-plugin-newchannelnotify.git
+  943  code mattermost-plugin-newchannelnotify
+  944  git remote rename origin gitlab
+  945  git remote add origin https://github.com/mickmister/mattermost-plugin-newchannelnotify.git
+  946  git push -u origin HEAD
+  947  git branch
+  948  git checkout mjkochell-master-patch-65112
+  949  git checkout -b fix-panics
+  950  git push -u origin HEAD
+  951  make dist
+  952  go mod init
+  953  go mod init github.com/mattermost/mattermost-plugin-newchannelnotify
+  954  go mod tidy
+  955  make dist
+  956  git checkout build/manifest/vendor
+  957  make dist
+  958  git commit -m "compiles"
+  959  git push
+  960  cd ../
+  961  git clone https://github.com/mickmister/mattermost-plugin-upload-file-from-text.git
+  962  code mattermost-plugin-upload-file-from-text
+  963  cd webapp
+  964  nvm install v13.14.0
+  965  npm i
+  966  cd ../
+  967  make deploy
+  968  make restart-server ENABLED_DOCKER_SERVICES=postgres
+  969  cd mattermost-plugin-zoom
+  970  cd webapp
+  971  npm test
+  972  nvm install 13.14
+  973  git commit
+  974  git push
+  975  git status
+  976  git checkout master
+  977  git pull
+  978  git stash -u && git pull && git stash pop
+  979  git checkout release-7.1
+  980  git stash -u
+  981  git checkout release-7.1
+  982  git pull
+  983  git checkout master
+  984  git checkout -
+  985  git checkout -b plugin-enable-debug-log
+  986  git commit
+  987  git push -u origin HEAD
+  988  git checkout -b plugin-enable-ha-issue
+  989  git push -u origin HEAD
+  990  hub pr show
+  991  git checkout production && git pull && git checkout -b add_mattermost-plugin-zoom_v1.6.1 && go run ./cmd/generator/ add mattermost-plugin-zoom v1.6.1 --official
+  992  git commit plugins.json -m "Add v1.6.1 of mattermost-plugin-zoom to the Marketplace" && git push --set-upstream origin && add_mattermost-plugin-zoom_v1.6.1
+  993  git push -u origin HEAD
+  994  git revert 77881fc
+  995  git push
+  996  git revert f0e4794
+  997  git push
+  998  cd ../
+  999  cd -
+ 1000  git pull
+ 1001  git checkout -b debug-ha-config-change
+ 1002  git checkout master
+ 1003  git pull
+ 1004  git checkout -b debug-ha-config-change  
+ 1005  git push -u origin HEAD
+ 1006  git checkout -b debug-ha-config-change
+ 1007  git revert 3710f3657c3a51f0a964c1ca8993fbbedabe1ed8
+ 1008  git push -u origin HEAD
+ 1009  git checkout master
+ 1010  git checkout -b plugin-enable-ha-issue
+ 1011  git revert 3710f3657c3a51f0a964c1ca8993fbbedabe1ed8
+ 1012  git push -u origin HEAD
+ 1013  make stop-server
+ 1014  make run-haserver ENABLED_DOCKER_SERVICES=postgres
+ 1015  mv ../enterprise2 ../enterprise
+ 1016  make run-haserver ENABLED_DOCKER_SERVICES=postgres
+ 1017  make stop-haserver
+ 1018  make run-haserver ENABLED_DOCKER_SERVICES=postgres
+ 1019  git log
+ 1020  git checkout master
+ 1021  moveptof
+ 1022  code ~/code/dotfiles
+ 1023  touch koch.log
+ 1024  tail -f koch.log
+ 1025  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1026  git checkout master
+ 1027  git pull
+ 1028  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1029  make dist
+ 1030  nvm install 13.14
+ 1031  make dist
+ 1032  make dist && mmctl plugin add ./dist/jira-3.2.0.tar.gz --local --force && mmctl plugin enable jira --local
+ 1033  alias mmctl='~/mattermost/mattermost-server/bin/mmctl'\n
+ 1034  make dist && mmctl plugin add ./dist/jira-3.2.0.tar.gz --local --force && mmctl plugin enable jira --local
+ 1035  ngrok http 8065
+ 1036  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1037  docker-compose up
+ 1038  alias mmctl='~/mattermost/mattermost-server/bin/mmctl'\n
+ 1039  make dist && mmctl plugin add ./dist/jira-3.2.0.tar.gz --local --force && mmctl plugin enable jira --local
+ 1040  nvm install 13.14
+ 1041  make dist && mmctl plugin add ./dist/jira-3.2.0.tar.gz --local --force && mmctl plugin enable jira --local
+ 1042  make watch
+ 1043  make debug-watch
+ 1044  make dist && mmctl plugin add ./dist/jira-3.2.0.tar.gz --local --force && mmctl plugin enable jira --local
+ 1045  git checkout vbuild
+ 1046  git checkout build
+ 1047  git checkout webhook-validation
+ 1048  alias mmctl='~/mattermost/mattermost-server/bin/mmctl'\n
+ 1049  make dist && mmctl plugin add ./dist/jira-3.2.0.tar.gz --local --force && mmctl plugin enable jira --local
+ 1050  make dist && mmctl plugin add ./dist/zoom-1.5.1.tar.gz --local --force && mmctl plugin enable zoom --local
+ 1051  matter
+ 1052  git clone https://github.com/mattermost/circleci-orbs.git && code circleci-orbs
+ 1053  git branch
+ 1054  hub pr list
+ 1055  hub pr checkout 30
+ 1056  git checkout master
+ 1057  git checkout -b git-instead-of
+ 1058  git commit
+ 1059  git push -u origin HEAD
+ 1060  go env GOPATH
+ 1061  touce a/b/g/f/f
+ 1062  touch a/b/g/f/f
+ 1063  touch a
+ 1064  touch b
+ 1065  touch d/f
+ 1066  cd ../
+ 1067  git clone https://github.com/mickmister/mattermost-gitpod-config.git
+ 1068  code mattermost-gitpod-config
+ 1069  docker build -t michaelkochell/mattermost-gitpod:0.1.0
+ 1070  docker build -t michaelkochell/mattermost-gitpod:0.1.0 .
+ 1071  make deploy
+ 1072  cd webapp
+ 1073  npm i react-bootstrap
+ 1074  nvm use v13.14.0
+ 1075  npm i react-bootstrap
+ 1076  npm i mattermost-redux
+ 1077  cd ../
+ 1078  make deploy
+ 1079  make watch
+ 1080  git push -u origin HEAD
+ 1081  hub browse
+ 1082  export | grep DEVELOPER
+ 1083  unset MM_SERVICESETTINGS_ENABLEDEVELOPER
+ 1084  make dist
+ 1085  git doff
+ 1086  git diff
+ 1087  git status
+ 1088  git branch
+ 1089  git checkout plugin-support-new-integration-type
+ 1090  git push -u origin HEAD
+ 1091  git commit
+ 1092  git push -u origin HEAD
+ 1093  cd ../
+ 1094  git clone https://github.com/mattermost/mattermost-plugin-hackerone.git
+ 1095  code mattermost-plugin-hackerone
+ 1096  git remote rename origin private
+ 1097  git remote add origin https://github.com/srkgupta/mattermost-plugin-hackerone.git
+ 1098  git pull
+ 1099  git fetch origin
+ 1100  git pull
+ 1101  git log
+ 1102  git remote -v
+ 1103  git checkout main
+ 1104  git pull
+ 1105  git checkout release
+ 1106  git checkout -
+ 1107  git log
+ 1108  git checkout -
+ 1109  git merge main
+ 1110  git push
+ 1111  git status
+ 1112  hub pr checkout 10658
+ 1113  git remote add colton https://github.com/coltoneshaw/mattermost-webapp.git
+ 1114  git fetch colton
+ 1115  git checkout betterEditor
+ 1116  cd ../mattermost-webapp
+ 1117  make restart
+ 1118  git clone https://github.com/coltoneshaw/Mattermost-Plugin-Footer-and-Banner.git
+ 1119  code Mattermost-Plugin-Footer-and-Banner
+ 1120  cd webaoo
+ 1121  cd webapp
+ 1122  nvm install 16.14
+ 1123  npm i
+ 1124  npm test
+ 1125  cd ../
+ 1126  make dist
+ 1127  cd webapp
+ 1128  npm i mattermost-redux
+ 1129  cd ../
+ 1130  make dist
+ 1131  cd -
+ 1132  git push
+ 1133  make watch
+ 1134  make deploy
+ 1135  docker run --rm --name hoppscotch -p 3000:3000 hoppscotch/hoppscotch:latest
+ 1136  git checkout production && git pull && git checkout -b add_mattermost-plugin-github_v2.1.2 && go run ./cmd/generator/ add mattermost-plugin-github v2.1.2 --official
+ 1137  git commit plugins.json -m "Add v2.1.2 of mattermost-plugin-github to the Marketplace" && git push --set-upstream origin && add_mattermost-plugin-github_v2.1.2
+ 1138  git push -u origin HEAD
+ 1139  git checkout -
+ 1140  git diff
+ 1141  cd mattermost
+ 1142  cd mattermost-webapp
+ 1143  ls
+ 1144  git diff
+ 1145  git status
+ 1146  git sttaus
+ 1147  git status
+ 1148  rm https://music.youtube.com/watch\?v\=ZU3aT82NwgE\&feature\=share
+ 1149  rm components/suggestion/suggestion_box/suggestion_box.tsx
+ 1150  git checkout -
+ 1151  git checkout master
+ 1152  git pull
+ 1153  make restart
+ 1154  code ~/.hyper.js
+ 1155  echo https://google.com
+ 1156  cd mattermost
+ 1157  cd mattermost-webapp
+ 1158  make restart
+ 1159  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1160  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1161  make stop-server
+ 1162  cd mattermost/mattermost-server
+ 1163  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1164  git push
+ 1165  hub pr show
+ 1166  make run
+ 1167  git checkout master
+ 1168  git pull
+ 1169  make deploy
+ 1170  cd test/app
+ 1171  go run .
+ 1172  git remote -v
+ 1173  cd ../
+ 1174  git clone https://github.com/mattermost/mattermost-app-servicenow.git
+ 1175  code mattermost-app-servicenow
+ 1176  hub browse
+ 1177  make run
+ 1178  make test
+ 1179  git remote -v
+ 1180  cd ../
+ 1181  git clone https://github.com/mattermost/mattermost-plugin-gitlab.git
+ 1182  code mattermost-plugin-gitlab
+ 1183  git status
+ 1184  code ~/.global_gitignore
+ 1185  git config --global core.excludesfile ~/.global_gitignore
+ 1186  git status
+ 1187  git fetch mickmister
+ 1188  git remote -v
+ 1189  git remote add mickmister https://github.com/mickmister/mattermost-server.git
+ 1190  git fetch mickmister
+ 1191  git checkout from_integration-prop
+ 1192  git checkout plugin-support-new-integration-type
+ 1193  git checkout pack*
+ 1194  git checkout plugin-support-new-integration-type
+ 1195  make restart
+ 1196  mergemaster
+ 1197  git push
+ 1198  git pull
+ 1199  make deploy
+ 1200  git checkout main
+ 1201  git pull
+ 1202  git checkout -
+ 1203  git merge main
+ 1204  git push
+ 1205  git checkout main
+ 1206  git pull
+ 1207  git checkout -
+ 1208  git merge main
+ 1209  git push
+ 1210  cd ../
+ 1211  git clone https://github.com/mattermost/mattermost-android-classic.git
+ 1212  code mattermost-android-classic
+ 1213  cd ../
+ 1214  cd
+ 1215  cd code
+ 1216  git clone https://github.com/mickmister/people-queue.git
+ 1217  code people-queue
+ 1218  npm init -y
+ 1219  npm i parcel-bundler
+ 1220  npm i --save-dev parcel-bundler
+ 1221  touch index.html index.tsx && mkdir components
+ 1222  npm start
+ 1223  ./node_modules/.bin/tsc --init
+ 1224  npm start
+ 1225  cd mattermost-server
+ 1226  git pull
+ 1227  git log
+ 1228  git push -u origin HEAD
+ 1229  dcu
+ 1230  make deploy
+ 1231  nvm install 13.14
+ 1232  make deploy
+ 1233  make dist && mmctl plugin add ./dist/jira-3.2.0.tar.gz --local --force && mmctl plugin enable jira --local
+ 1234  alias mmctl='~/mattermost/mattermost-server/bin/mmctl'\n
+ 1235  alias mmctl='~/mattermost/mattermost-server/bin/mmctl'
+ 1236  make dist && mmctl plugin add ./dist/jira-3.2.0.tar.gz --local --force && mmctl plugin enable jira --local
+ 1237  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1238  mv ../enterprise ../enterprise2
+ 1239  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1240  make test
+ 1241  make test > a
+ 1242  matter
+ 1243  git clone https://github.com/mickmister/mattermost-plugin-monaco.git
+ 1244  code mattermost-plugin-monaco
+ 1245  nvm install 13.14
+ 1246  make deploy
+ 1247  go get golang.org/x/sys
+ 1248  make deploy
+ 1249  git branch
+ 1250  git fetch origin
+ 1251  git checkout custom-editor
+ 1252  make deploy
+ 1253  nvm install 13.14
+ 1254  make deploy
+ 1255  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1256  make deploy
+ 1257  make enable
+ 1258  make reset
+ 1259  make deploy
+ 1260  alias mmctl='~/mattermost/mattermost-server/bin/mmctl'
+ 1261  mmctl plugin remove monaco-editor --local
+ 1262  mmctl plugin delete monaco-editor --local
+ 1263  make deploy
+ 1264  ps aux | grep m,onaco
+ 1265  ps aux | grep monaco
+ 1266  mmctl plugin delete monaco-editor --local && make deploy
+ 1267  git remote 0v
+ 1268  git remote -v
+ 1269  cd ../
+ 1270  ls
+ 1271  git clone https://github.com/mattermost/mattermost-plugin-starter-template.git
+ 1272  cp -r ./mattermost-plugin-starter-template/build ./mattermost-plugin-monaco/build2
+ 1273  cp -r ./mattermost-plugin-starter-template/Makefile ./mattermost-plugin-monaco/Makefile2
+ 1274  cp -r ./mattermost-plugin-starter-template/plugin.json ./mattermost-plugin-monaco/plugin.json2
+ 1275  make dist
+ 1276  cd -
+ 1277  make dist
+ 1278  go get golang.org/x/sys
+ 1279  make dist
+ 1280  make deploy
+ 1281  git commit
+ 1282  git push
+ 1283  make deploy
+ 1284  mv ../enterprise2 ../enterprise
+ 1285  git remote -v
+ 1286  cd ../
+ 1287  git clone https://github.com/mattermost/enterprise.git
+ 1288  git clone https://github.com/mattermost/mattermost-plugin-todo.git
+ 1289  code mattermost-plugin-todo
+ 1290  git checkout custom-plugin-editor
+ 1291  git status
+ 1292  git checkout pack*
+ 1293  git checkout custom-plugin-editor
+ 1294  git checkout origin/custom-plugin-editor
+ 1295  git branch -u origin HEAD
+ 1296  git push -u origin HEAD
+ 1297  git checkout master
+ 1298  git pull
+ 1299  git checkout -
+ 1300  git checkout -b custom-plugin-editor
+ 1301  git merge master
+ 1302  git push -u origin HEAD
+ 1303  matter
+ 1304  cd mattermost-server
+ 1305  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1306  mv ../enterprise ../enterprise2
+ 1307  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1308  mv ../enterprise ../enterprise2
+ 1309  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1310  code ../circleci-orbs
+ 1311  git checkout master
+ 1312  git checkout -b with-node-version
+ 1313  git commit
+ 1314  git push -u origin HEAD
+ 1315  node --version
+ 1316  git pusj
+ 1317  git pushg
+ 1318  git push
+ 1319  nano ~/.global_gitignore
+ 1320  cd _debug
+ 1321  npm init -y
+ 1322  npm i node-fetch
+ 1323  node test.js
+ 1324  npm i
+ 1325  node test.js
+ 1326  python3 -m http.server --directory .
+ 1327  node test.js
+ 1328  make test
+ 1329  cd webapp
+ 1330  grep -rl findDOMNode .
+ 1331  ls
+ 1332  nvm install 13.14
+ 1333  npm i
+ 1334  nvm install 16
+ 1335  npm i
+ 1336  grep -rl findDOMNode .
+ 1337  grep -rl react-dom
+ 1338  grep -rl react-dom .
+ 1339  ls
+ 1340  ls node_modules
+ 1341  cd ../
+ 1342  ls
+ 1343  cd webapp
+ 1344  ls
+ 1345  ls node_modules
+ 1346  cd node_modules
+ 1347  ls
+ 1348  cd ../
+ 1349  npm i
+ 1350  ls node_modules
+ 1351  grep -rl react-dom .
+ 1352  ls -al node_modules
+ 1353  ls node_modules/.staging
+ 1354  npm i
+ 1355  nvm install
+ 1356  nvm install 14
+ 1357  npm -v
+ 1358  nvm use 16.4
+ 1359  npm i
+ 1360  nvm install 13.14
+ 1361  rm -rf node_modules
+ 1362  nvm install 16.4
+ 1363  npm i
+ 1364  git status
+ 1365  git push
+ 1366  git pull
+ 1367  git log
+ 1368  git rebase -i master
+ 1369  git rebase --abort
+ 1370  git log
+ 1371  git rebase -i 667ea99804f15c324833875223635d860663e59b
+ 1372  git rebase --abort
+ 1373  git push
+ 1374  git checkout circle-test
+ 1375  git pull
+ 1376  git commit
+ 1377  git push
+ 1378  hub browse
+ 1379  git commit
+ 1380  git push
+ 1381  hub pr show
+ 1382  cd ../
+ 1383  ls
+ 1384  cd scratch
+ 1385  ls
+ 1386  cd ../
+ 1387  ls
+ 1388  cd ../
+ 1389  ls
+ 1390  cd -
+ 1391  git diff
+ 1392  git add ,
+ 1393  git add .
+ 1394  git commit
+ 1395  git push
+ 1396  git log
+ 1397  git revert 4c2699d8ff3d8b139d63c5f4e13f433ae4cd8398
+ 1398  git push
+ 1399  hub pr show
+ 1400  git checkout with-node-version
+ 1401  code fiverr
+ 1402  pwd
+ 1403  cd ../
+ 1404  git clone https://github.com/mickmister/mattermost-plugin-set-default-theme.git
+ 1405  git clone https://github.com/mickmister/mattermost-plugin-default-theme.git
+ 1406  code mattermost-plugin-default-theme
+ 1407  make dist
+ 1408  go get golang.org/x/sys
+ 1409  make dist
+ 1410  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1411  cd plugin-react-dom-patch
+ 1412  go run .
+ 1413  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1414  cd ../
+ 1415  make deploy
+ 1416  go get golang.org/x/sys
+ 1417  make deploy
+ 1418  nvm install 13.14
+ 1419  make deploy
+ 1420  cd ../mattermost-webapp
+ 1421  git checkout master
+ 1422  git pull
+ 1423  git checkout master
+ 1424  git pull
+ 1425  make stop
+ 1426  make run
+ 1427  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1428  go run .
+ 1429  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1430  make deploy
+ 1431  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1432  go run .
+ 1433  go run . > test.js
+ 1434  moveptof
+ 1435  ptof
+ 1436  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1437  touch ../koch.log
+ 1438  tail -f ../koch.log
+ 1439  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1440  cd ../
+ 1441  git checkout -b patch-plugins-react-dom
+ 1442  git commit
+ 1443  git push -u origin HEAD
+ 1444  hub browse
+ 1445  unset MM_DEBUG
+ 1446  make deploy
+ 1447  ./bin/mmctl plugin marketplace install-url https://github.com/standup-raven/standup-raven/releases/download/v3.2.3/mattermost-plugin-standup-raven-v3.2.2-darwin-amd64.tar.gz --local
+ 1448  ./bin/mmctl plugin  install-url https://github.com/standup-raven/standup-raven/releases/download/v3.2.3/mattermost-plugin-standup-raven-v3.2.2-darwin-amd64.tar.gz --local
+ 1449  cd ./mattermost-plugin-jira
+ 1450  dcu
+ 1451  nano docker-compose.yml
+ 1452  ls -al | grep ngrok
+ 1453  ngrok config eidt
+ 1454  ngrok config edit
+ 1455  ngrock 8065
+ 1456  ngrok http 8065
+ 1457  git checkout master
+ 1458  git pull
+ 1459  git checkout -b release-0.1.8
+ 1460  git commit -am "[semver:patch] Release 0.1.8"
+ 1461  git log
+ 1462  git commit --allow-empty -am "[semver:patch] Release 0.1.8"
+ 1463  git push -u origin HEAD
+ 1464  hub browse
+ 1465  git checkout v2.1.2
+ 1466  git checkout -b release-2.1.3
+ 1467  git checkout master
+ 1468  git pull
+ 1469  git log
+ 1470  git checkout -
+ 1471  git cherry-pick dd1decf1ae0bd1fad553e4e5fd0a99a573f83c06
+ 1472  git checkout v2.1.2
+ 1473  git checkout -
+ 1474  git checkout -b release-bump-2.1.3
+ 1475  git checkout v2.1.2
+ 1476  git branch -D release-2.1.3
+ 1477  git checkout -b release-2.1.3
+ 1478  git push -u origin HEAD
+ 1479  git checkout release-bump-2.1.3
+ 1480  git push -u origin HEAD
+ 1481  git status
+ 1482  git add plugin.json
+ 1483  git commit
+ 1484  git push
+ 1485  git commit --allow-empty -am "[semver:patch] Release 0.2.0"
+ 1486  git commit
+ 1487  git push
+ 1488  hub pr show
+ 1489  git checkout master
+ 1490  git stash -u
+ 1491  git checkout  v3.2.0
+ 1492  git checkout master
+ 1493  git pull
+ 1494  git log
+ 1495  git checkout -b release-3.2.1
+ 1496  git checkout release-bump-3.2.1
+ 1497  git checkout -b release-bump-3.2.1
+ 1498  git commit -m "bump version 3.2.1"
+ 1499  git push -u origin HEAD
+ 1500  git checkout -
+ 1501  git push -u origin HEAD
+ 1502  hub browse
+ 1503  git checkout master
+ 1504  git log
+ 1505  git checkout -
+ 1506  git cherry-pick f778e6f44392bb672bbe1b411e87fd9f44e1213c
+ 1507  git cherry-pick --abort
+ 1508  git cherry-pick f778e6f44392bb672bbe1b411e87fd9f44e1213c
+ 1509  git cherry-pick --abort
+ 1510  git log
+ 1511  git checkout v3.2.0
+ 1512  git log
+ 1513  git checkout -b release-bump-3.2.1
+ 1514  git checkout release-3.2.1
+ 1515  git log
+ 1516  git checkout -
+ 1517  git branch -D release-3.2.1
+ 1518  git branch -D release-bump-3.2.1
+ 1519  git checkout -b release-bump-3.2.1
+ 1520  git checkout -b release-3.2.1
+ 1521  git checkout -
+ 1522  git cherry-pick f778e6f44392bb672bbe1b411e87fd9f44e1213c
+ 1523  git commit -m "bump version 3.2.1"
+ 1524  git add plugin.json
+ 1525  git commit -m "bump version 3.2.1"
+ 1526  git push -f
+ 1527  git push -f -u origin HEAD
+ 1528  git checkout -
+ 1529  git push -f -u origin HEAD
+ 1530  make apply
+ 1531  git status
+ 1532  git checkout -
+ 1533  git status
+ 1534  make apply
+ 1535  hub browse
+ 1536  cd mattermost
+ 1537  cd mattermost-server
+ 1538  ./bin/mmctl plugin  install-url https://github.com/mickmister/mattermost-plugin-dev-environment/releases/download/v0.1.0/mattermost-dev-environment-0.1.0.tar.gz --local
+ 1539  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1540  ./bin/mmctl plugin  install-url https://github.com/mickmister/mattermost-plugin-dev-environment/releases/download/v0.1.0/mattermost-dev-environment-0.1.0.tar.gz --local
+ 1541  ./bin/mmctl plugin list
+ 1542  ./bin/mmctl plugin list --local
+ 1543  ./bin/mmctl plugin list --local | grep dev
+ 1544  cd mattermost/mattermost-server
+ 1545  ./bin/mmctl plugin enable mattermost-dev-environment --local
+ 1546  cd mattermost
+ 1547  git -C ./mattermost-server remote -v
+ 1548  git clone https://github.com/mattermost/mattermost-plugin-agenda.git && code mattermost-plugin-agenda
+ 1549  python3 -m http.server
+ 1550  cd
+ 1551  cd code
+ 1552  mkdir express-typescript-test
+ 1553  code express-typescript-test
+ 1554  npm init -y
+ 1555  npm i --save-dev typescript @types/node
+ 1556  npm i express
+ 1557  ./node_modules/.bin/tsc --init
+ 1558  touch index.ts
+ 1559  npm i --save-dev @types/express
+ 1560  npm express-session
+ 1561  npm i express-session
+ 1562  ./node_modules/.bin/tsc -p .
+ 1563  npm i --save-dev @types/express-session
+ 1564  ./node_modules/.bin/tsc -p .
+ 1565  node index.
+ 1566  node index.js
+ 1567  ./node_modules/.bin/tsc -p . && node index.js
+ 1568  hub -v
+ 1569  hub 
+ 1570  hub  --version
+ 1571  hub browse
+ 1572  docker run splunk/splunk
+ 1573  docker run nginx
+ 1574  docker 
+ 1575  docker | grep image
+ 1576  docker rmi nginx
+ 1577  docker ps
+ 1578  docker rm 70ffbca69068
+ 1579  docker rmi nginx
+ 1580  docker rmi --force nginx
+ 1581  docker run nginx
+ 1582  ngrok http 8065
+ 1583  git status
+ 1584  git pull
+ 1585  hub pr checkout 362
+ 1586  git pull
+ 1587  git log
+ 1588  make check-style
+ 1589  git push
+ 1590  git remote -v
+ 1591  git remote add azigler https://github.com/azigler/mattermost-plugin-apps.git
+ 1592  git push -u azigler HEAD
+ 1593  git checkout master
+ 1594  git pull
+ 1595  git push
+ 1596  go mod tidy
+ 1597  git reset HEAD~1
+ 1598  git checkout -
+ 1599  git checkout go.mod
+ 1600  go mod tidy
+ 1601  git push
+ 1602  brew install fzf
+ 1603  $(brew --prefix)/opt/fzf/install\n
+ 1604  ls
+ 1605  l
+ 1606  llowjdw
+ 1607  iwjfijfiejq
+ 1608  brew install tmux
+ 1609  alacritty -e tmux\n
+ 1610  ls /Applications/Alacritty.app/Contents/MacOS/alacritty
+ 1611  sudo ls /Applications/Alacritty.app/Contents/MacOS/alacritty
+ 1612  head /Applications/Alacritty.app/Contents/MacOS/alacritty
+ 1613  nano ~/.zshrc
+ 1614  export PATH=/Applications/Alacritty.app/Contents/MacOS
+ 1615  alacritty -e tmux\n
+ 1616  tmux
+ 1617  exit
+ 1618  brew install tmux
+ 1619  brew
+ 1620  nano ~/.zshrc
+ 1621  nano
+ 1622  alacritty -e tmux\n
+ 1623  exit
+ 1624  wxit
+ 1625  exit
+ 1626  ls | fzf
+ 1627  Pictures
+ 1628  cd -
+ 1629  ls | fzf-tmux
+ 1630  echo $(ls | fzf-tmux)
+ 1631  X=$(ls | fzf-tmux)
+ 1632  echo $X
+ 1633  git checkout master
+ 1634  git pull
+ 1635  git checkout -
+ 1636  git commit
+ 1637  git push
+ 1638  hub pr show
+ 1639  make check-style
+ 1640  make check-style | grep "hello-world"
+ 1641  git commit
+ 1642  git push
+ 1643  hub pr show
+ 1644  dcu
+ 1645  docker-compose rm jira
+ 1646  dcu
+ 1647  git checkout master
+ 1648  git pull
+ 1649  git checkout -b fix-e2e
+ 1650  cd test/e2e
+ 1651  nvm install 16
+ 1652  npm i
+ 1653  npm run cypress:open
+ 1654  npm i --save-dev typescript
+ 1655  npm run cypress:open
+ 1656  npm i
+ 1657  dcu
+ 1658  cd mattermost
+ 1659  git clone https://github.com/mattermost/mattermost-app-gcal.git && code mattermost-app-gcal
+ 1660  make
+ 1661  make restart-server ENABLED_DOCKER_SERVICES=postgres
+ 1662  make deploy
+ 1663  alias sb='npx @silverbulletmd/server . --port 30001'
+ 1664  echo "alias sb='npx @silverbulletmd/server . --port 30001'" >> ~/.zshrc
+ 1665  sb
+ 1666  sb &
+ 1667  fg
+ 1668  sb &
+ 1669  fg
+ 1670  sb
+ 1671  sb -y
+ 1672  sb
+ 1673  npm i -g @silverbulletmd/server
+ 1674  cd
+ 1675  cd Documents
+ 1676  ls
+ 1677  cd silverbullet-workspace
+ 1678  deno run -A --unstable https://get.silverbullet.md .
+ 1679  brew install deno
+ 1680  deno run -A --unstable https://get.silverbullet.md .
+ 1681  deno run -A --unstable https://get.silverbullet.md . --port 30001
+ 1682  code ~/.zshrc
+ 1683  alias sb='deno run -A --unstable https://get.silverbullet.md . --port 30001'\n
+ 1684  sb
+ 1685  pwd
+ 1686  alias sb='deno run -A --unstable https://get.silverbullet.md /Users/koch/Documents/silverbullet-workspace --port 30001'
+ 1687  sb
+ 1688  ls
+ 1689  rm -rf ./*
+ 1690  sb
+ 1691  git log
+ 1692  git checkout -b app-bar-partial-refreshes
+ 1693  git branch | grep bar
+ 1694  cd ../mattermost-webapp
+ 1695  make run
+ 1696  make restart
+ 1697  npm run updatesnapshot components/sidebar_right/partial_refresh/partial_refresh.test.tsx
+ 1698  ./node_modules/.bin/jest --watch "components/sidebar_right/partial_refresh/partial_refresh.test.tsx"
+ 1699  cd mattermost
+ 1700  ls
+ 1701  cd mattermost-mobile
+ 1702  ls
+ 1703  git checkout gekidou
+ 1704  git pull
+ 1705  ls -al | grep nvm
+ 1706  code .
+ 1707  npm i
+ 1708  npm -v
+ 1709  node -v
+ 1710  watchman
+ 1711  brew install watchman
+ 1712  npm -g install react-native-cli
+ 1713  gem install bundler --version 2.0.2
+ 1714  git fetch
+ 1715  git fetch mickmister
+ 1716  cd ../mattermost-mobile
+ 1717  npm start
+ 1718  git checkout -b gitpod
+ 1719  git log
+ 1720  git add .gitpod*
+ 1721  git commit -m "add .gitpod.yml"
+ 1722  git push -u origin HEAD
+ 1723  hub browse
+ 1724  ls ../
+ 1725  git status
+ 1726  git pull
+ 1727  git checkout v0.2.2
+ 1728  git checkout -b release-0.2.1
+ 1729  git push -u origin HEAD
+ 1730  git checkout -b release-0.2.1-bump
+ 1731  git checkout master
+ 1732  git log
+ 1733  git checkout 0
+ 1734  git checkout -
+ 1735  git cherry-pick 273a57607e63b6e59cce149d9d087eb63ec49558
+ 1736  git checkout -
+ 1737  git checkout -b release-0.2.3-bump
+ 1738  git checkout 
+ 1739  git checkout -
+ 1740  git branch -D release-0.2.3-bump
+ 1741  git checkout -
+ 1742  git checkout release-0.2.1
+ 1743  git checkout release-0.2.3
+ 1744  git checkout -b release-0.2.3
+ 1745  git checkout release-0.2.1-bump
+ 1746  git checkout -b release-0.2.3-bump
+ 1747  git push -u origin HEAD
+ 1748  git checkout release-0.2.3
+ 1749  git push -u origin HEAD
+ 1750  hub browse
+ 1751  git add plugin.json
+ 1752  git commit
+ 1753  git push
+ 1754  git checkout -
+ 1755  git add plugin.json
+ 1756  git commit
+ 1757  gut git push
+ 1758  git pus
+ 1759  git push
+ 1760  git checkout -
+ 1761  git reset HEAD~1
+ 1762  git push -g
+ 1763  git push -f
+ 1764  git checkout -
+ 1765  git checkout plugin.json
+ 1766  git checkout -
+ 1767  git cherry-pick 40fd68c
+ 1768  git push
+ 1769  go mod tidy
+ 1770  git commiot
+ 1771  git add .
+ 1772  git commit
+ 1773  git push
+ 1774  hub ci-status
+ 1775  make apply
+ 1776  git commit
+ 1777  git push
+ 1778* npm run android
+ 1779* /Users/koch/mattermost/mattermost-mobile/node_modules/react-native/scripts/launchPackager.command ; exit;
+ 1780* npm run android
+ 1781* npm i
+ 1782* nvm install 15
+ 1783* nvm install 16
+ 1784* npm i
+ 1785* npm -g install react-native-cli
+ 1786* gem install bundler --version 2.0.2
+ 1787* sudo gem install bundler --version 2.0.2
+ 1788* export ANDROID_HOME=$HOME/Library/Android/sdk\nexport PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$PATH
+ 1789* echo "export ANDROID_HOME=$HOME/Library/Android/sdk\nexport PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$PATH" >> ~/.zshrc
+ 1790* npm i
+ 1791* npm run android
+ 1792* brew tap homebrew/cask-versions\nbrew install --cask zulu11
+ 1793* git add .gitpod.Dockerfile
+ 1794* git commit -m "try gitpod with vnc"
+ 1795* git push
+ 1796* git remote
+ 1797* git remote -v
+ 1798* git remote add mickmister https://github.com/mickmister/mattermost-mobile.git 
+ 1799* git push mickmister HEAD
+ 1800* git push -u mickmister HEAD
+ 1801* git push -u origin HEAD
+ 1802* npm run android
+ 1803* git push -u mickmister HEAD
+ 1804* cd android/app
+ 1805* keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000\n
+ 1806* npm run android
+ 1807* yes
+ 1808* npm run android
+ 1809* ifconfig
+ 1810* ifconfig | grep 192
+ 1811* hub browse
+ 1812  history
