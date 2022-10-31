@@ -2,14 +2,14 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/mattermost/mattermost-server/v5/plugin/plugintest"
+	"github.com/mattermost/mattermost-server/v6/plugin/plugintest"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -40,7 +40,7 @@ func TestServeHTTP(t *testing.T) {
 
 		result := w.Result()
 		assert.NotNil(result)
-		bodyBytes, err := ioutil.ReadAll(result.Body)
+		bodyBytes, err := io.ReadAll(result.Body)
 		assert.Nil(err)
 
 		assert.Equal(string(jsonMeeting), string(bodyBytes))
