@@ -17,7 +17,11 @@ Initial development as part of [Mattermost Hackathon 2019](https://github.com/ma
 
 ## Usage
 
-#### Meeting Settings Configuration
+### Enable the plugin
+
+Once this plugin is installed, a Mattermost admin can enable it in the Mattermost System Console by going to **Plugins > Plugin Management**, and selecting **Enable**.
+
+### Configure meeting settings
 
 The meeting settings for each channel can be configured in the Channel Header Dropdown.
 
@@ -32,7 +36,7 @@ Meeting settings include:
   The date format must be wrapped in double Braces ( {{ }} ).
   A default is generated from the first 15 characters of the channel's name with the short name of the month and day (i.e. Dev-{{ Jan02 }}).
 
-#### Slash Commands to manage the meeting agenda:
+#### Slash Commands to manage the meeting agenda
 
 ```
 /agenda queue [meetingDay] message
