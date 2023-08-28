@@ -6,8 +6,7 @@
 [![Release](https://img.shields.io/github/v/release/mattermost/mattermost-plugin-agenda?include_prereleases)](https://github.com/mattermost/mattermost-plugin-agenda/releases/latest)
 [![HW](https://img.shields.io/github/issues/mattermost/mattermost-plugin-agenda/Up%20For%20Grabs?color=dark%20green&label=Help%20Wanted)](https://github.com/mattermost/mattermost-plugin-agenda/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22Up+For+Grabs%22+label%3A%22Help+Wanted%22)
 
-**Maintainer:** [@jfrerich](https://github.com/jfrerich)
-**Co-Maintainer:** [@iomodo](https://github.com/iomodo)
+**Maintainer:** [@mickmister](https://github.com/mickmister)
 
 The Agenda Plugin helps users queue and list items in a channel's meeting agenda. The agenda is identified by a hashtag based on the meeting date.
 
