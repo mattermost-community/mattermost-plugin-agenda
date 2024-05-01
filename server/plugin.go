@@ -36,7 +36,7 @@ var (
 )
 
 // ServeHTTP demonstrates a plugin that handles HTTP requests by greeting the world.
-func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
+func (p *Plugin) ServeHTTP(_ *plugin.Context, w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	switch path := r.URL.Path; path {
@@ -87,7 +87,7 @@ func (p *Plugin) httpMeetingSettings(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (p *Plugin) httpMeetingSaveSettings(w http.ResponseWriter, r *http.Request, mmUserID string) {
+func (p *Plugin) httpMeetingSaveSettings(w http.ResponseWriter, r *http.Request, _ string) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -112,7 +112,7 @@ func (p *Plugin) httpMeetingSaveSettings(w http.ResponseWriter, r *http.Request,
 	p.writeJSON(w, resp)
 }
 
-func (p *Plugin) httpMeetingGetSettings(w http.ResponseWriter, r *http.Request, mmUserID string) {
+func (p *Plugin) httpMeetingGetSettings(w http.ResponseWriter, r *http.Request, _ string) {
 	channelID, ok := r.URL.Query()["channelId"]
 
 	if !ok || len(channelID[0]) < 1 {

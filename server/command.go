@@ -41,7 +41,7 @@ func (p *Plugin) registerCommands() error {
 }
 
 // ExecuteCommand executes a command that has been previously registered via the RegisterCommand
-func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
+func (p *Plugin) ExecuteCommand(_ *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	split := strings.Fields(args.Command)
 
 	if len(split) < 2 {
@@ -216,7 +216,7 @@ func parseMeetingPost(meeting *Meeting, post *model.Post) (string, ParsedMeeting
 	return hashtagDateFormat, ParsedMeetingMessage{}, errors.New("failed to parse meeting post's header")
 }
 
-func (p *Plugin) executeCommandHelp(args *model.CommandArgs) *model.CommandResponse {
+func (p *Plugin) executeCommandHelp(_ *model.CommandArgs) *model.CommandResponse {
 	return responsef(helpCommandText)
 }
 

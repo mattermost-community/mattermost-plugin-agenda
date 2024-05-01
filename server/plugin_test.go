@@ -19,7 +19,7 @@ func TestServeHTTP(t *testing.T) {
 	api := &plugintest.API{}
 	plugin.SetAPI(api)
 
-	t.Run("get default meeting settings", func(t *testing.T) {
+	t.Run("get default meeting settings", func(_ *testing.T) {
 		// Mock get default meeting
 		defaultMeeting := &Meeting{
 			ChannelID:     "myChannelId",
@@ -46,7 +46,7 @@ func TestServeHTTP(t *testing.T) {
 		assert.Equal(string(jsonMeeting), string(bodyBytes))
 	})
 
-	t.Run("post meeting settings", func(t *testing.T) {
+	t.Run("post meeting settings", func(_ *testing.T) {
 		// Mock set meeting
 		meeting := &Meeting{
 			ChannelID:     "myChannelId",
